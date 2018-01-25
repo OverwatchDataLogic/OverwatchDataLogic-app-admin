@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Form, Input, DatePicker, Button, Card, Radio, Icon, Upload, message } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './SportAdd.less';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
