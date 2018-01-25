@@ -8,6 +8,7 @@ import createHistory from 'history/createHashHistory';
 import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import FastClick from 'fastclick';
+import AV from 'leancloud-storage';
 import './rollbar';
 
 import './index.less';
@@ -28,7 +29,10 @@ app.router(require('./router').default);
 // 5. Start
 app.start('#root');
 
+const appId = 'r0NqQbCYH9G7wYrKrLiYehwc-9Nh9j0Va';
+const appKey = 'coIpj6HaQjMxNPq5MMx6romH';
+AV.init({ appId, appKey });
 
 FastClick.attach(document.body);
 
-export default app._store;  // eslint-disable-line
+export default app._store; // eslint-disable-line

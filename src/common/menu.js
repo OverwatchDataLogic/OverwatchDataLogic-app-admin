@@ -160,7 +160,11 @@ const menuData = [
     children: [
       {
         name: '赛事列表',
-        path: 'sports',
+        path: 'sport/list',
+      },
+      {
+        name: '新增赛事',
+        path: 'sport/add',
       },
     ],
   },

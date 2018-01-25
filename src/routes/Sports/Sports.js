@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import {
-  Row,
-  Col,
   Card,
   Form,
   Input,
@@ -11,8 +9,6 @@ import {
   Button,
   Dropdown,
   Menu,
-  InputNumber,
-  DatePicker,
   Modal,
   message,
 } from 'antd';
@@ -22,7 +18,6 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Sports.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])

@@ -165,8 +165,11 @@ export const getRouterData = (app) => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-    '/sports/sports': {
+    '/sports/sport/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Sports/Sports')),
+    },
+    '/sports/sport/add': {
+      component: dynamicWrapper(app, [], () => import('../routes/Sports/SportAdd')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
