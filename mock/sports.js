@@ -57,14 +57,14 @@ export function getSports(req, res, u) {
     let filterDataSource = [];
     status.forEach((s) => {
       filterDataSource = filterDataSource.concat(
-        [...dataSource].filter(data => parseInt(data.status, 10) === parseInt(s[0], 10))
+        [...dataSource].filter(data => data.status === s)
       );
     });
     dataSource = filterDataSource;
   }
 
-  if (params.no) {
-    dataSource = dataSource.filter(data => data.no.indexOf(params.no) > -1);
+  if (params.id) {
+    dataSource = dataSource.filter(data => data.id.indexOf(params.id) > -1);
   }
 
   let pageSize = 10;

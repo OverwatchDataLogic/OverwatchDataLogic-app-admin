@@ -115,7 +115,7 @@ class SportsTable extends PureComponent {
       <div className={styles.standardTable}>
         <Table
           loading={loading}
-          rowKey={record => record.key}
+          rowKey={record => record.id}
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}
