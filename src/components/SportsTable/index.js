@@ -89,8 +89,6 @@ class SportsTable extends PureComponent {
         title: '操作',
         render: () => (
           <Fragment>
-            <a href="">编辑</a>
-            <Divider type="vertical" />
             <a href="">删除</a>
           </Fragment>
         ),

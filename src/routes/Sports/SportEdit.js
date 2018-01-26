@@ -40,10 +40,19 @@ function beforeUpload(file) {
   submitting: loading.effects['form/submitRegularForm']
 }))
 @Form.create()
-export default class SportAdd extends PureComponent {
+export default class SportEdit extends PureComponent {
   state = {
     loading: false
   }
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'sports/detail',
+      
+    })
+  }
+
   handleLogoChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
@@ -79,7 +88,7 @@ export default class SportAdd extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.dispatch({
-          type: 'sports/create',
+          type: 'sports/update',
           payload: values
         })
       }
@@ -114,7 +123,7 @@ export default class SportAdd extends PureComponent {
       }
     }
     return (
-      <PageHeaderLayout title="新增赛事">
+      <PageHeaderLayout title="编辑赛事">
         <Card bordered={false}>
           <Form
             onSubmit={this.handleSubmit}
@@ -159,13 +168,7 @@ export default class SportAdd extends PureComponent {
                     message: '请输入赛事奖金'
                   }
                 ]
-              })(
-                <InputNumber
-                  placeholder="请输入"
-                  min={0}
-                  max={10000}
-                />
-              )}
+              })(<InputNumber placeholder="请输入" min={0} max={10000} />)}
               <span>万</span>
             </FormItem>
             <FormItem {...formItemLayout} label="赛事介绍">

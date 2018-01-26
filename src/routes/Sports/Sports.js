@@ -3,68 +3,30 @@ import { connect } from 'dva';
 import {
   Card,
   Form,
-  Input,
-  Select,
   Icon,
   Button,
   Dropdown,
   Menu,
-  Modal,
-  message,
 } from 'antd';
 import SportsTable from '../../components/SportsTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './Sports.less';
 
-const FormItem = Form.Item;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-const CreateForm = Form.create()((props) => {
-  const { modalVisible, form, handleAdd, handleModalVisible } = props;
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      handleAdd(fieldsValue);
-    });
-  };
-  return (
-    <Modal
-      title="新建规则"
-      visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => handleModalVisible()}
-    >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: 'Please input some description...' }],
-        })(<Input placeholder="请输入" />)}
-      </FormItem>
-    </Modal>
-  );
-});
-
 @connect(({ sports, loading }) => ({
   sports,
-  loading: loading.models.rule,
+  loading: loading.models.sports,
 }))
 @Form.create()
 export default class Sports extends PureComponent {
   state = {
-    modalVisible: false,
     selectedRows: [],
-    formValues: {},
   };
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'sports/fetch',
-    });
-  }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -122,30 +84,9 @@ export default class Sports extends PureComponent {
       selectedRows: rows,
     });
   };
-
-  handleModalVisible = (flag) => {
-    this.setState({
-      modalVisible: !!flag,
-    });
-  };
-
-  handleAdd = (fields) => {
-    this.props.dispatch({
-      type: 'sports/add',
-      payload: {
-        description: fields.desc,
-      },
-    });
-
-    message.success('添加成功');
-    this.setState({
-      modalVisible: false,
-    });
-  };
-
   render() {
     const { sports: { data }, loading } = this.props;
-    const { selectedRows, modalVisible } = this.state;
+    const { selectedRows } = this.state;
 
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -153,17 +94,12 @@ export default class Sports extends PureComponent {
       </Menu>
     );
 
-    const parentMethods = {
-      handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
-    };
-
     return (
       <PageHeaderLayout title="赛事列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" href="/#/sports/sport/add">
                 新建
               </Button>
               {selectedRows.length > 0 && (
@@ -186,7 +122,6 @@ export default class Sports extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} />
       </PageHeaderLayout>
     );
   }

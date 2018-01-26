@@ -8,6 +8,7 @@ import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 import { getSports, postSports } from './mock/sports';
+import { getUploadToken } from './mock/qiniu';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
