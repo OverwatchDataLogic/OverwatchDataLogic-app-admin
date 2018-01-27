@@ -6,8 +6,7 @@ import {
   getSportById,
   createSports,
   updateSports,
-  removeSports,
-  removeBatchSports
+  removeSports
 } from '../services/api'
 
 export default {
@@ -68,14 +67,6 @@ export default {
         type: 'removeSuccess',
         payload: response
       })
-    },
-    *removeBatch({ payload, callback }, { call, put }) {
-      const response = yield call(removeBatchSports, payload)
-      yield put({
-        type: 'removeSuccess',
-        payload: response
-      })
-      if (callback) callback()
     }
   },
 
