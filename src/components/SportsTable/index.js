@@ -1,56 +1,65 @@
-import React, { PureComponent, Fragment } from 'react';
-import moment from 'moment';
-import { Table, Badge, Divider } from 'antd';
-import styles from './index.less';
+import React, { PureComponent, Fragment } from 'react'
+import moment from 'moment'
+import { Table, Badge, Divider } from 'antd'
+import styles from './index.less'
 
 class SportsTable extends PureComponent {
   state = {
-    selectedRowKeys: [],
-  };
+    selectedRowKeys: []
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedRows.length === 0) {
       this.setState({
-        selectedRowKeys: [],
-      });
+        selectedRowKeys: []
+      })
     }
   }
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
     if (this.props.onSelectRow) {
-      this.props.onSelectRow(selectedRows);
+      this.props.onSelectRow(selectedRows)
     }
-    this.setState({ selectedRowKeys });
-  };
+    this.setState({ selectedRowKeys })
+  }
 
   handleTableChange = (pagination, filters, sorter) => {
-    this.props.onChange(pagination, filters, sorter);
-  };
+    this.props.onChange(pagination, filters, sorter)
+  }
 
   cleanSelectedKeys = () => {
-    this.handleRowSelectChange([], []);
-  };
+    this.handleRowSelectChange([], [])
+  }
 
   render() {
-    const { selectedRowKeys } = this.state;
-    const { data: { list, pagination }, loading } = this.props;
-    const statusMap = { PENDING: 'default', LIVING: 'processing', CONCLUDED: 'success' };
-    const status = { PENDING: '未开始', LIVING: '进行中', CONCLUDED: '已结束' };
+    const { selectedRowKeys } = this.state
+    const {
+      data: { list, pagination },
+      loading,
+      navigateTo,
+      remove
+    } = this.props
+    const statusMap = {
+      PENDING: 'default',
+      LIVING: 'processing',
+      CONCLUDED: 'success'
+    }
+    const status = { PENDING: '未开始', LIVING: '进行中', CONCLUDED: '已结束' }
     const columns = [
       {
         title: '赛事简称',
-        dataIndex: 'abbreviatedTitle',
+        dataIndex: 'abbreviatedTitle'
       },
       {
         title: '赛事名称',
-        dataIndex: 'title',
+        dataIndex: 'title'
       },
       {
         title: '奖金',
         dataIndex: 'prize',
         sorter: true,
         align: 'right',
-        render: val => `${val} 万`,
+        render: val => `${val} 万`
       },
       {
         title: '状态',
@@ -58,56 +67,60 @@ class SportsTable extends PureComponent {
         filters: [
           {
             text: status.PENDING,
-            value: 'PENDING',
+            value: 'PENDING'
           },
           {
             text: status.LIVING,
-            value: 'LIVING',
+            value: 'LIVING'
           },
           {
             text: status.CONCLUDED,
-            value: 'CONCLUDED',
-          },
+            value: 'CONCLUDED'
+          }
         ],
         render(val) {
-          return <Badge status={statusMap[val]} text={status[val]} />;
-        },
+          return <Badge status={statusMap[val]} text={status[val]} />
+        }
       },
       {
         title: '开始时间',
         dataIndex: 'startDate',
         sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>
       },
       {
         title: '结束时间',
         dataIndex: 'endDate',
         sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>
       },
       {
         title: '操作',
-        render: () => (
+        render: (text, record) => (
           <Fragment>
-            <a href="">删除</a>
+            <a onClick={() => navigateTo(`/sports/sport/edit/${record.id}`)}>
+              编辑
+            </a>
+            <Divider type="vertical" />
+            <a onClick={() => remove(record.id)}>删除</a>
           </Fragment>
-        ),
-      },
-    ];
+        )
+      }
+    ]
 
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
-      ...pagination,
-    };
+      ...pagination
+    }
 
     const rowSelection = {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
       getCheckboxProps: record => ({
-        disabled: record.disabled,
-      }),
-    };
+        disabled: record.disabled
+      })
+    }
 
     return (
       <div className={styles.standardTable}>
@@ -121,8 +134,8 @@ class SportsTable extends PureComponent {
           onChange={this.handleTableChange}
         />
       </div>
-    );
+    )
   }
 }
 
-export default SportsTable;
+export default SportsTable

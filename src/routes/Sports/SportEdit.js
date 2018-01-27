@@ -12,6 +12,7 @@ import {
   Upload,
   message
 } from 'antd'
+import moment from 'moment'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 const FormItem = Form.Item
@@ -36,21 +37,14 @@ function beforeUpload(file) {
   return isJPG && isLt2M
 }
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm']
-}))
 @Form.create()
-export default class SportEdit extends PureComponent {
+class SportEdit extends PureComponent {
   state = {
     loading: false
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'sports/detail',
-      
-    })
+    this.props.getById()
   }
 
   handleLogoChange = info => {
@@ -68,6 +62,7 @@ export default class SportEdit extends PureComponent {
       )
     }
   }
+
   handlePicChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
@@ -83,18 +78,27 @@ export default class SportEdit extends PureComponent {
       )
     }
   }
+
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'sports/update',
-          payload: values
-        })
+        this.props.update(values)
       }
     })
   }
   render() {
+    const {
+      id,
+      title,
+      abbreviatedTitle,
+      englishTitle,
+      description,
+      startDate,
+      endDate,
+      prize,
+      status
+    } = this.props.sport
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const logoUrl = this.state.logoUrl
@@ -130,8 +134,14 @@ export default class SportEdit extends PureComponent {
             hideRequiredMark
             style={{ marginTop: 8 }}
           >
+            <FormItem>
+              {getFieldDecorator('id', {
+                initialValue: id
+              })}
+            </FormItem>
             <FormItem {...formItemLayout} label="赛事名称">
               {getFieldDecorator('title', {
+                initialValue: title,
                 rules: [
                   {
                     required: true,
@@ -142,6 +152,7 @@ export default class SportEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事简称">
               {getFieldDecorator('abbreviatedTitle', {
+                initialValue: abbreviatedTitle,
                 rules: [
                   {
                     required: true,
@@ -152,6 +163,7 @@ export default class SportEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事英文名称">
               {getFieldDecorator('englishTitle', {
+                initialValue: englishTitle,
                 rules: [
                   {
                     required: true,
@@ -162,6 +174,7 @@ export default class SportEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事奖金">
               {getFieldDecorator('prize', {
+                initialValue: prize,
                 rules: [
                   {
                     required: true,
@@ -173,6 +186,7 @@ export default class SportEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事介绍">
               {getFieldDecorator('description', {
+                initialValue: description,
                 rules: [
                   {
                     required: true,
@@ -189,6 +203,10 @@ export default class SportEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="起止日期">
               {getFieldDecorator('date', {
+                initialValue: [
+                  moment(startDate, 'YYYY-MM-DD'),
+                  moment(endDate, 'YYYY-MM-DD')
+                ],
                 rules: [
                   {
                     required: true,
@@ -205,7 +223,7 @@ export default class SportEdit extends PureComponent {
             <FormItem {...formItemLayout} label="状态">
               <div>
                 {getFieldDecorator('status', {
-                  initialValue: 'PENDING'
+                  initialValue: status
                 })(
                   <Radio.Group>
                     <Radio value="PENDING">未开始</Radio>
@@ -254,3 +272,30 @@ export default class SportEdit extends PureComponent {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const { sports, loading } = state
+  return {
+    sport: sports.data.list.length > 0 ? sports.data.list[0] : sports.default,
+    loading: loading.models.sports
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    getById: () => {
+      dispatch({
+        type: 'sports/getById',
+        payload: ownProps.match.params.id
+      })
+    },
+    update: values => {
+      dispatch({
+        type: 'sports/update',
+        payload: values
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SportEdit)

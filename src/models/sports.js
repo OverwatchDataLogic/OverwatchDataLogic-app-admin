@@ -1,8 +1,9 @@
 import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
-import pathToRegexp from 'path-to-regexp'
+import _ from 'lodash'
 import {
   querySports,
+  getSportById,
   removeSports,
   createSports,
   updateSports
@@ -12,6 +13,16 @@ export default {
   namespace: 'sports',
 
   state: {
+    default: {
+      title: '',
+      abbreviatedTitle: '',
+      englishTitle: '',
+      description: '',
+      startDate: '2018-01-01',
+      endDate: '2018-01-01',
+      prize: 0,
+      status: 'PENDING'
+    },
     data: {
       currentItem: {},
       list: [],
@@ -20,17 +31,24 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *get({ payload }, { call, put }) {
       const response = yield call(querySports, payload)
       yield put({
         type: 'save',
         payload: response
       })
     },
+    *getById({ payload }, { call, put }) {
+      const response = yield call(getSportById, payload)
+      yield put({
+        type: 'updateSuccess',
+        payload: response
+      })
+    },
     *create({ payload }, { call, put }) {
       const response = yield call(createSports, payload)
       yield put({
-        type: 'save',
+        type: 'createSuccess',
         payload: response
       })
       yield put(routerRedux.push('/sports/sport/list'))
@@ -38,7 +56,7 @@ export default {
     *update({ payload }, { call, put }) {
       const response = yield call(updateSports, payload)
       yield put({
-        type: 'save',
+        type: 'updateSuccess',
         payload: response
       })
       yield put(routerRedux.push('/sports/sport/list'))
@@ -46,7 +64,7 @@ export default {
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeSports, payload)
       yield put({
-        type: 'save',
+        type: 'removeSuccess',
         payload: response
       })
       if (callback) callback()
@@ -60,6 +78,44 @@ export default {
         data: action.payload
       }
     },
+    createSuccess(state, action) {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          list: [...state.data.list, action.payload]
+        }
+      }
+    },
+    updateSuccess(state, action) {
+      const list = state.data.list.map(item => {
+        if (item.id === action.payload.id) {
+          return Object.assign(item, action.payload)
+        } else {
+          return item
+        }
+      })
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          list: list
+        }
+      }
+    },
+    removeSuccess(state, action) {
+      const list = _.uniqBy(
+        _.concat(state.data.list, action.payload),
+        x => x.id
+      )
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          list: list
+        }
+      }
+    }
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -67,7 +123,7 @@ export default {
         if (pathname.startsWith('/sports')) {
           const query = queryString.parse(search)
           if (pathname === '/sports/sport/list') {
-            dispatch({ type: 'fetch', payload: query })
+            dispatch({ type: 'get', payload: query })
           }
         }
       })

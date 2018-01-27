@@ -12,6 +12,7 @@ import {
   Upload,
   message
 } from 'antd'
+import moment from 'moment'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 const FormItem = Form.Item
@@ -36,11 +37,8 @@ function beforeUpload(file) {
   return isJPG && isLt2M
 }
 
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm']
-}))
 @Form.create()
-export default class SportAdd extends PureComponent {
+class SportAdd extends PureComponent {
   state = {
     loading: false
   }
@@ -86,6 +84,16 @@ export default class SportAdd extends PureComponent {
     })
   }
   render() {
+    const {
+      title,
+      abbreviatedTitle,
+      englishTitle,
+      description,
+      startDate,
+      endDate,
+      prize,
+      status
+    } = this.props.default
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const logoUrl = this.state.logoUrl
@@ -93,7 +101,7 @@ export default class SportAdd extends PureComponent {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">上传</div>
       </div>
     )
     const formItemLayout = {
@@ -123,6 +131,7 @@ export default class SportAdd extends PureComponent {
           >
             <FormItem {...formItemLayout} label="赛事名称">
               {getFieldDecorator('title', {
+                initialValue: title,
                 rules: [
                   {
                     required: true,
@@ -133,6 +142,7 @@ export default class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事简称">
               {getFieldDecorator('abbreviatedTitle', {
+                initialValue: abbreviatedTitle,
                 rules: [
                   {
                     required: true,
@@ -143,6 +153,7 @@ export default class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事英文名称">
               {getFieldDecorator('englishTitle', {
+                initialValue: englishTitle,
                 rules: [
                   {
                     required: true,
@@ -153,6 +164,7 @@ export default class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事奖金">
               {getFieldDecorator('prize', {
+                initialValue: prize,
                 rules: [
                   {
                     required: true,
@@ -161,6 +173,10 @@ export default class SportAdd extends PureComponent {
                 ]
               })(
                 <InputNumber
+                  formatter={value =>
+                    `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   placeholder="请输入"
                   min={0}
                   max={10000}
@@ -170,6 +186,7 @@ export default class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="赛事介绍">
               {getFieldDecorator('description', {
+                initialValue: description,
                 rules: [
                   {
                     required: true,
@@ -186,6 +203,8 @@ export default class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="起止日期">
               {getFieldDecorator('date', {
+                initialValue: [moment(startDate, 'YYYY-MM-DD'),
+                  moment(endDate, 'YYYY-MM-DD')],
                 rules: [
                   {
                     required: true,
@@ -202,7 +221,7 @@ export default class SportAdd extends PureComponent {
             <FormItem {...formItemLayout} label="状态">
               <div>
                 {getFieldDecorator('status', {
-                  initialValue: 'PENDING'
+                  initialValue: status
                 })(
                   <Radio.Group>
                     <Radio value="PENDING">未开始</Radio>
@@ -251,3 +270,13 @@ export default class SportAdd extends PureComponent {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const { sports, loading } = state
+  return {
+    default: sports.default,
+    loading: loading.models.sports
+  }
+}
+
+export default connect(mapStateToProps)(SportAdd)

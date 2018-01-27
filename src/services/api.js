@@ -82,32 +82,30 @@ export async function querySports(params) {
   return request(`/api/sports?${stringify(params)}`)
 }
 
-export async function removeSports(params) {
-  return request('/api/sports', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'delete'
-    }
-  })
+export async function getSportById(id) {
+  return request(`/api/sports/${id}`)
 }
 
 export async function createSports(params) {
   return request('/api/sports', {
     method: 'POST',
     body: {
-      ...params,
-      method: 'post'
+      ...params
     }
   })
 }
 
 export async function updateSports(params) {
   return request('/api/sports', {
-    method: 'POST',
+    method: 'PUT',
     body: {
-      ...params,
-      method: 'put'
+      ...params
     }
+  })
+}
+
+export async function removeSports(id) {
+  return request(`/api/sports/${id}`, {
+    method: 'DELETE'
   })
 }

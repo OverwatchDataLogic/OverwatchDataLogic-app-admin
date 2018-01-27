@@ -1,5 +1,6 @@
 import { getUrlParams } from './utils'
 import uuidv4 from 'uuid/v4'
+import _ from 'lodash'
 
 // mock tableListDataSource
 let tableListDataSource = [
@@ -92,16 +93,21 @@ export function getSports(req, res, u) {
   }
 }
 
-export function postSports(req, res, u, b) {
-  let url = u
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url // eslint-disable-line
-  }
+export function getSportById(req, res) {
+  const { id } = req.params
 
+  const result = tableListDataSource.filter(x => x.id === id)[0]
+
+  if (res && res.json) {
+    res.json(result)
+  } else {
+    return result
+  }
+}
+
+export function postSports(req, res, b) {
   const body = (b && b.body) || req.body
   const {
-    method,
-    id,
     title,
     abbreviatedTitle,
     englishTitle,
@@ -112,60 +118,56 @@ export function postSports(req, res, u, b) {
     pic,
     prize
   } = body
-  console.log(method)
-  switch (method) {
-    /* eslint no-case-declarations:0 */
-    case 'delete':
-      tableListDataSource = tableListDataSource.filter(
-        item => id.indexOf(item.id) === -1
-      )
-      break
-    case 'post':
-      tableListDataSource.unshift({
-        id: uuidv4(),
-        title,
-        abbreviatedTitle,
-        englishTitle,
-        description,
-        startDate: date[0],
-        endDate: date[1],
-        status,
-        logo,
-        pic,
-        prize
-      })
-      break
-    case 'put':
-      tableListDataSource.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            title,
-            abbreviatedTitle,
-            englishTitle,
-            description,
-            startDate: date[0],
-            endDate: date[1],
-            status,
-            logo,
-            pic,
-            prize
-          }
-        } else {
-          return item
-        }
-      })
-      break
-    default:
-      break
-  }
-  console.log(tableListDataSource)
+
   const result = {
-    list: tableListDataSource,
-    pagination: {
-      total: tableListDataSource.length
-    }
+    id: uuidv4(),
+    title,
+    abbreviatedTitle,
+    englishTitle,
+    description,
+    startDate: date[0],
+    endDate: date[1],
+    status,
+    logo,
+    pic,
+    prize
   }
+
+  tableListDataSource.unshift(result)
+
+  if (res && res.json) {
+    res.json(result)
+  } else {
+    return result
+  }
+}
+
+export function putSports(req, res, b) {
+  const body = (b && b.body) || req.body
+  const { id } = body
+
+  tableListDataSource.forEach(item => {
+    if (item.id === id) {
+      const data = Object.assign(item, body)
+      return data
+    } else {
+      return item
+    }
+  })
+
+  const result = tableListDataSource.filter(x => x.id === id)[0]
+
+  if (res && res.json) {
+    res.json(result)
+  } else {
+    return result
+  }
+}
+
+export function deleteSports(req, res) {
+  const { id } = req.params
+
+  const result = _.remove(tableListDataSource, x => x.id === id)
 
   if (res && res.json) {
     res.json(result)
@@ -176,5 +178,8 @@ export function postSports(req, res, u, b) {
 
 export default {
   getSports,
-  postSports
+  getSportById,
+  postSports,
+  putSports,
+  deleteSports
 }
