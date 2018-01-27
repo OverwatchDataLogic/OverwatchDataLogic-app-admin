@@ -171,17 +171,7 @@ class SportAdd extends PureComponent {
                     message: '请输入赛事奖金'
                   }
                 ]
-              })(
-                <InputNumber
-                  formatter={value =>
-                    `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  }
-                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                  placeholder="请输入"
-                  min={0}
-                  max={10000}
-                />
-              )}
+              })(<InputNumber placeholder="请输入" min={0} max={10000} />)}
               <span>万</span>
             </FormItem>
             <FormItem {...formItemLayout} label="赛事介绍">
@@ -203,8 +193,10 @@ class SportAdd extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="起止日期">
               {getFieldDecorator('date', {
-                initialValue: [moment(startDate, 'YYYY-MM-DD'),
-                  moment(endDate, 'YYYY-MM-DD')],
+                initialValue: [
+                  moment(startDate, 'YYYY-MM-DD'),
+                  moment(endDate, 'YYYY-MM-DD')
+                ],
                 rules: [
                   {
                     required: true,

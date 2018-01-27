@@ -2,11 +2,12 @@ import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import _ from 'lodash'
 import {
-  querySports,
+  getSports,
   getSportById,
-  removeSports,
   createSports,
-  updateSports
+  updateSports,
+  removeSports,
+  removeBatchSports
 } from '../services/api'
 
 export default {
@@ -32,7 +33,7 @@ export default {
 
   effects: {
     *get({ payload }, { call, put }) {
-      const response = yield call(querySports, payload)
+      const response = yield call(getSports, payload)
       yield put({
         type: 'save',
         payload: response
@@ -63,6 +64,13 @@ export default {
     },
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeSports, payload)
+      yield put({
+        type: 'removeSuccess',
+        payload: response
+      })
+    },
+    *removeBatch({ payload, callback }, { call, put }) {
+      const response = yield call(removeBatchSports, payload)
       yield put({
         type: 'removeSuccess',
         payload: response
@@ -104,10 +112,7 @@ export default {
       }
     },
     removeSuccess(state, action) {
-      const list = _.uniqBy(
-        _.concat(state.data.list, action.payload),
-        x => x.id
-      )
+      const list = _.xorBy(state.data.list, JSON.parse(action.payload), 'id')
       return {
         ...state,
         data: {

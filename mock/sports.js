@@ -2,7 +2,6 @@ import { getUrlParams } from './utils'
 import uuidv4 from 'uuid/v4'
 import _ from 'lodash'
 
-// mock tableListDataSource
 let tableListDataSource = [
   {
     id: '000000001',
@@ -166,8 +165,12 @@ export function putSports(req, res, b) {
 
 export function deleteSports(req, res) {
   const { id } = req.params
+  let result = []
 
-  const result = _.remove(tableListDataSource, x => x.id === id)
+  id.split(',').forEach(x => {
+    const r = _.remove(tableListDataSource, i => i.id === x)
+    result = result.concat(r)
+  })
 
   if (res && res.json) {
     res.json(result)

@@ -12,9 +12,9 @@ import {
   postSports,
   getSportById,
   putSports,
-  deleteSports
+  deleteSports,
+  deleteBatchSports
 } from './mock/sports'
-import { getUploadToken } from './mock/qiniu'
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true'

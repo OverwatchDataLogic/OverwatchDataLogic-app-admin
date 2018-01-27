@@ -137,7 +137,7 @@ class SportEdit extends PureComponent {
             <FormItem>
               {getFieldDecorator('id', {
                 initialValue: id
-              })}
+              })(<Input type="hidden" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="赛事名称">
               {getFieldDecorator('title', {

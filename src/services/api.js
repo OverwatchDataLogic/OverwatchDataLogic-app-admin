@@ -78,7 +78,7 @@ export async function queryNotices() {
   return request('/api/notices')
 }
 
-export async function querySports(params) {
+export async function getSports(params) {
   return request(`/api/sports?${stringify(params)}`)
 }
 

@@ -45,23 +45,17 @@ class Sports extends PureComponent {
   }
 
   handleMenuClick = e => {
-    const { dispatch } = this.props
+    const { remove } = this.props
     const { selectedRows } = this.state
 
     if (!selectedRows) return
 
     switch (e.key) {
       case 'remove':
-        dispatch({
-          type: 'sports/remove',
-          payload: {
-            id: selectedRows.map(row => row.id).join(',')
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: []
-            })
-          }
+        remove(selectedRows.map(row => row.id).join(','), () => {
+          this.setState({
+            selectedRows: []
+          })
         })
         break
       default:
@@ -137,10 +131,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     navigateTo: location => {
       dispatch(routerRedux.push(location))
     },
-    remove: id => {
+    remove: (id, callback) => {
       dispatch({
         type: 'sports/remove',
-        payload: id
+        payload: id,
+        callback: callback
       })
     }
   }
