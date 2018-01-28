@@ -169,6 +169,21 @@ const menuData = [
     ]
   },
   {
+    name: '选手',
+    icon: 'user',
+    path: 'players',
+    children: [
+      {
+        name: '选手列表',
+        path: 'player/list'
+      },
+      {
+        name: '新增选手',
+        path: 'player/add'
+      }
+    ]
+  },
+  {
     name: '使用文档',
     icon: 'book',
     path: 'http://pro.ant.design/docs/getting-started',
@@ -176,7 +191,7 @@ const menuData = [
   }
 ]
 
-function formatter (data, parentPath = '', parentAuthority) {
+function formatter(data, parentPath = '', parentAuthority) {
   return data.map(item => {
     let { path } = item
     if (!isUrl(path)) {

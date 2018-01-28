@@ -15,6 +15,14 @@ import {
   deleteSports,
   deleteBatchSports
 } from './mock/sports'
+import {
+  getPlayers,
+  postPlayers,
+  getPlayerById,
+  putPlayers,
+  deletePlayers,
+  deleteBatchPlayers
+} from './mock/players'
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true'
@@ -153,7 +161,16 @@ const proxy = {
   'PUT /api/sports': {
     $body: putSports
   },
-  'DELETE /api/sports/:id': deleteSports
+  'DELETE /api/sports/:id': deleteSports,
+  'GET /api/players': getPlayers,
+  'GET /api/players/:id': getPlayerById,
+  'POST /api/players': {
+    $body: postPlayers
+  },
+  'PUT /api/players': {
+    $body: putPlayers
+  },
+  'DELETE /api/players/:id': deletePlayers
 }
 
 export default (noProxy ? {} : delay(proxy, 1000))
