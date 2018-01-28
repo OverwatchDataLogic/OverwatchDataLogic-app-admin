@@ -19,7 +19,7 @@ class Sports extends PureComponent {
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props
+    const { get } = this.props
     const { formValues } = this.state
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -38,10 +38,7 @@ class Sports extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`
     }
 
-    dispatch({
-      type: 'sports/get',
-      payload: params
-    })
+    get(params)
   }
 
   handleMenuClick = e => {
@@ -130,6 +127,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     navigateTo: location => {
       dispatch(routerRedux.push(location))
+    },
+    get: params => {
+      dispatch({
+        type: 'sports/get',
+        payload: params
+      })
     },
     remove: (id, callback) => {
       dispatch({
