@@ -175,7 +175,7 @@ const proxy = {
   'PUT /api/players': {
     $body: putPlayers
   },
-  'DELETE /api/players/:id': deleteHeroes,
+  'DELETE /api/players/:id': deletePlayers,
   'GET /api/heroes': getHeroes,
   'GET /api/heroes/:id': getHeroById,
   'POST /api/heroes': {

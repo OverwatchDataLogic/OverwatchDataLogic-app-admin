@@ -1,23 +1,10 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import {
-  Form,
-  Input,
-  InputNumber,
-  DatePicker,
-  Button,
-  Card,
-  Radio,
-  Icon,
-  Upload,
-  message
-} from 'antd'
-import moment from 'moment'
+import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 const FormItem = Form.Item
-const { RangePicker } = DatePicker
-const { TextArea } = Input
+const Option = Select.Option
 
 function getBase64(img, callback) {
   const reader = new FileReader()
@@ -25,23 +12,16 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img)
 }
 
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg'
-  if (!isJPG) {
-    message.error('You can only upload JPG file!')
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJPG && isLt2M
-}
-
 @Form.create()
 class PlayerAdd extends PureComponent {
   state = {
     loading: false
   }
+
+  componentDidMount() {
+    this.props.getHeroes()
+  }
+
   handleLogoChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
@@ -76,12 +56,12 @@ class PlayerAdd extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'players/create',
-          payload: values
-        })
+        this.props.create(values)
       }
     })
+  }
+  handleHeroChange(value) {
+    console.log(`selected ${value}`)
   }
   render() {
     const {
@@ -90,8 +70,9 @@ class PlayerAdd extends PureComponent {
       givenName,
       nationality,
       homeLocation,
-      role
-    } = this.props.default
+      role,
+      heroes
+    } = this.props.player
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const headshotUrl = this.state.headshotUrl
@@ -101,6 +82,14 @@ class PlayerAdd extends PureComponent {
         <div className="ant-upload-text">上传</div>
       </div>
     )
+    const heroOptions = []
+    this.props.heroes.forEach(item => {
+      heroOptions.push(
+        <Option key={item.id} value={item.id}>
+          {item.name}
+        </Option>
+      )
+    })
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -195,6 +184,20 @@ class PlayerAdd extends PureComponent {
                 )}
               </div>
             </FormItem>
+            <FormItem {...formItemLayout} label="擅长英雄">
+              {getFieldDecorator('heroes', {
+                initialValue: heroes
+              })(
+                <Select
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                  placeholder="请选择擅长英雄"
+                  onChange={this.handleHeroChange}
+                >
+                  {heroOptions}
+                </Select>
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="头像">
               <Upload
                 name="headshot"
@@ -203,7 +206,6 @@ class PlayerAdd extends PureComponent {
                 className="avatar-uploader"
                 showUploadList={false}
                 action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={beforeUpload}
                 onChange={this.handleChange}
               >
                 {headshotUrl ? <img src={headshotUrl} alt="" /> : uploadButton}
@@ -222,11 +224,30 @@ class PlayerAdd extends PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { players, loading } = state
+  const { players, heroes, loading } = state
   return {
-    default: players.default,
+    player:
+      players.data.list.length > 0 ? players.data.list[0] : players.default,
+    heroes: heroes.data.list,
     loading: loading.models.players
   }
 }
 
-export default connect(mapStateToProps)(PlayerAdd)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    create: values => {
+      dispatch({
+        type: 'players/create',
+        payload: values
+      })
+    },
+    getHeroes: () => {
+      dispatch({
+        type: 'heroes/get',
+        payload: {}
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerAdd)

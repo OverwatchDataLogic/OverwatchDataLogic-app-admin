@@ -1,26 +1,15 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import { Form, Input, Button, Card, Radio, Icon, Upload, message } from 'antd'
+import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 const FormItem = Form.Item
+const Option = Select.Option
 
 function getBase64(img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
   reader.readAsDataURL(img)
-}
-
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg'
-  if (!isJPG) {
-    message.error('You can only upload JPG file!')
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJPG && isLt2M
 }
 
 @Form.create()
@@ -31,6 +20,7 @@ class PlayerEdit extends PureComponent {
 
   componentDidMount() {
     this.props.getById()
+    this.props.getHeroes()
   }
 
   handleLogoChange = info => {
@@ -73,6 +63,11 @@ class PlayerEdit extends PureComponent {
       }
     })
   }
+
+  handleHeroChange(value) {
+    console.log(`selected ${value}`)
+  }
+
   render() {
     const {
       id,
@@ -81,7 +76,8 @@ class PlayerEdit extends PureComponent {
       givenName,
       nationality,
       homeLocation,
-      role
+      role,
+      heroes
     } = this.props.player
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
@@ -92,6 +88,14 @@ class PlayerEdit extends PureComponent {
         <div className="ant-upload-text">Upload</div>
       </div>
     )
+    const heroOptions = []
+    this.props.heroes.forEach(item => {
+      heroOptions.push(
+        <Option key={item.id} value={item.id}>
+          {item.name}
+        </Option>
+      )
+    })
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -178,18 +182,30 @@ class PlayerEdit extends PureComponent {
               })(<Input placeholder="请输入选手家乡" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="角色">
-              <div>
-                {getFieldDecorator('role', {
-                  initialValue: role
-                })(
-                  <Radio.Group>
-                    <Radio value="offense">突击</Radio>
-                    <Radio value="tank">重装</Radio>
-                    <Radio value="support">辅助</Radio>
-                    <Radio value="flex">自由人</Radio>
-                  </Radio.Group>
-                )}
-              </div>
+              {getFieldDecorator('role', {
+                initialValue: role
+              })(
+                <Radio.Group>
+                  <Radio value="offense">突击</Radio>
+                  <Radio value="tank">重装</Radio>
+                  <Radio value="support">辅助</Radio>
+                  <Radio value="flex">自由人</Radio>
+                </Radio.Group>
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="擅长英雄">
+              {getFieldDecorator('heroes', {
+                initialValue: heroes
+              })(
+                <Select
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                  placeholder="请选择擅长英雄"
+                  onChange={this.handleHeroChange}
+                >
+                  {heroOptions}
+                </Select>
+              )}
             </FormItem>
             <FormItem {...formItemLayout} label="头像">
               <Upload
@@ -199,7 +215,6 @@ class PlayerEdit extends PureComponent {
                 className="avatar-uploader"
                 showUploadList={false}
                 action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={beforeUpload}
                 onChange={this.handleChange}
               >
                 {headshotUrl ? <img src={headshotUrl} alt="" /> : uploadButton}
@@ -218,10 +233,11 @@ class PlayerEdit extends PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { players, loading } = state
+  const { players, heroes, loading } = state
   return {
     player:
       players.data.list.length > 0 ? players.data.list[0] : players.default,
+    heroes: heroes.data.list,
     loading: loading.models.players
   }
 }
@@ -238,6 +254,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({
         type: 'players/update',
         payload: values
+      })
+    },
+    getHeroes: () => {
+      dispatch({
+        type: 'heroes/get',
+        payload: {}
       })
     }
   }
