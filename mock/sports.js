@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 let tableListDataSource = [
   {
-    id: '000000001',
+    id: uuidv4(),
     title: '守望先锋职业战队联赛',
     abbreviatedTitle: 'OTS',
     englishTitle: 'OverWatch Team Story',
@@ -19,7 +19,7 @@ let tableListDataSource = [
     prize: 30
   },
   {
-    id: '000000002',
+    id: uuidv4(),
     title: '守望先锋联赛',
     abbreviatedTitle: 'OWL',
     englishTitle: 'OverWatch League',

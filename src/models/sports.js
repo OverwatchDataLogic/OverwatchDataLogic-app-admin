@@ -114,15 +114,6 @@ export default {
     }
   },
   subscriptions: {
-    setup({ dispatch, history }) {
-      return history.listen(({ pathname, search }) => {
-        if (pathname.startsWith('/sports')) {
-          const query = queryString.parse(search)
-          if (pathname === '/sports/sport/list') {
-            dispatch({ type: 'get', payload: query })
-          }
-        }
-      })
-    }
+   
   }
 }
