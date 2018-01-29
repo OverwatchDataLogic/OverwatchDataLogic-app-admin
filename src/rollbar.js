@@ -1,4 +1,4 @@
-import Rollbar from 'rollbar';
+import Rollbar from 'rollbar'
 
 // Track error by rollbar.com
 if (location.host === 'preview.pro.ant.design') {
@@ -7,7 +7,7 @@ if (location.host === 'preview.pro.ant.design') {
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
-      environment: 'production',
-    },
-  });
+      environment: 'production'
+    }
+  })
 }

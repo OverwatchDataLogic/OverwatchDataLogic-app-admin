@@ -109,3 +109,35 @@ export async function removeSports(id) {
     method: 'DELETE'
   })
 }
+
+export async function getPlayers(params) {
+  return request(`/api/players?${stringify(params)}`)
+}
+
+export async function getPlayerById(id) {
+  return request(`/api/players/${id}`)
+}
+
+export async function createPlayers(params) {
+  return request('/api/players', {
+    method: 'POST',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function updatePlayers(params) {
+  return request('/api/players', {
+    method: 'PUT',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function removePlayers(id) {
+  return request(`/api/players/${id}`, {
+    method: 'DELETE'
+  })
+}

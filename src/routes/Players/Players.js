@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
 import { Card, Form, Icon, Button, Dropdown, Menu } from 'antd'
-import SportsTable from '../../components/SportsTable'
+import PlayersTable from '../../components/PlayersTable'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
-import styles from './Sports.less'
+import styles from './Players.less'
 
 const getValue = obj =>
   Object.keys(obj)
@@ -13,7 +13,7 @@ const getValue = obj =>
     .join(',')
 
 @Form.create()
-class Sports extends PureComponent {
+class Players extends PureComponent {
   state = {
     selectedRows: []
   }
@@ -67,7 +67,7 @@ class Sports extends PureComponent {
   }
 
   render() {
-    const { sports: { data }, loading, navigateTo, remove } = this.props
+    const { players: { data }, loading, navigateTo, remove } = this.props
     const { selectedRows } = this.state
 
     const menu = (
@@ -77,14 +77,14 @@ class Sports extends PureComponent {
     )
 
     return (
-      <PageHeaderLayout title="赛事列表">
+      <PageHeaderLayout title="选手列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button
                 icon="plus"
                 type="primary"
-                onClick={() => navigateTo('/sports/sport/add')}
+                onClick={() => navigateTo('/players/player/add')}
               >
                 新建
               </Button>
@@ -99,7 +99,7 @@ class Sports extends PureComponent {
                 </span>
               )}
             </div>
-            <SportsTable
+            <PlayersTable
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -116,10 +116,10 @@ class Sports extends PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { sports, loading } = state
+  const { players, loading } = state
   return {
-    sports,
-    loading: loading.models.sports
+    players,
+    loading: loading.models.players
   }
 }
 
@@ -130,13 +130,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     get: params => {
       dispatch({
-        type: 'sports/get',
+        type: 'players/get',
         payload: params
       })
     },
     remove: (id, callback) => {
       dispatch({
-        type: 'sports/remove',
+        type: 'players/remove',
         payload: id,
         callback: callback
       })
@@ -144,4 +144,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sports)
+export default connect(mapStateToProps, mapDispatchToProps)(Players)
