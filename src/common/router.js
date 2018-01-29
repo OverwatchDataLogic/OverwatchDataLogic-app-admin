@@ -236,12 +236,12 @@ export const getRouterData = app => {
       )
     },
     '/players/player/add': {
-      component: dynamicWrapper(app, ['players'], () =>
+      component: dynamicWrapper(app, ['players', 'heroes'], () =>
         import('../routes/Players/PlayerAdd')
       )
     },
     '/players/player/edit/:id': {
-      component: dynamicWrapper(app, ['players'], () =>
+      component: dynamicWrapper(app, ['players', 'heroes'], () =>
         import('../routes/Players/PlayerEdit')
       )
     },

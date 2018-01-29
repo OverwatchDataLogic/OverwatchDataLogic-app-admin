@@ -20,7 +20,8 @@ export default {
       headshot: '',
       nationality: '',
       homeLocation: '',
-      role: ''
+      role: '',
+      heroes: []
     },
     data: {
       list: [],
@@ -111,6 +112,13 @@ export default {
     }
   },
   subscriptions: {
-  
+    setup({ dispatch, history }) {
+      return history.listen(({ pathname, search }) => {
+        const query = queryString.parse(search)
+        if (pathname === '/players/player/list') {
+          dispatch({ type: 'get', payload: query })
+        }
+      })
+    }
   }
 }
