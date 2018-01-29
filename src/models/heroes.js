@@ -2,67 +2,71 @@ import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import _ from 'lodash'
 import {
-  getSports,
-  getSportById,
-  createSports,
-  updateSports,
-  removeSports
+  getHeroes,
+  getHeroById,
+  createHeroes,
+  updateHeroes,
+  removeHeroes
 } from '../services/api'
 
 export default {
-  namespace: 'sports',
+  namespace: 'heroes',
 
   state: {
     default: {
-      title: '',
-      abbreviatedTitle: '',
-      englishTitle: '',
+      name: '',
       description: '',
-      startDate: '2018-01-01',
-      endDate: '2018-01-01',
-      prize: 0,
-      status: 'PENDING'
+      health: '',
+      armour: '',
+      shield: '',
+      real_name: '',
+      age: '',
+      height: '',
+      profession: '',
+      affiliation: '',
+      base_of_operations: '',
+      difficulty: 1,
+      role: ''
     },
     data: {
-      currentItem: {},
       list: [],
       pagination: {}
     }
   },
-
   effects: {
     *get({ payload }, { call, put }) {
-      const response = yield call(getSports, payload)
+      console.log(123)
+      const response = yield call(getHeroes, payload)
       yield put({
         type: 'save',
         payload: response
       })
     },
     *getById({ payload }, { call, put }) {
-      const response = yield call(getSportById, payload)
+      const response = yield call(getHeroById, payload)
       yield put({
         type: 'updateSuccess',
         payload: response
       })
     },
     *create({ payload }, { call, put }) {
-      const response = yield call(createSports, payload)
+      const response = yield call(createHeroes, payload)
       yield put({
         type: 'createSuccess',
         payload: response
       })
-      yield put(routerRedux.push('/sports/sport/list'))
+      yield put(routerRedux.push('/Heroes/hero/list'))
     },
     *update({ payload }, { call, put }) {
-      const response = yield call(updateSports, payload)
+      const response = yield call(updateHeroes, payload)
       yield put({
         type: 'updateSuccess',
         payload: response
       })
-      yield put(routerRedux.push('/sports/sport/list'))
+      yield put(routerRedux.push('/Heroes/hero/list'))
     },
     *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeSports, payload)
+      const response = yield call(removeHeroes, payload)
       yield put({
         type: 'removeSuccess',
         payload: response
@@ -114,6 +118,13 @@ export default {
     }
   },
   subscriptions: {
-   
+    setup({ dispatch, history }) {
+      return history.listen(({ pathname, search }) => {
+        const query = queryString.parse(search)
+        if (pathname === '/heroes/hero/list') {
+          dispatch({ type: 'get', payload: query })
+        }
+      })
+    }
   }
 }

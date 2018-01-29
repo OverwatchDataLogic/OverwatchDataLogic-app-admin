@@ -141,3 +141,35 @@ export async function removePlayers(id) {
     method: 'DELETE'
   })
 }
+
+export async function getHeroes(params) {
+  return request(`/api/heroes?${stringify(params)}`)
+}
+
+export async function getHeroById(id) {
+  return request(`/api/heroes/${id}`)
+}
+
+export async function createHeroes(params) {
+  return request('/api/heroes', {
+    method: 'POST',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function updateHeroes(params) {
+  return request('/api/heroes', {
+    method: 'PUT',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function removeHeroes(id) {
+  return request(`/api/heroes/${id}`, {
+    method: 'DELETE'
+  })
+}

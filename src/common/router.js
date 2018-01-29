@@ -244,6 +244,21 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['players'], () =>
         import('../routes/Players/PlayerEdit')
       )
+    },
+    '/heroes/hero/list': {
+      component: dynamicWrapper(app, ['heroes'], () =>
+        import('../routes/Heroes/Heroes')
+      )
+    },
+    '/heroes/hero/add': {
+      component: dynamicWrapper(app, ['heroes'], () =>
+        import('../routes/Heroes/HeroAdd')
+      )
+    },
+    '/heroes/hero/edit/:id': {
+      component: dynamicWrapper(app, ['heroes'], () =>
+        import('../routes/Heroes/HeroEdit')
+      )
     }
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),

@@ -184,6 +184,21 @@ const menuData = [
     ]
   },
   {
+    name: '英雄',
+    icon: 'user',
+    path: 'heroes',
+    children: [
+      {
+        name: '英雄列表',
+        path: 'hero/list'
+      },
+      {
+        name: '新增英雄',
+        path: 'hero/add'
+      }
+    ]
+  },
+  {
     name: '使用文档',
     icon: 'book',
     path: 'http://pro.ant.design/docs/getting-started',
