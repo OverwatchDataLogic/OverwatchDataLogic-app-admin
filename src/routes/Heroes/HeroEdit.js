@@ -8,9 +8,9 @@ import {
   Card,
   Radio,
   Icon,
-  Upload,
-  message
+  Upload
 } from 'antd'
+import AV from 'leancloud-storage'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 
 const FormItem = Form.Item
@@ -22,48 +22,33 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img)
 }
 
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg'
-  if (!isJPG) {
-    message.error('You can only upload JPG file!')
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJPG && isLt2M
-}
-
 @Form.create()
 class HeroEdit extends PureComponent {
   state = {
-    loading: false
+    loading: false,
+    isAvatarChanged: false
   }
-  handleLogoChange = info => {
+  avatarUpload = ({ onSuccess, onError, file }) => {
+    var newfile = new AV.File(file.name, file)
+    newfile.save().then(
+      function(res) {
+        onSuccess(res)
+      },
+      function(error) {
+        console.log(error)
+      }
+    )
+  }
+  handleChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
       return
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl =>
         this.setState({
-          logoUrl: imageUrl,
-          loading: false
-        })
-      )
-    }
-  }
-  handlePicChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
-      return
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          picUrl: imageUrl,
+          avatarUrl: imageUrl,
+          isAvatarChanged: true,
           loading: false
         })
       )
@@ -75,7 +60,10 @@ class HeroEdit extends PureComponent {
       if (!err) {
         this.props.dispatch({
           type: 'heroes/update',
-          payload: values
+          payload: {
+            ...values,
+            avatar: this.state.isAvatarChanged ? this.state.avatarUrl : this.props.avatar
+          }
         })
       }
     })
@@ -95,11 +83,12 @@ class HeroEdit extends PureComponent {
       affiliation,
       base_of_operations,
       difficulty,
-      role
+      role,
+      avatar
     } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
-    const headshotUrl = this.state.headshotUrl
+    const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -255,16 +244,15 @@ class HeroEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="头像">
               <Upload
-                name="headshot"
+                name="avatar"
                 accept="image/jpg,image/jpeg,image/png"
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={beforeUpload}
                 onChange={this.handleChange}
+                customRequest={this.avatarUpload}
               >
-                {headshotUrl ? <img src={headshotUrl} alt="" /> : uploadButton}
+                {avatarUrl ? <img src={avatarUrl} alt="" /> : uploadButton}
               </Upload>
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
