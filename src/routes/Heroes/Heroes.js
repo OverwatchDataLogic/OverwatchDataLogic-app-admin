@@ -46,7 +46,7 @@ class Heroes extends PureComponent {
                         <img
                           alt=""
                           className={styles.cardAvatar}
-                          src={item.icon_portrait}
+                          src={item.avatar}
                         />
                       }
                       title={<a href="#">{item.name}</a>}
