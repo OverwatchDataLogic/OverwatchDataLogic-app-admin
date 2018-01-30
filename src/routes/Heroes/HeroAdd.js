@@ -3,7 +3,6 @@ import { connect } from 'dva'
 import {
   Form,
   Input,
-  InputNumber,
   Button,
   Card,
   Radio,
@@ -16,7 +15,6 @@ import {
 import AV from 'leancloud-storage'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
-import styles from './HeroEdit'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -47,7 +45,7 @@ class HeroAdd extends PureComponent {
       this.setState({ width })
     }
   }
-  avatarUpload = ({ onSuccess, onError, file }) => {
+  handleUpload = ({ onSuccess, onError, file }) => {
     var newfile = new AV.File(file.name, file)
     newfile.save().then(
       function(res) {
@@ -58,7 +56,7 @@ class HeroAdd extends PureComponent {
       }
     )
   }
-  handleChange = info => {
+  handleAvatarUploadChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
       return
@@ -105,7 +103,7 @@ class HeroAdd extends PureComponent {
       difficulty,
       role,
       avatar
-    } = this.props.default
+    } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
@@ -117,7 +115,7 @@ class HeroAdd extends PureComponent {
     )
     return (
       <PageHeaderLayout title="新增英雄">
-        <Card title="游戏数据" className={styles.card} bordered={false}>
+        <Card title="游戏数据" bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
@@ -220,7 +218,7 @@ class HeroAdd extends PureComponent {
             </Row>
           </Form>
         </Card>
-        <Card title="背景数据" className={styles.card} bordered={false}>
+        <Card title="背景数据" bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
@@ -326,8 +324,8 @@ class HeroAdd extends PureComponent {
                       listType="picture-card"
                       className="avatar-uploader"
                       showUploadList={false}
-                      onChange={this.handleChange}
-                      customRequest={this.avatarUpload}
+                      onChange={this.handleAvatarUploadChange}
+                      customRequest={this.handleUpload}
                     >
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="" />
@@ -364,7 +362,7 @@ class HeroAdd extends PureComponent {
 const mapStateToProps = (state, ownProps) => {
   const { heroes, loading } = state
   return {
-    default: heroes.default,
+    hero: heroes.default,
     loading: loading.models.heroes
   }
 }

@@ -27,7 +27,8 @@ export default {
       base_of_operations: '',
       difficulty: 1,
       role: 'offense',
-      avatar: ''
+      avatar: '',
+      abilities: []
     },
     data: {
       list: [],
@@ -36,7 +37,6 @@ export default {
   },
   effects: {
     *get({ payload }, { call, put }) {
-      console.log(123)
       const response = yield call(getHeroes, payload)
       yield put({
         type: 'save',

@@ -10,12 +10,18 @@ import {
   Upload,
   Col,
   Row,
-  Rate
+  Rate,
+  Modal,
+  List,
+  Avatar,
+  Tag
 } from 'antd'
 import AV from 'leancloud-storage'
+import uuidv4 from 'uuid/v4'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
-import styles from './HeroEdit'
+import EditableAbilityExtraTable from '../../components/EditableAbilityExtraTable'
+import styles from './HeroEdit.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -31,7 +37,25 @@ class HeroEdit extends PureComponent {
   state = {
     loading: false,
     isAvatarChanged: false,
-    width: '100%'
+    width: '100%',
+    visible: false,
+    extra_visible: false,
+    confirmLoading: false,
+    ability: [],
+    abilityName: '',
+    abilityDesc: '',
+    abilityExtra: [
+      {
+        id: '0',
+        name: 'Edward King 0',
+        value: '32'
+      },
+      {
+        id: '1',
+        name: 'Edward King 1',
+        value: '32'
+      }
+    ]
   }
   componentDidMount() {
     window.addEventListener('resize', this.resizeFooterToolbar)
@@ -46,7 +70,7 @@ class HeroEdit extends PureComponent {
       this.setState({ width })
     }
   }
-  avatarUpload = ({ onSuccess, onError, file }) => {
+  handleUpload = ({ onSuccess, onError, file }) => {
     var newfile = new AV.File(file.name, file)
     newfile.save().then(
       function(res) {
@@ -57,9 +81,9 @@ class HeroEdit extends PureComponent {
       }
     )
   }
-  handleChange = info => {
+  handleAvatarUploadChange = info => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
+      this.setState({ avatar_loading: true })
       return
     }
     if (info.file.status === 'done') {
@@ -67,7 +91,22 @@ class HeroEdit extends PureComponent {
         this.setState({
           avatarUrl: imageUrl,
           isAvatarChanged: true,
-          loading: false
+          avatar_loading: false
+        })
+      )
+    }
+  }
+  handleAbilityChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ ability_loading: true })
+      return
+    }
+    if (info.file.status === 'done') {
+      getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          abilityUrl: imageUrl,
+          isAbilityChanged: true,
+          ability_loading: false
         })
       )
     }
@@ -77,7 +116,7 @@ class HeroEdit extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.dispatch({
-          type: 'heroes/update',
+          type: 'heroes/create',
           payload: {
             ...values,
             avatar: this.state.isAvatarChanged
@@ -86,6 +125,91 @@ class HeroEdit extends PureComponent {
           }
         })
       }
+    })
+  }
+  handleModalOk = () => {
+    this.setState({
+      confirmLoading: true
+    })
+    setTimeout(() => {
+      this.setState({
+        visible: false,
+        confirmLoading: false
+      })
+      this.props.push({
+        id: uuidv4(),
+        name: this.abilityName,
+        description: this.abilityDesc,
+        icon: this.state.abilityUrl
+      })
+    }, 2000)
+  }
+  handleModalCancel = () => {
+    console.log('Clicked cancel button')
+    this.setState({
+      visible: false
+    })
+  }
+  handleModalShow = () => {
+    this.setState({
+      visible: true
+    })
+  }
+  handleExtraModalOk = () => {
+    this.setState({
+      confirmLoading: true
+    })
+    setTimeout(() => {
+      this.setState({
+        extra_visible: false,
+        confirmLoading: false
+      })
+    }, 2000)
+  }
+  handleExtraModalCancel = () => {
+    console.log('Clicked cancel button')
+    this.setState({
+      extra_visible: false
+    })
+  }
+  handleExtraModalShow = () => {
+    this.setState({
+      extra_visible: true
+    })
+  }
+  handleAbilityExtraChange = (id, dataIndex) => {
+    return value => {
+      const abilityExtra = [...this.state.abilityExtra]
+      const target = abilityExtra.find(item => item.id === id)
+      if (target) {
+        target[dataIndex] = value
+        this.setState({ abilityExtra })
+      }
+    }
+  }
+  handleAbilityExtraDelete = id => {
+    const abilityExtra = [...this.state.abilityExtra]
+    this.setState({ abilityExtra: abilityExtra.filter(item => item.id !== id) })
+  }
+  handleAbilityExtraAdd = () => {
+    const { abilityExtra } = this.state
+    const newData = {
+      id: uuidv4(),
+      name: '大招',
+      value: '是'
+    }
+    this.setState({
+      abilityExtra: [...abilityExtra, newData]
+    })
+  }
+  onAbilityNameChange = e => {
+    this.setState({
+      abilityName: e.target.value
+    })
+  }
+  onAbilityNameChange = e => {
+    this.setState({
+      abilityDesc: e.target.value
     })
   }
   render() {
@@ -104,19 +228,16 @@ class HeroEdit extends PureComponent {
       base_of_operations,
       difficulty,
       role,
-      avatar
+      avatar,
+      abilities
     } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
+    const { visible, extra_visible, confirmLoading, abilityExtra } = this.state
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">上传</div>
-      </div>
-    )
+    const abilityUrl = this.state.isAbilityChanged ? this.state.abilityUrl : ''
     return (
-      <PageHeaderLayout title="新增英雄">
+      <PageHeaderLayout title="编辑英雄">
         <Card title="游戏数据" className={styles.card} bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
@@ -333,13 +454,20 @@ class HeroEdit extends PureComponent {
                       listType="picture-card"
                       className="avatar-uploader"
                       showUploadList={false}
-                      onChange={this.handleChange}
-                      customRequest={this.avatarUpload}
+                      onChange={this.handleAvatarUploadChange}
+                      customRequest={this.handleUpload}
                     >
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="" />
                       ) : (
-                        uploadButton
+                        <div>
+                          <Icon
+                            type={
+                              this.state.avatar_loading ? 'loading' : 'plus'
+                            }
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
                       )}
                     </Upload>
                   )}
@@ -354,6 +482,49 @@ class HeroEdit extends PureComponent {
             </Row>
           </Form>
         </Card>
+        <Card
+          title="英雄技能"
+          extra={<a onClick={() => this.handleModalShow()}>新增技能</a>}
+          className={styles.abilities}
+          bordered={false}
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={abilities}
+            renderItem={item => (
+              <List.Item
+                actions={[
+                  <a onClick={() => this.handleExtraModalShow()}>扩展</a>,
+                  <a>编辑</a>,
+                  <a>详细</a>
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src={item.icon} size="large" shape="square" />
+                  }
+                  title={<a href="https://ant.design">{item.name}</a>}
+                  description={item.description}
+                />
+                <div>
+                  {item.extra.length > 0 ? (
+                    item.extra.slice(0, 6).map(x => (
+                      <Row key={x.id}>
+                        <Col>
+                          <Tag color="magenta">{x.name}</Tag>：<span>
+                            {x.value}
+                          </span>
+                        </Col>
+                      </Row>
+                    ))
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              </List.Item>
+            )}
+          />
+        </Card>
         <FooterToolbar style={{ width: this.state.width }}>
           <Button
             type="primary"
@@ -363,6 +534,70 @@ class HeroEdit extends PureComponent {
             提交
           </Button>
         </FooterToolbar>
+        <Modal
+          title="英雄技能"
+          visible={visible}
+          onOk={this.handleModalOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleModalCancel}
+        >
+          <Form hideRequiredMark>
+            <FormItem label="技能图标">
+              <Upload
+                name="ability_icon"
+                accept="image/jpg,image/jpeg,image/png"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                onChange={this.handleAbilityChange}
+                customRequest={this.handleUpload}
+              >
+                {abilityUrl ? (
+                  <img src={abilityUrl} alt="" />
+                ) : (
+                  <div>
+                    <Icon
+                      type={this.state.ability_loading ? 'loading' : 'plus'}
+                    />
+                    <div className="ant-upload-text">上传</div>
+                  </div>
+                )}
+              </Upload>
+            </FormItem>
+            <FormItem label="技能名称">
+              <Input
+                placeholder="请输入技能名称"
+                onChange={() => this.onAbilityNameChange}
+              />
+            </FormItem>
+            <FormItem label="技能描述">
+              <TextArea
+                style={{ minHeight: 32 }}
+                placeholder="请输入技能描述"
+                onChange={() => this.onAbilityDescChange}
+                rows={6}
+              />
+            </FormItem>
+          </Form>
+        </Modal>
+        <Modal
+          title="技能扩展"
+          visible={extra_visible}
+          onOk={this.handleExtraModalOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleExtraModalCancel}
+        >
+          <Form hideRequiredMark>
+            <FormItem>
+              <EditableAbilityExtraTable
+                data={abilityExtra}
+                handleAbilityExtraChange={this.handleAbilityExtraChange}
+                handleAbilityExtraDelete={this.handleAbilityExtraDelete}
+                handleAbilityExtraAdd={this.handleAbilityExtraAdd}
+              />
+            </FormItem>
+          </Form>
+        </Modal>
       </PageHeaderLayout>
     )
   }
