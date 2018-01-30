@@ -30,11 +30,13 @@ let tableListDataSource = [
           '安娜可以用手中的步枪射出飞镖为队友恢复生命值或对敌人造成持续性伤害。她也可以用步枪的瞄准镜进行放大瞄准以便更精准地击中目标。',
         icon:
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/f/fc/Ability-ana1.png',
-        extra: {
-          id: uuidv4(),
-          name: '大招',
-          value: '否'
-        }
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
       },
       {
         id: uuidv4(),
@@ -43,11 +45,13 @@ let tableListDataSource = [
           '安娜可以用她的副武器射出飞镖，使敌人失去意识（目标受到任何伤害后将会醒来）。',
         icon:
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/5/58/Ability-ana2.png',
-        extra: {
-          id: uuidv4(),
-          name: '大招',
-          value: '否'
-        }
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
       },
       {
         id: uuidv4(),
@@ -56,11 +60,13 @@ let tableListDataSource = [
           '安娜扔出一颗生物手雷；当手雷爆炸后，对小范围内的敌人造成伤害并治疗队友。受影响的队友在短时间内受到的所有治疗效果将会提高，而受影响的敌人则会在短时间内无法受到治疗。',
         icon:
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/0/0c/Ability-ana3.png',
-        extra: {
-          id: uuidv4(),
-          name: '大招',
-          value: '否'
-        }
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
       },
       {
         id: uuidv4(),
@@ -69,11 +75,13 @@ let tableListDataSource = [
           '安娜用激素强化一位队友，在短时间内提高目标队友造成的伤害并且降低其受到的伤害。',
         icon:
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/9/97/Ability-ana4.png',
-        extra: {
-          id: uuidv4(),
-          name: '大招',
-          value: '是'
-        }
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '是'
+          }
+        ]
       }
     ]
   },

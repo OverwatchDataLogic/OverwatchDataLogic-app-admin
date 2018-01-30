@@ -41,7 +41,8 @@ class HeroEdit extends PureComponent {
     visible: false,
     extra_visible: false,
     confirmLoading: false,
-    ability: [],
+    abilities: this.props.abilities,
+    abilityUrl: '',
     abilityName: '',
     abilityDesc: '',
     abilityExtra: [
@@ -121,7 +122,8 @@ class HeroEdit extends PureComponent {
             ...values,
             avatar: this.state.isAvatarChanged
               ? this.state.avatarUrl
-              : this.props.avatar
+              : this.props.avatar,
+            abilities: this.state.abilities
           }
         })
       }
@@ -134,13 +136,16 @@ class HeroEdit extends PureComponent {
     setTimeout(() => {
       this.setState({
         visible: false,
-        confirmLoading: false
-      })
-      this.props.push({
-        id: uuidv4(),
-        name: this.abilityName,
-        description: this.abilityDesc,
-        icon: this.state.abilityUrl
+        confirmLoading: false,
+        abilities: [
+          ...this.state.abilities,
+          {
+            id: uuidv4(),
+            name: this.abilityName,
+            description: this.abilityDesc,
+            icon: this.state.abilityUrl
+          }
+        ]
       })
     }, 2000)
   }
@@ -503,24 +508,22 @@ class HeroEdit extends PureComponent {
                   avatar={
                     <Avatar src={item.icon} size="large" shape="square" />
                   }
-                  title={<a href="https://ant.design">{item.name}</a>}
+                  title={item.name}
                   description={item.description}
                 />
-                <div>
-                  {item.extra.length > 0 ? (
-                    item.extra.slice(0, 6).map(x => (
-                      <Row key={x.id}>
-                        <Col>
-                          <Tag color="magenta">{x.name}</Tag>：<span>
-                            {x.value}
-                          </span>
-                        </Col>
-                      </Row>
-                    ))
-                  ) : (
-                    <div />
-                  )}
-                </div>
+                {item.extra.length > 0 ? (
+                  item.extra.slice(0, 6).map(x => (
+                    <Row key={x.id}>
+                      <Col>
+                        <Tag color="magenta">{x.name}</Tag>：<span>
+                          {x.value}
+                        </span>
+                      </Col>
+                    </Row>
+                  ))
+                ) : (
+                  <div />
+                )}
               </List.Item>
             )}
           />
