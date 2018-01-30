@@ -26,7 +26,7 @@ export default {
       affiliation: '',
       base_of_operations: '',
       difficulty: 1,
-      role: '',
+      role: 'offense',
       avatar: ''
     },
     data: {
