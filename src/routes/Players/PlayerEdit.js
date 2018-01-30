@@ -236,7 +236,9 @@ const mapStateToProps = (state, ownProps) => {
   const { players, heroes, loading } = state
   return {
     player:
-      players.data.list.length > 0 ? players.data.list[0] : players.default,
+      players.data.list.length > 0
+        ? players.data.list.filter(x => x.id === ownProps.match.params.id)[0]
+        : players.default,
     heroes: heroes.data.list,
     loading: loading.models.players
   }

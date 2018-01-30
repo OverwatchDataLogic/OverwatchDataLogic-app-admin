@@ -276,7 +276,10 @@ class SportEdit extends PureComponent {
 const mapStateToProps = (state, ownProps) => {
   const { sports, loading } = state
   return {
-    sport: sports.data.list.length > 0 ? sports.data.list[0] : sports.default,
+    sport:
+      sports.data.list.length > 0
+        ? sports.data.list.filter(x => x.id === ownProps.match.params.id)[0]
+        : sports.default,
     loading: loading.models.sports
   }
 }
