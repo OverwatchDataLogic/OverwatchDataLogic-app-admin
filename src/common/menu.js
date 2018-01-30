@@ -169,6 +169,21 @@ const menuData = [
     ]
   },
   {
+    name: '队伍',
+    icon: 'user',
+    path: 'teams',
+    children: [
+      {
+        name: '队伍列表',
+        path: 'team/list'
+      },
+      {
+        name: '新增队伍',
+        path: 'team/add'
+      }
+    ]
+  },
+  {
     name: '选手',
     icon: 'user',
     path: 'players',

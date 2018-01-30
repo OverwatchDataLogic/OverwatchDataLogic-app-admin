@@ -259,7 +259,23 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['heroes'], () =>
         import('../routes/Heroes/HeroEdit')
       )
-    }
+    },
+    //队伍
+    // '/teams/team/add': {
+    //   component: dynamicWrapper(app, ['heroes'], () =>
+    //     import('../routes/Teams/TeamAdd')
+    //   )
+    // },
+    '/teams/team/list': {
+      component: dynamicWrapper(app, ['heroes'], () =>
+        import('../routes/Teams/Teams')
+      )
+    },
+    // '/teams/team/edit/:id': {
+    //   component: dynamicWrapper(app, ['heroes'], () =>
+    //     import('../routes/Teams/TeamsEdit')
+    //   )
+    // }
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
