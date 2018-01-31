@@ -173,3 +173,35 @@ export async function removeHeroes(id) {
     method: 'DELETE'
   })
 }
+
+export async function getTeams(params) {
+  return request(`/api/teams?${stringify(params)}`)
+}
+
+export async function getTeamById(id) {
+  return request(`/api/teams/${id}`)
+}
+
+export async function createTeams(params) {
+  return request('/api/teams', {
+    method: 'POST',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function updateTeams(params) {
+  return request('/api/teams', {
+    method: 'PUT',
+    body: {
+      ...params
+    }
+  })
+}
+
+export async function removeTeams(id) {
+  return request(`/api/team/${id}`, {
+    method: 'DELETE'
+  })
+}
