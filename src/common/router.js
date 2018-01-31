@@ -267,10 +267,10 @@ export const getRouterData = app => {
     //   )
     // },
     '/teams/team/list': {
-      component: dynamicWrapper(app, ['heroes'], () =>
+      component: dynamicWrapper(app, ['teams'], () =>
         import('../routes/Teams/Teams')
       )
-    },
+    }
     // '/teams/team/edit/:id': {
     //   component: dynamicWrapper(app, ['heroes'], () =>
     //     import('../routes/Teams/TeamsEdit')

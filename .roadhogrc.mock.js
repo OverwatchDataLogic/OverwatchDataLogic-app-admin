@@ -28,6 +28,7 @@ import {
   putHeroes,
   deleteHeroes
 } from './mock/heroes'
+import { getTeams } from './mock/teams'
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true'
@@ -184,7 +185,8 @@ const proxy = {
   'PUT /api/heroes': {
     $body: putHeroes
   },
-  'DELETE /api/heroes/:id': deleteHeroes
+  'DELETE /api/heroes/:id': deleteHeroes,
+  'GET /api/teams': getTeams
 }
 
 export default (noProxy ? {} : delay(proxy, 1000))
