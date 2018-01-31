@@ -8,6 +8,7 @@ let tableListDataSource = [
     name: '安娜',
     description:
       '安娜全方位的武器配备让她可以应对战场上的所有情况。她的生物步枪和生物手雷可以用来治疗队友并对敌人造成伤害，同时还能对敌人造成负面影响；她的副武器可以麻醉重要目标，而纳米激素则可以大大强化她的一名队友。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -20,7 +21,8 @@ let tableListDataSource = [
     difficulty: 3,
     role: 'support',
     extra: [],
-    full_portrait:
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/ana/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Ana_portrait.png',
     abilities: [
@@ -37,6 +39,13 @@ let tableListDataSource = [
             name: '大招',
             value: '否'
           }
+        ],
+        remark: [
+          {
+            id: uuidv4(),
+            value:
+              '生物步枪能够对敌方托比昂的炮台造成伤害，但不能治疗友方托比昂的炮台。'
+          }
         ]
       },
       {
@@ -51,6 +60,12 @@ let tableListDataSource = [
             id: uuidv4(),
             name: '大招',
             value: '否'
+          }
+        ],
+        remark: [
+          {
+            id: uuidv4(),
+            value: '麻醉镖对托比昂的炮台没有作用。'
           }
         ]
       },
@@ -67,6 +82,13 @@ let tableListDataSource = [
             name: '大招',
             value: '否'
           }
+        ],
+        remark: [
+          {
+            id: uuidv4(),
+            value:
+              '队友受到的治疗量额外提高100%，同时敌人受到的治疗量减少100%。'
+          }
         ]
       },
       {
@@ -82,7 +104,8 @@ let tableListDataSource = [
             name: '大招',
             value: '是'
           }
-        ]
+        ],
+        remark: []
       }
     ]
   },
@@ -91,6 +114,7 @@ let tableListDataSource = [
     name: '堡垒',
     description:
       '“堡垒”具有自我修复的能力，还可以在哨卫模式、侦查模式以及极具毁灭性的坦克模式间进行切换。',
+    comment: '',
     health: 200,
     armour: 100,
     shield: 0,
@@ -102,7 +126,9 @@ let tableListDataSource = [
     base_of_operations: '',
     difficulty: 1,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/bastion/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Bastion_portrait.png'
   },
@@ -111,6 +137,7 @@ let tableListDataSource = [
     name: 'D.Va',
     description:
       'D.Va拥有一部强大的机甲，它具有两台全自动的近距离聚变机炮、可以使机甲飞跃敌人或障碍物的推进器、 还有可以抵御来自正面的远程攻击的deffense矩阵。',
+    comment: '',
     health: 200,
     armour: 400,
     shield: 0,
@@ -122,7 +149,9 @@ let tableListDataSource = [
     base_of_operations: '韩国，釜山',
     difficulty: 2,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/dva/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/DVa_portrait.png'
   },
@@ -131,6 +160,7 @@ let tableListDataSource = [
     name: '源氏',
     description:
       '源氏可以用致命而准确的手里剑重创敌人，他的高科技武士刀可以用来反弹敌人的远程攻击，或是对敌人施展一次快速攻击。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -142,7 +172,9 @@ let tableListDataSource = [
     base_of_operations: '尼泊尔，香巴里寺庙',
     difficulty: 3,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/genji/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Genji_portrait.png'
   },
@@ -151,6 +183,7 @@ let tableListDataSource = [
     name: '半藏',
     description:
       '半藏的弓箭具备有不同的功能，既可以侦测敌情，也可以分散成数股箭矢攻击多个敌人。他还可以攀爬墙壁，从高处攻击敌人，或是召唤巨大的巨龙之魂冲击敌人。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -162,7 +195,9 @@ let tableListDataSource = [
     base_of_operations: '日本，花村（前）',
     difficulty: 3,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/hanzo/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Hanzo_portrait.png'
   },
@@ -171,6 +206,7 @@ let tableListDataSource = [
     name: '狂鼠',
     description:
       '“狂鼠”具有强大的范围攻击能力，他的榴弹发射器可以射出弹跳的榴弹攻击敌人，震荡地雷可以对敌人造成伤害并击飞他们，捕兽夹则可以困住不小心落入陷阱的敌人。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -182,7 +218,9 @@ let tableListDataSource = [
     base_of_operations: '（前）澳大利亚，渣客镇',
     difficulty: 2,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/junkrat/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Junkrat_portrait.png'
   },
@@ -191,6 +229,7 @@ let tableListDataSource = [
     name: '卢西奥',
     description:
       '卢西奥的音速扩音器可以射出音速飞弹攻击敌人，还可以用声波将其击退。他播放的音乐可以为队友恢复生命值，或者为他们提供移动速度加成，而且他可以在这两种音乐中随心切换。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -202,7 +241,9 @@ let tableListDataSource = [
     base_of_operations: '巴西，里约热内卢',
     difficulty: 2,
     role: 'support',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/lucio/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Lucio_portrait.png'
   },
@@ -211,6 +252,7 @@ let tableListDataSource = [
     name: '麦克雷',
     description:
       '麦克雷拥有一把维和者左轮手枪，他可以用神射手精准解决他的目标，也可以用战术翻滚如苍鹰般在战场中出入自如。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -222,7 +264,9 @@ let tableListDataSource = [
     base_of_operations: '美国新墨西哥州，圣达菲',
     difficulty: 2,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mccree/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/McCree_portrait.png'
   },
@@ -231,6 +275,7 @@ let tableListDataSource = [
     name: '美',
     description:
       '美的天气控制设备可以使敌人减速或是进行区域控制。她的冰霜冲击枪可以射出冰锥或是冷气对敌人造成伤害。她可以将自己急冻在冰块中治疗自己或者抵挡伤害，还可以用冰墙来阻碍敌方的行动。',
+    comment: '',
     health: 250,
     armour: 0,
     shield: 0,
@@ -242,7 +287,9 @@ let tableListDataSource = [
     base_of_operations: '中国，西安',
     difficulty: 2,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mei/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mei_portrait.png'
   },
@@ -251,6 +298,7 @@ let tableListDataSource = [
     name: '天使',
     description:
       '“天使”的女武神作战服可以让她像守护天使一样保护战场上的队友。她的治疗杖可以射出两种光束，治疗或是强化队友，她还可以使用复活技能使队友死而复生。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -262,7 +310,9 @@ let tableListDataSource = [
     base_of_operations: '瑞士，苏黎世',
     difficulty: 1,
     role: 'support',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mercy/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mercy_portrait.png'
   },
@@ -271,6 +321,7 @@ let tableListDataSource = [
     name: '法老之鹰',
     description:
       '可以通过喷气作战服翱翔天际，也能用火箭发射器投下高爆火箭，“法老之鹰”代表着一股让你无法忽视的强大力量。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -282,7 +333,9 @@ let tableListDataSource = [
     base_of_operations: '埃及，吉萨',
     difficulty: 1,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/pharah/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Pharah_portrait.png'
   },
@@ -291,6 +344,7 @@ let tableListDataSource = [
     name: '死神',
     description:
       '”死神”能用地狱火霰弹枪造成巨大伤害，能够用幽灵形态躲避伤害，还能用暗影步在各个地点来回穿梭，这些能力让他足以成为最致命的杀手。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -302,7 +356,9 @@ let tableListDataSource = [
     base_of_operations: '',
     difficulty: 1,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/reaper/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reaper_portrait.png'
   },
@@ -311,6 +367,7 @@ let tableListDataSource = [
     name: '莱因哈特',
     description:
       '莱因哈特穿着一套厚重的动力装甲，既可以挥舞着火箭重锤，用强大的冲锋杀入敌阵，也能用巨大的能量屏障保护盟友。',
+    comment: '',
     health: 200,
     armour: 300,
     shield: 0,
@@ -322,7 +379,9 @@ let tableListDataSource = [
     base_of_operations: '德国，斯图加特',
     difficulty: 1,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/reinhardt/full-portrait.png',
     avatar:
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reinhardt_portrait.png'
@@ -332,6 +391,7 @@ let tableListDataSource = [
     name: '路霸',
     description:
       '“路霸”可以用他标志性的链钩将敌人勾到他的身边，然后用爆裂枪重创他们。他能够承受巨大的伤害，还可以通过呼吸器恢复生命值。',
+    comment: '',
     health: 600,
     armour: 0,
     shield: 0,
@@ -343,7 +403,9 @@ let tableListDataSource = [
     base_of_operations: '（前）澳大利亚，渣客镇',
     difficulty: 1,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/roadhog/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Roadhog_portrait.png'
   },
@@ -352,6 +414,7 @@ let tableListDataSource = [
     name: '士兵76',
     description:
       '他装备有最先进的武器，一把试验性的可以发射螺旋高爆火箭的脉冲步枪，而且他还是经过专业训练的战斗人员，拥有强大的机动以及辅助能力。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -363,7 +426,9 @@ let tableListDataSource = [
     base_of_operations: '',
     difficulty: 1,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/soldier-76/full-portrait.png',
     avatar:
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Soldier76_portrait.png'
@@ -373,6 +438,7 @@ let tableListDataSource = [
     name: '秩序之光',
     description:
       '“秩序之光”能够使用光子发射器来分解敌人，为队友提供护盾，建造传送面板或是部署粒子哨戒炮。',
+    comment: '',
     health: 100,
     armour: 0,
     shield: 100,
@@ -384,7 +450,9 @@ let tableListDataSource = [
     base_of_operations: '印度，乌托邦',
     difficulty: 2,
     role: 'support',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/symmetra/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Symmetra_portrait.png'
   },
@@ -393,6 +461,7 @@ let tableListDataSource = [
     name: '托比昂',
     description:
       '托比昂的主要武器是一把锤子以及一把铆钉枪。他随身携带的熔炉让他可以放置可升级的炮台，或是铸造护甲包供盟友使用。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -404,7 +473,9 @@ let tableListDataSource = [
     base_of_operations: '瑞典，哥德堡',
     difficulty: 2,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/torbjorn/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Torbjorn_portrait.png'
   },
@@ -413,6 +484,7 @@ let tableListDataSource = [
     name: '猎空',
     description:
       '“猎空”的武器有两把脉冲手枪，强大的脉冲炸弹以及永不停歇的欢声笑语。猎空能够通过闪现快速移动并且利用闪回调整自己的状态，然后以这些强大的能力除尽世上的邪恶。',
+    comment: '',
     health: 150,
     armour: 0,
     shield: 0,
@@ -424,7 +496,9 @@ let tableListDataSource = [
     base_of_operations: '英国，伦敦',
     difficulty: 2,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/tracer/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Tracer_portrait.png'
   },
@@ -433,6 +507,7 @@ let tableListDataSource = [
     name: '黑百合',
     description:
       '“黑百合”全身都是致命的武器，包括能够放出致命毒素的诡雷、能够为队友提供红外视野的护目镜以及一把可以在狙击和自动模式间切换的强大步枪。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -444,7 +519,9 @@ let tableListDataSource = [
     base_of_operations: '法国，安纳西',
     difficulty: 2,
     role: 'deffense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/widowmaker/full-portrait.png',
     avatar:
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Widowmaker_portrait.png'
@@ -454,6 +531,7 @@ let tableListDataSource = [
     name: '温斯顿',
     description:
       '温斯顿拥有他创造的强大发明，包括了喷射背包、特斯拉炮以及屏障发射器。不仅如此，他还有与生俱来强大的猩猩力量。',
+    comment: '',
     health: 400,
     armour: 100,
     shield: 0,
@@ -465,7 +543,9 @@ let tableListDataSource = [
     base_of_operations: '（前）“地平线”月球殖民地',
     difficulty: 2,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/winston/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Winston_portrait.png'
   },
@@ -474,6 +554,7 @@ let tableListDataSource = [
     name: '查莉娅',
     description:
       '查莉娅可以为自己或队友施加护盾，吸收伤害并且提升她粒子炮的能量，因此查莉雅具备有前线作战的强大实力。',
+    comment: '',
     health: 200,
     armour: 200,
     shield: 0,
@@ -485,7 +566,9 @@ let tableListDataSource = [
     base_of_operations: '俄罗斯，克拉斯诺亚尔斯克前线',
     difficulty: 2,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/zarya/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
@@ -494,6 +577,7 @@ let tableListDataSource = [
     name: '禅雅塔',
     description:
       '禅雅塔可以用和“谐”治愈盟友，也可以用“乱”削弱敌人，还可以在短时间内进入超凡入圣的状态，获得短暂的无敌效果。',
+    comment: '',
     health: 50,
     armour: 0,
     shield: 150,
@@ -505,7 +589,9 @@ let tableListDataSource = [
     base_of_operations: '尼泊尔，香巴里僧院（前）',
     difficulty: 3,
     role: 'support',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/zenyatta/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
@@ -514,6 +600,7 @@ let tableListDataSource = [
     name: '黑影',
     description:
       '隐身与削弱敌人的能力让“黑影”成为了一个强大的渗透者。她的黑客入侵技能可以干扰敌人，使其更容易被击杀，而她的电磁脉冲可以在对付多个敌人时获得先手优势。“黑影”的位移传动和隐秘潜行也让她难以被敌人压制。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -525,7 +612,9 @@ let tableListDataSource = [
     base_of_operations: '墨西哥，多拉多',
     difficulty: 3,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/sombra/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Sombra_portrait.png'
   },
@@ -534,6 +623,7 @@ let tableListDataSource = [
     name: '奥丽莎',
     description:
       '奥丽莎是团队的核心，可以用防护屏障掩护前线队友。她可以从远距离进行攻击、强化自身的deffense、发射重力弹使敌人减速并打乱阵型，同时还能部署超充能器强化范围多个队友的伤害输出。',
+    comment: '',
     health: 200,
     armour: 200,
     shield: 0,
@@ -545,7 +635,9 @@ let tableListDataSource = [
     base_of_operations: '努巴尼',
     difficulty: 2,
     role: 'tank',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/orisa/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Orisa_portrait.png'
   },
@@ -554,6 +646,7 @@ let tableListDataSource = [
     name: '末日铁拳',
     description:
       '“末日铁拳”身上的机械元件使他成为一名高机动力、高破坏力的前线战士。除了用手炮从远距离造成伤害，”末日铁拳”还能猛击地面，将敌人击飞或令其失去平衡，或者用火箭重拳冲进战场。当面对一群阵型紧密的敌人时，”末日铁拳”可以跳到敌人视野之外，紧接着以毁天灭地之势坠落强袭。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -565,7 +658,9 @@ let tableListDataSource = [
     base_of_operations: '尼日利亚，奥约',
     difficulty: 3,
     role: 'offense',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/doomfist/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Doomfist_portrait.png'
   },
@@ -574,6 +669,7 @@ let tableListDataSource = [
     name: '莫伊拉',
     description:
       '莫伊拉可以运用生化能量提供治疗或输出伤害——但一切都是为了她自己的利益。',
+    comment: '',
     health: 200,
     armour: 0,
     shield: 0,
@@ -585,7 +681,9 @@ let tableListDataSource = [
     base_of_operations: '黑爪，（前）暗影守望成员',
     difficulty: 2,
     role: 'support',
-    full_portrait:
+    extra: [],
+    remark: [],
+    fullshot:
       'http://overwatch.nos.netease.com/1/assets/images/hero/moira/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Moira_portrait.png'
   }
@@ -664,6 +762,7 @@ export function postHeroes(req, res, b) {
   const {
     name,
     description,
+    comment,
     health,
     armour,
     shield,
@@ -675,7 +774,7 @@ export function postHeroes(req, res, b) {
     base_of_operations,
     difficulty,
     role,
-    full_portrait,
+    fullshot,
     avatar
   } = body
 
@@ -683,6 +782,7 @@ export function postHeroes(req, res, b) {
     id: uuidv4(),
     name,
     description,
+    comment,
     health,
     armour,
     shield,
@@ -694,7 +794,7 @@ export function postHeroes(req, res, b) {
     base_of_operations,
     difficulty,
     role,
-    full_portrait,
+    fullshot,
     avatar
   }
 

@@ -16,6 +16,7 @@ export default {
     default: {
       name: '',
       description: '',
+      comment: '',
       health: '',
       armour: '',
       shield: '',
@@ -28,6 +29,7 @@ export default {
       difficulty: 1,
       role: 'offense',
       avatar: '',
+      fullshot: '',
       abilities: [],
       extra: []
     },

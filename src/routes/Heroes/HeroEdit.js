@@ -20,8 +20,10 @@ import AV from 'leancloud-storage'
 import uuidv4 from 'uuid/v4'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
-import EditableAbilityExtraTable from '../../components/EditableAbilityExtraTable'
 import EditableHeroExtraTable from '../../components/EditableHeroExtraTable'
+import EditableHeroRemarkTable from '../../components/EditableHeroRemarkTable'
+import EditableAbilityExtraTable from '../../components/EditableAbilityExtraTable'
+import EditableAbilityRemarkTable from '../../components/EditableAbilityRemarkTable'
 import styles from './HeroEdit.less'
 
 const FormItem = Form.Item
@@ -32,11 +34,14 @@ class HeroEdit extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: false,
+      avatar_loading: false,
+      fullshot_loading: false,
       isAvatarChanged: false,
+      isFullshotChanged: false,
       width: '100%',
       ability_visible: false,
-      extra_visible: false,
+      ability_extra_visible: false,
+      ability_remark_visible: false,
       confirmLoading: false,
       abilityUrl: '',
       abilityName: '',
@@ -44,7 +49,8 @@ class HeroEdit extends Component {
       abilityId: '',
       ability: {},
       abilities: this.props.hero.abilities,
-      extra: this.props.hero.extra
+      extra: this.props.hero.extra,
+      remark: this.props.hero.remark
     }
     this.onAbilityNameChange = this.onAbilityNameChange.bind(this)
     this.onAbilityDescChange = this.onAbilityDescChange.bind(this)
@@ -87,6 +93,19 @@ class HeroEdit extends Component {
       })
     }
   }
+  handleFullshotUploadChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ fullshot_loading: true })
+      return
+    }
+    if (info.file.status === 'done') {
+      this.setState({
+        fullshotUrl: info.file.response.attributes.url,
+        isFullshotChanged: true,
+        fullshot_loading: false
+      })
+    }
+  }
   handleAbilityChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ ability_loading: true })
@@ -109,8 +128,12 @@ class HeroEdit extends Component {
           avatar: this.state.isAvatarChanged
             ? this.state.avatarUrl
             : this.props.avatar,
+          fullshot: this.state.isFullshotChanged
+            ? this.state.fullshotUrl
+            : this.props.fullshot,
           abilities: this.state.abilities,
-          extra: this.state.extra
+          extra: this.state.extra,
+          remark: this.state.remark
         })
       }
     })
@@ -168,7 +191,8 @@ class HeroEdit extends Component {
         name: this.state.abilityName,
         description: this.state.abilityDesc,
         icon: this.state.abilityUrl,
-        extra: []
+        extra: [],
+        remark: []
       }
       this.setState({
         ability_visible: false,
@@ -184,10 +208,14 @@ class HeroEdit extends Component {
   }
   handleAbilityModalShow = () => {
     this.setState({
-      ability_visible: true
+      ability_visible: true,
+      abilityUrl: '',
+      abilityName: '',
+      abilityDesc: '',
+      abilityId: ''
     })
   }
-  handleExtraModalOk = () => {
+  handleAbilityExtraModalOk = () => {
     const abilities = this.state.abilities.map(item => {
       if (item.id === this.state.ability.id) {
         return Object.assign(item, this.state.ability)
@@ -196,23 +224,19 @@ class HeroEdit extends Component {
       }
     })
     this.setState({
-      extra_visible: false,
+      ability_extra_visible: false,
       confirmLoading: false,
       abilities
     })
   }
-  handleExtraModalCancel = () => {
+  handleAbilityExtraModalCancel = () => {
     this.setState({
-      extra_visible: false
+      ability_extra_visible: false
     })
   }
-  handleExtraModalShow = id => {
+  handleAbilityExtraModalShow = id => {
     this.setState({
-      extra_visible: true,
-      abilityUrl: '',
-      abilityName: '',
-      abilityDesc: '',
-      abilityId: '',
+      ability_extra_visible: true,
       ability: this.state.abilities.filter(x => x.id === id)[0]
     })
   }
@@ -249,6 +273,63 @@ class HeroEdit extends Component {
       }
     })
   }
+  handleAbilityRemarkModalOk = () => {
+    const abilities = this.state.abilities.map(item => {
+      if (item.id === this.state.ability.id) {
+        return Object.assign(item, this.state.ability)
+      } else {
+        return item
+      }
+    })
+    this.setState({
+      ability_remark_visible: false,
+      confirmLoading: false,
+      abilities
+    })
+  }
+  handleAbilityRemarkModalCancel = () => {
+    this.setState({
+      ability_remark_visible: false
+    })
+  }
+  handleAbilityRemarkModalShow = id => {
+    this.setState({
+      ability_remark_visible: true,
+      ability: this.state.abilities.filter(x => x.id === id)[0]
+    })
+  }
+  handleAbilityRemarkChange = (id, dataIndex) => {
+    return value => {
+      this.state.ability.remark.map(item => {
+        if (item.id === id) {
+          item[dataIndex] = value
+          return item
+        } else {
+          return item
+        }
+      })
+    }
+  }
+  handleAbilityRemarkDelete = id => {
+    this.setState({
+      ability: {
+        ...this.state.ability,
+        remark: this.state.ability.remark.filter(item => item.id !== id)
+      }
+    })
+  }
+  handleAbilityRemarkAdd = () => {
+    const newData = {
+      id: uuidv4(),
+      value: '内容'
+    }
+    this.setState({
+      ability: {
+        ...this.state.ability,
+        remark: [...this.state.ability.remark, newData]
+      }
+    })
+  }
   handleHeroExtraChange = (id, dataIndex) => {
     return value => {
       const extra = this.state.extra.map(item => {
@@ -282,11 +363,44 @@ class HeroEdit extends Component {
       extra: [...this.state.extra, newData]
     })
   }
+  handleHeroRemarkChange = (id, dataIndex) => {
+    return value => {
+      const remark = this.state.remark.map(item => {
+        if (item.id === id) {
+          const target = (item[dataIndex] = value)
+          return {
+            ...item,
+            target
+          }
+        } else {
+          return item
+        }
+      })
+      this.setState({
+        remark: remark
+      })
+    }
+  }
+  handleHeroRemarkDelete = id => {
+    this.setState({
+      remark: this.state.remark.filter(item => item.id !== id)
+    })
+  }
+  handleHeroRemarkAdd = () => {
+    const newData = {
+      id: uuidv4(),
+      value: '内容'
+    }
+    this.setState({
+      remark: [...this.state.remark, newData]
+    })
+  }
   render() {
     const {
       id,
       name,
       description,
+      comment,
       health,
       armour,
       shield,
@@ -298,19 +412,25 @@ class HeroEdit extends Component {
       base_of_operations,
       difficulty,
       role,
-      avatar
+      avatar,
+      fullshot
     } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const {
       ability_visible,
-      extra_visible,
+      ability_extra_visible,
+      ability_remark_visible,
       confirmLoading,
       ability,
       extra,
+      remark,
       abilities
     } = this.state
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
+    const fullshotUrl = this.state.isFullshotChanged
+      ? this.state.fullshotUrl
+      : fullshot
     const abilityUrl = this.state.isAbilityChanged ? this.state.abilityUrl : ''
     return (
       <PageHeaderLayout title="编辑英雄">
@@ -422,6 +542,126 @@ class HeroEdit extends Component {
                 </FormItem>
               </Col>
             </Row>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <FormItem label="英雄介绍">
+                  {getFieldDecorator('description', {
+                    initialValue: description
+                  })(
+                    <TextArea
+                      style={{ minHeight: 32 }}
+                      placeholder="请输入英雄介绍"
+                      rows={6}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 6, offset: 2 }}
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                sm={24}
+              >
+                <FormItem label="英雄评价">
+                  {getFieldDecorator('comment', {
+                    initialValue: comment
+                  })(
+                    <TextArea
+                      style={{ minHeight: 32 }}
+                      placeholder="请输入英雄评价"
+                      rows={6}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 8, offset: 2 }}
+                lg={{ span: 10 }}
+                md={{ span: 24 }}
+                sm={24}
+              />
+            </Row>
+          </Form>
+        </Card>
+        <Card title="相关图片" bordered={false} className={styles.heroImg}>
+          <Form layout="vertical" hideRequiredMark>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <FormItem label="头像">
+                  {getFieldDecorator('avatar', {
+                    initialValue: {
+                      url: avatar
+                    }
+                  })(
+                    <Upload
+                      name="avatar"
+                      accept="image/jpg,image/jpeg,image/png"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      onChange={this.handleAvatarUploadChange}
+                      customRequest={this.handleUpload}
+                    >
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt="" />
+                      ) : (
+                        <div>
+                          <Icon
+                            type={
+                              this.state.avatar_loading ? 'loading' : 'plus'
+                            }
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
+                      )}
+                    </Upload>
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 6, offset: 2 }}
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                sm={24}
+              >
+                <FormItem label="全身照">
+                  {getFieldDecorator('fullshot', {
+                    initialValue: {
+                      url: fullshot
+                    }
+                  })(
+                    <Upload
+                      name="fullshot"
+                      accept="image/jpg,image/jpeg,image/png"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      onChange={this.handleFullshotUploadChange}
+                      customRequest={this.handleUpload}
+                    >
+                      {fullshotUrl ? (
+                        <img src={fullshotUrl} alt="" />
+                      ) : (
+                        <div>
+                          <Icon
+                            type={
+                              this.state.fullshot_loading ? 'loading' : 'plus'
+                            }
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
+                      )}
+                    </Upload>
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 8, offset: 2 }}
+                lg={{ span: 10 }}
+                md={{ span: 24 }}
+                sm={24}
+              />
+            </Row>
           </Form>
         </Card>
         <Card title="扩展数据" className={styles.card} bordered={false}>
@@ -432,6 +672,18 @@ class HeroEdit extends Component {
                 handleHeroExtraChange={this.handleHeroExtraChange}
                 handleHeroExtraDelete={this.handleHeroExtraDelete}
                 handleHeroExtraAdd={this.handleHeroExtraAdd}
+              />
+            </FormItem>
+          </Form>
+        </Card>
+        <Card title="英雄备注" className={styles.card} bordered={false}>
+          <Form hideRequiredMark>
+            <FormItem>
+              <EditableHeroRemarkTable
+                data={remark}
+                handleHeroRemarkChange={this.handleHeroRemarkChange}
+                handleHeroRemarkDelete={this.handleHeroRemarkDelete}
+                handleHeroRemarkAdd={this.handleHeroRemarkAdd}
               />
             </FormItem>
           </Form>
@@ -504,64 +756,6 @@ class HeroEdit extends Component {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col lg={6} md={12} sm={24}>
-                <FormItem label="英雄介绍">
-                  {getFieldDecorator('description', {
-                    initialValue: description
-                  })(
-                    <TextArea
-                      style={{ minHeight: 32 }}
-                      placeholder="请输入英雄介绍"
-                      rows={6}
-                    />
-                  )}
-                </FormItem>
-              </Col>
-              <Col
-                xl={{ span: 6, offset: 2 }}
-                lg={{ span: 8 }}
-                md={{ span: 12 }}
-                sm={24}
-              >
-                <FormItem label="头像">
-                  {getFieldDecorator('avatar', {
-                    initialValue: {
-                      url: avatar
-                    }
-                  })(
-                    <Upload
-                      name="avatar"
-                      accept="image/jpg,image/jpeg,image/png"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      onChange={this.handleAvatarUploadChange}
-                      customRequest={this.handleUpload}
-                    >
-                      {avatarUrl ? (
-                        <img src={avatarUrl} alt="" />
-                      ) : (
-                        <div>
-                          <Icon
-                            type={
-                              this.state.avatar_loading ? 'loading' : 'plus'
-                            }
-                          />
-                          <div className="ant-upload-text">上传</div>
-                        </div>
-                      )}
-                    </Upload>
-                  )}
-                </FormItem>
-              </Col>
-              <Col
-                xl={{ span: 8, offset: 2 }}
-                lg={{ span: 10 }}
-                md={{ span: 24 }}
-                sm={24}
-              />
-            </Row>
           </Form>
         </Card>
         <Card
@@ -576,8 +770,11 @@ class HeroEdit extends Component {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <a onClick={() => this.handleExtraModalShow(item.id)}>
+                  <a onClick={() => this.handleAbilityExtraModalShow(item.id)}>
                     扩展
+                  </a>,
+                  <a onClick={() => this.handleAbilityRemarkModalShow(item.id)}>
+                    备注
                   </a>,
                   <a onClick={() => this.handleAbilityUpdate(item.id)}>编辑</a>,
                   <a onClick={() => this.handleAbilityDelete(item.id)}>删除</a>
@@ -669,10 +866,10 @@ class HeroEdit extends Component {
         </Modal>
         <Modal
           title="技能扩展"
-          visible={extra_visible}
-          onOk={this.handleExtraModalOk}
+          visible={ability_extra_visible}
+          onOk={this.handleAbilityExtraModalOk}
           confirmLoading={confirmLoading}
-          onCancel={this.handleExtraModalCancel}
+          onCancel={this.handleAbilityExtraModalCancel}
         >
           <Form hideRequiredMark>
             <FormItem>
@@ -681,6 +878,24 @@ class HeroEdit extends Component {
                 handleAbilityExtraChange={this.handleAbilityExtraChange}
                 handleAbilityExtraDelete={this.handleAbilityExtraDelete}
                 handleAbilityExtraAdd={this.handleAbilityExtraAdd}
+              />
+            </FormItem>
+          </Form>
+        </Modal>
+        <Modal
+          title="技能备注"
+          visible={ability_remark_visible}
+          onOk={this.handleAbilityRemarkModalOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleAbilityRemarkModalCancel}
+        >
+          <Form hideRequiredMark>
+            <FormItem>
+              <EditableAbilityRemarkTable
+                data={ability}
+                handleAbilityRemarkChange={this.handleAbilityRemarkChange}
+                handleAbilityRemarkDelete={this.handleAbilityRemarkDelete}
+                handleAbilityRemarkAdd={this.handleAbilityRemarkAdd}
               />
             </FormItem>
           </Form>
