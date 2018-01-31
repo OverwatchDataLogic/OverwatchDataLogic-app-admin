@@ -15,6 +15,7 @@ import {
 import AV from 'leancloud-storage'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
+import styles from './HeroEdit.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input
@@ -22,8 +23,10 @@ const { TextArea } = Input
 @Form.create()
 class HeroAdd extends PureComponent {
   state = {
-    loading: false,
+    avatar_loading: false,
+    fullshot_loading: false,
     isAvatarChanged: false,
+    isFullshotChanged: false,
     width: '100%'
   }
   componentDidMount() {
@@ -52,14 +55,27 @@ class HeroAdd extends PureComponent {
   }
   handleAvatarUploadChange = info => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
+      this.setState({ avatar_loading: true })
       return
     }
     if (info.file.status === 'done') {
       this.setState({
         avatarUrl: info.file.response.attributes.url,
         isAvatarChanged: true,
-        loading: false
+        avatar_loading: false
+      })
+    }
+  }
+  handleFullshotUploadChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ fullshot_loading: true })
+      return
+    }
+    if (info.file.status === 'done') {
+      this.setState({
+        fullshotUrl: info.file.response.attributes.url,
+        isFullshotChanged: true,
+        fullshot_loading: false
       })
     }
   }
@@ -71,7 +87,10 @@ class HeroAdd extends PureComponent {
           ...values,
           avatar: this.state.isAvatarChanged
             ? this.state.avatarUrl
-            : this.props.avatar
+            : this.props.avatar,
+          fullshot: this.state.isFullshotChanged
+            ? this.state.fullshotUrl
+            : this.props.fullshot
         })
       }
     })
@@ -80,6 +99,7 @@ class HeroAdd extends PureComponent {
     const {
       name,
       description,
+      comment,
       health,
       armour,
       shield,
@@ -91,14 +111,18 @@ class HeroAdd extends PureComponent {
       base_of_operations,
       difficulty,
       role,
-      avatar
+      avatar,
+      fullshot
     } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
+    const fullshotUrl = this.state.isFullshotChanged
+      ? this.state.fullshotUrl
+      : fullshot
     return (
       <PageHeaderLayout title="新增英雄">
-        <Card title="游戏数据" bordered={false}>
+        <Card title="基本数据" bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
@@ -199,6 +223,126 @@ class HeroAdd extends PureComponent {
                 </FormItem>
               </Col>
             </Row>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <FormItem label="英雄介绍">
+                  {getFieldDecorator('description', {
+                    initialValue: description
+                  })(
+                    <TextArea
+                      style={{ minHeight: 32 }}
+                      placeholder="请输入英雄介绍"
+                      rows={6}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 6, offset: 2 }}
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                sm={24}
+              >
+                <FormItem label="英雄评价">
+                  {getFieldDecorator('comment', {
+                    initialValue: comment
+                  })(
+                    <TextArea
+                      style={{ minHeight: 32 }}
+                      placeholder="请输入英雄评价"
+                      rows={6}
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 8, offset: 2 }}
+                lg={{ span: 10 }}
+                md={{ span: 24 }}
+                sm={24}
+              />
+            </Row>
+          </Form>
+        </Card>
+        <Card title="相关图片" bordered={false} className={styles.heroImg}>
+          <Form layout="vertical" hideRequiredMark>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <FormItem label="头像">
+                  {getFieldDecorator('avatar', {
+                    initialValue: {
+                      url: avatar
+                    }
+                  })(
+                    <Upload
+                      name="avatar"
+                      accept="image/jpg,image/jpeg,image/png"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      onChange={this.handleAvatarUploadChange}
+                      customRequest={this.handleUpload}
+                    >
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt="" />
+                      ) : (
+                        <div>
+                          <Icon
+                            type={
+                              this.state.avatar_loading ? 'loading' : 'plus'
+                            }
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
+                      )}
+                    </Upload>
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 6, offset: 2 }}
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                sm={24}
+              >
+                <FormItem label="全身照">
+                  {getFieldDecorator('fullshot', {
+                    initialValue: {
+                      url: fullshot
+                    }
+                  })(
+                    <Upload
+                      name="fullshot"
+                      accept="image/jpg,image/jpeg,image/png"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      onChange={this.handleFullshotUploadChange}
+                      customRequest={this.handleUpload}
+                    >
+                      {fullshotUrl ? (
+                        <img src={fullshotUrl} alt="" />
+                      ) : (
+                        <div>
+                          <Icon
+                            type={
+                              this.state.fullshot_loading ? 'loading' : 'plus'
+                            }
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
+                      )}
+                    </Upload>
+                  )}
+                </FormItem>
+              </Col>
+              <Col
+                xl={{ span: 8, offset: 2 }}
+                lg={{ span: 10 }}
+                md={{ span: 24 }}
+                sm={24}
+              />
+            </Row>
           </Form>
         </Card>
         <Card title="背景数据" bordered={false}>
@@ -268,62 +412,6 @@ class HeroAdd extends PureComponent {
                   })(<Input placeholder="请输入隶属" />)}
                 </FormItem>
               </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col lg={6} md={12} sm={24}>
-                <FormItem label="英雄介绍">
-                  {getFieldDecorator('description', {
-                    initialValue: description,
-                  })(
-                    <TextArea
-                      style={{ minHeight: 32 }}
-                      placeholder="请输入英雄介绍"
-                      rows={6}
-                    />
-                  )}
-                </FormItem>
-              </Col>
-              <Col
-                xl={{ span: 6, offset: 2 }}
-                lg={{ span: 8 }}
-                md={{ span: 12 }}
-                sm={24}
-              >
-                <FormItem label="头像">
-                  {getFieldDecorator('avatar', {
-                    initialValue: {
-                      url: avatar
-                    }
-                  })(
-                    <Upload
-                      name="avatar"
-                      accept="image/jpg,image/jpeg,image/png"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      onChange={this.handleAvatarUploadChange}
-                      customRequest={this.handleUpload}
-                    >
-                      {avatarUrl ? (
-                        <img src={avatarUrl} alt="" />
-                      ) : (
-                        <div>
-                          <Icon
-                            type={this.state.loading ? 'loading' : 'plus'}
-                          />
-                          <div className="ant-upload-text">上传</div>
-                        </div>
-                      )}
-                    </Upload>
-                  )}
-                </FormItem>
-              </Col>
-              <Col
-                xl={{ span: 8, offset: 2 }}
-                lg={{ span: 10 }}
-                md={{ span: 24 }}
-                sm={24}
-              />
             </Row>
           </Form>
         </Card>
