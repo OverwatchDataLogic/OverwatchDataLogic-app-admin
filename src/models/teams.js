@@ -31,9 +31,17 @@ export default {
       //队伍描述
       description: '',
       //是否解散
-      isDissolved: '',
+      isDissolved: false,
+      //解散时间
+      dissolvedTime: null,
+      //比赛经历
+      match: '',
+      //成立时间
+      createTime: '',
+      //获得荣誉
+      honour: '',
       //选手列表
-      playerList: '',
+      playerList: [],
     },
     data: {
       currentItem: {},
@@ -63,7 +71,7 @@ export default {
         type: 'createSuccess',
         payload: response
       })
-      yield put(routerRedux.push('/sports/sport/list'))
+      yield put(routerRedux.push('/teams/team/list'))
     },
     *update({ payload }, { call, put }) {
       const response = yield call(updateTeams, payload)
@@ -71,7 +79,7 @@ export default {
         type: 'updateSuccess',
         payload: response
       })
-      yield put(routerRedux.push('/sports/sport/list'))
+      yield put(routerRedux.push('/teams/team/list'))
     },
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeTeams, payload)

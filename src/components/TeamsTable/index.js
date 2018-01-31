@@ -45,6 +45,10 @@ class TeamsTable extends PureComponent {
         dataIndex: 'name'
       },
       {
+        title: '队伍名称',
+        dataIndex: 'description'
+      },
+      {
         title: '城市',
         dataIndex: 'homeLocation'
       },

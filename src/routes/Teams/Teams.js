@@ -67,7 +67,7 @@ class Teams extends PureComponent {
   }
 
   render() {
-    const { sports: { data }, loading, navigateTo, remove } = this.props
+    const { teams: { data }, loading, navigateTo, remove } = this.props
     const { selectedRows } = this.state
 
     const menu = (
