@@ -28,7 +28,8 @@ export default {
       difficulty: 1,
       role: 'offense',
       avatar: '',
-      abilities: []
+      abilities: [],
+      extra: []
     },
     data: {
       list: [],

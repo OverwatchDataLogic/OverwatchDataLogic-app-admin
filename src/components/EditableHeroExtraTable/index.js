@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { Table, Button, Popconfirm } from 'antd'
 import EditableItem from '../EditableItem'
 
-export default class EditableAbilityExtraTable extends PureComponent {
+export default class EditableHeroExtraTable extends PureComponent {
   constructor(props) {
     super(props)
     this.columns = [
@@ -12,7 +12,7 @@ export default class EditableAbilityExtraTable extends PureComponent {
         render: (text, record) => (
           <EditableItem
             value={text}
-            onChange={this.props.handleAbilityExtraChange(record.id, 'name')}
+            onChange={this.props.handleHeroExtraChange(record.id, 'name')}
           />
         )
       },
@@ -22,17 +22,17 @@ export default class EditableAbilityExtraTable extends PureComponent {
         render: (text, record) => (
           <EditableItem
             value={text}
-            onChange={this.props.handleAbilityExtraChange(record.id, 'value')}
+            onChange={this.props.handleHeroExtraChange(record.id, 'value')}
           />
         )
       },
       {
         title: '操作',
         render: (text, record) => {
-          return this.props.data.extra.length > 0 ? (
+          return this.props.data.length > 0 ? (
             <Popconfirm
               title="确定删除?"
-              onConfirm={() => this.props.handleAbilityExtraDelete(record.id)}
+              onConfirm={() => this.props.handleHeroExtraDelete(record.id)}
             >
               <a href="#">删除</a>
             </Popconfirm>
@@ -48,11 +48,11 @@ export default class EditableAbilityExtraTable extends PureComponent {
       <div>
         <Button
           className="editable-add-btn"
-          onClick={() => this.props.handleAbilityExtraAdd()}
+          onClick={this.props.handleHeroExtraAdd}
         >
           新增
         </Button>
-        <Table bordered dataSource={data.extra} columns={columns} />
+        <Table bordered dataSource={data} columns={columns} />
       </div>
     )
   }

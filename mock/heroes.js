@@ -19,6 +19,7 @@ let tableListDataSource = [
     base_of_operations: '埃及，开罗',
     difficulty: 3,
     role: 'support',
+    extra: [],
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/ana/full-portrait.png',
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Ana_portrait.png',

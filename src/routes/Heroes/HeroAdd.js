@@ -19,12 +19,6 @@ import FooterToolbar from '../../components/FooterToolbar'
 const FormItem = Form.Item
 const { TextArea } = Input
 
-function getBase64(img, callback) {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
-
 @Form.create()
 class HeroAdd extends PureComponent {
   state = {
@@ -62,27 +56,22 @@ class HeroAdd extends PureComponent {
       return
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          avatarUrl: imageUrl,
-          isAvatarChanged: true,
-          loading: false
-        })
-      )
+      this.setState({
+        avatarUrl: info.file.response.attributes.url,
+        isAvatarChanged: true,
+        loading: false
+      })
     }
   }
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'heroes/create',
-          payload: {
-            ...values,
-            avatar: this.state.isAvatarChanged
-              ? this.state.avatarUrl
-              : this.props.avatar
-          }
+        this.props.create({
+          ...values,
+          avatar: this.state.isAvatarChanged
+            ? this.state.avatarUrl
+            : this.props.avatar
         })
       }
     })
@@ -107,12 +96,6 @@ class HeroAdd extends PureComponent {
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">上传</div>
-      </div>
-    )
     return (
       <PageHeaderLayout title="新增英雄">
         <Card title="游戏数据" bordered={false}>
@@ -291,12 +274,6 @@ class HeroAdd extends PureComponent {
                 <FormItem label="英雄介绍">
                   {getFieldDecorator('description', {
                     initialValue: description,
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入英雄介绍'
-                      }
-                    ]
                   })(
                     <TextArea
                       style={{ minHeight: 32 }}
@@ -330,7 +307,12 @@ class HeroAdd extends PureComponent {
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="" />
                       ) : (
-                        uploadButton
+                        <div>
+                          <Icon
+                            type={this.state.loading ? 'loading' : 'plus'}
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
                       )}
                     </Upload>
                   )}
@@ -367,4 +349,15 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(HeroAdd)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    create: params => {
+      dispatch({
+        type: 'heroes/create',
+        payload: params
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeroAdd)

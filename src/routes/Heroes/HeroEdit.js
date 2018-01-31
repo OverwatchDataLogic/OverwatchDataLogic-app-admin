@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'dva'
 import {
   Form,
@@ -21,43 +21,35 @@ import uuidv4 from 'uuid/v4'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
 import EditableAbilityExtraTable from '../../components/EditableAbilityExtraTable'
+import EditableHeroExtraTable from '../../components/EditableHeroExtraTable'
 import styles from './HeroEdit.less'
 
 const FormItem = Form.Item
 const { TextArea } = Input
 
-function getBase64(img, callback) {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
-
 @Form.create()
-class HeroEdit extends PureComponent {
-  state = {
-    loading: false,
-    isAvatarChanged: false,
-    width: '100%',
-    visible: false,
-    extra_visible: false,
-    confirmLoading: false,
-    abilities: this.props.abilities,
-    abilityUrl: '',
-    abilityName: '',
-    abilityDesc: '',
-    abilityExtra: [
-      {
-        id: '0',
-        name: 'Edward King 0',
-        value: '32'
-      },
-      {
-        id: '1',
-        name: 'Edward King 1',
-        value: '32'
-      }
-    ]
+class HeroEdit extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: false,
+      isAvatarChanged: false,
+      width: '100%',
+      ability_visible: false,
+      extra_visible: false,
+      confirmLoading: false,
+      abilityUrl: '',
+      abilityName: '',
+      abilityDesc: '',
+      abilityId: '',
+      ability: {},
+      abilities: this.props.hero.abilities,
+      extra: this.props.hero.extra
+    }
+    this.onAbilityNameChange = this.onAbilityNameChange.bind(this)
+    this.onAbilityDescChange = this.onAbilityDescChange.bind(this)
   }
+
   componentDidMount() {
     window.addEventListener('resize', this.resizeFooterToolbar)
   }
@@ -88,13 +80,11 @@ class HeroEdit extends PureComponent {
       return
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          avatarUrl: imageUrl,
-          isAvatarChanged: true,
-          avatar_loading: false
-        })
-      )
+      this.setState({
+        avatarUrl: info.file.response.attributes.url,
+        isAvatarChanged: true,
+        avatar_loading: false
+      })
     }
   }
   handleAbilityChange = info => {
@@ -103,108 +93,43 @@ class HeroEdit extends PureComponent {
       return
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          abilityUrl: imageUrl,
-          isAbilityChanged: true,
-          ability_loading: false
-        })
-      )
+      this.setState({
+        abilityUrl: info.file.response.attributes.url,
+        isAbilityChanged: true,
+        ability_loading: false
+      })
     }
   }
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'heroes/create',
-          payload: {
-            ...values,
-            avatar: this.state.isAvatarChanged
-              ? this.state.avatarUrl
-              : this.props.avatar,
-            abilities: this.state.abilities
-          }
+        this.props.update({
+          ...values,
+          avatar: this.state.isAvatarChanged
+            ? this.state.avatarUrl
+            : this.props.avatar,
+          abilities: this.state.abilities,
+          extra: this.state.extra
         })
       }
     })
   }
-  handleModalOk = () => {
+  handleAbilityDelete = id => {
+    const abilities = this.state.abilities.filter(item => item.id !== id)
     this.setState({
-      confirmLoading: true
-    })
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-        abilities: [
-          ...this.state.abilities,
-          {
-            id: uuidv4(),
-            name: this.abilityName,
-            description: this.abilityDesc,
-            icon: this.state.abilityUrl
-          }
-        ]
-      })
-    }, 2000)
-  }
-  handleModalCancel = () => {
-    console.log('Clicked cancel button')
-    this.setState({
-      visible: false
+      abilities
     })
   }
-  handleModalShow = () => {
+  handleAbilityUpdate = id => {
+    const ability = this.state.abilities.filter(x => x.id === id)[0]
     this.setState({
-      visible: true
-    })
-  }
-  handleExtraModalOk = () => {
-    this.setState({
-      confirmLoading: true
-    })
-    setTimeout(() => {
-      this.setState({
-        extra_visible: false,
-        confirmLoading: false
-      })
-    }, 2000)
-  }
-  handleExtraModalCancel = () => {
-    console.log('Clicked cancel button')
-    this.setState({
-      extra_visible: false
-    })
-  }
-  handleExtraModalShow = () => {
-    this.setState({
-      extra_visible: true
-    })
-  }
-  handleAbilityExtraChange = (id, dataIndex) => {
-    return value => {
-      const abilityExtra = [...this.state.abilityExtra]
-      const target = abilityExtra.find(item => item.id === id)
-      if (target) {
-        target[dataIndex] = value
-        this.setState({ abilityExtra })
-      }
-    }
-  }
-  handleAbilityExtraDelete = id => {
-    const abilityExtra = [...this.state.abilityExtra]
-    this.setState({ abilityExtra: abilityExtra.filter(item => item.id !== id) })
-  }
-  handleAbilityExtraAdd = () => {
-    const { abilityExtra } = this.state
-    const newData = {
-      id: uuidv4(),
-      name: '大招',
-      value: '是'
-    }
-    this.setState({
-      abilityExtra: [...abilityExtra, newData]
+      ability_visible: true,
+      isAbilityChanged: true,
+      abilityId: id,
+      abilityUrl: ability.icon,
+      abilityName: ability.name,
+      abilityDesc: ability.description
     })
   }
   onAbilityNameChange = e => {
@@ -212,9 +137,149 @@ class HeroEdit extends PureComponent {
       abilityName: e.target.value
     })
   }
-  onAbilityNameChange = e => {
+  onAbilityDescChange = e => {
     this.setState({
       abilityDesc: e.target.value
+    })
+  }
+  handleAbilityModalOk = () => {
+    if (this.state.abilityId) {
+      const ability = {
+        id: this.state.abilityId,
+        name: this.state.abilityName,
+        description: this.state.abilityDesc,
+        icon: this.state.abilityUrl
+      }
+      const abilities = this.state.abilities.map(item => {
+        if (item.id === this.state.abilityId) {
+          return Object.assign(item, ability)
+        } else {
+          return item
+        }
+      })
+      this.setState({
+        ability_visible: false,
+        confirmLoading: false,
+        abilities
+      })
+    } else {
+      const ability = {
+        id: uuidv4(),
+        name: this.state.abilityName,
+        description: this.state.abilityDesc,
+        icon: this.state.abilityUrl,
+        extra: []
+      }
+      this.setState({
+        ability_visible: false,
+        confirmLoading: false,
+        abilities: [...this.state.abilities, ability]
+      })
+    }
+  }
+  handleAbilityModalCancel = () => {
+    this.setState({
+      ability_visible: false
+    })
+  }
+  handleAbilityModalShow = () => {
+    this.setState({
+      ability_visible: true
+    })
+  }
+  handleExtraModalOk = () => {
+    const abilities = this.state.abilities.map(item => {
+      if (item.id === this.state.ability.id) {
+        return Object.assign(item, this.state.ability)
+      } else {
+        return item
+      }
+    })
+    this.setState({
+      extra_visible: false,
+      confirmLoading: false,
+      abilities
+    })
+  }
+  handleExtraModalCancel = () => {
+    this.setState({
+      extra_visible: false
+    })
+  }
+  handleExtraModalShow = id => {
+    this.setState({
+      extra_visible: true,
+      abilityUrl: '',
+      abilityName: '',
+      abilityDesc: '',
+      abilityId: '',
+      ability: this.state.abilities.filter(x => x.id === id)[0]
+    })
+  }
+  handleAbilityExtraChange = (id, dataIndex) => {
+    return value => {
+      this.state.ability.extra.map(item => {
+        if (item.id === id) {
+          item[dataIndex] = value
+          return item
+        } else {
+          return item
+        }
+      })
+    }
+  }
+  handleAbilityExtraDelete = id => {
+    this.setState({
+      ability: {
+        ...this.state.ability,
+        extra: this.state.ability.extra.filter(item => item.id !== id)
+      }
+    })
+  }
+  handleAbilityExtraAdd = () => {
+    const newData = {
+      id: uuidv4(),
+      name: '标题',
+      value: '内容'
+    }
+    this.setState({
+      ability: {
+        ...this.state.ability,
+        extra: [...this.state.ability.extra, newData]
+      }
+    })
+  }
+  handleHeroExtraChange = (id, dataIndex) => {
+    return value => {
+      const extra = this.state.extra.map(item => {
+        if (item.id === id) {
+          const target = (item[dataIndex] = value)
+          return {
+            ...item,
+            target
+          }
+        } else {
+          return item
+        }
+      })
+      this.setState({
+        extra: extra
+      })
+    }
+  }
+  handleHeroExtraDelete = id => {
+    this.setState({
+      extra: this.state.extra.filter(item => item.id !== id)
+    })
+  }
+  handleHeroExtraAdd = () => {
+    const newData = {
+      id: uuidv4(),
+      name: '标题',
+      value: '内容'
+    }
+    this.setState({
+      extra: [...this.state.extra, newData]
     })
   }
   render() {
@@ -233,17 +298,23 @@ class HeroEdit extends PureComponent {
       base_of_operations,
       difficulty,
       role,
-      avatar,
-      abilities
+      avatar
     } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
-    const { visible, extra_visible, confirmLoading, abilityExtra } = this.state
+    const {
+      ability_visible,
+      extra_visible,
+      confirmLoading,
+      ability,
+      extra,
+      abilities
+    } = this.state
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
     const abilityUrl = this.state.isAbilityChanged ? this.state.abilityUrl : ''
     return (
       <PageHeaderLayout title="编辑英雄">
-        <Card title="游戏数据" className={styles.card} bordered={false}>
+        <Card title="基础数据" className={styles.card} bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={0} md={0} sm={0}>
@@ -353,6 +424,18 @@ class HeroEdit extends PureComponent {
             </Row>
           </Form>
         </Card>
+        <Card title="扩展数据" className={styles.card} bordered={false}>
+          <Form hideRequiredMark>
+            <FormItem>
+              <EditableHeroExtraTable
+                data={extra}
+                handleHeroExtraChange={this.handleHeroExtraChange}
+                handleHeroExtraDelete={this.handleHeroExtraDelete}
+                handleHeroExtraAdd={this.handleHeroExtraAdd}
+              />
+            </FormItem>
+          </Form>
+        </Card>
         <Card title="背景数据" className={styles.card} bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
@@ -425,13 +508,7 @@ class HeroEdit extends PureComponent {
               <Col lg={6} md={12} sm={24}>
                 <FormItem label="英雄介绍">
                   {getFieldDecorator('description', {
-                    initialValue: description,
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入英雄介绍'
-                      }
-                    ]
+                    initialValue: description
                   })(
                     <TextArea
                       style={{ minHeight: 32 }}
@@ -489,7 +566,7 @@ class HeroEdit extends PureComponent {
         </Card>
         <Card
           title="英雄技能"
-          extra={<a onClick={() => this.handleModalShow()}>新增技能</a>}
+          extra={<a onClick={() => this.handleAbilityModalShow()}>新增技能</a>}
           className={styles.abilities}
           bordered={false}
         >
@@ -499,9 +576,11 @@ class HeroEdit extends PureComponent {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <a onClick={() => this.handleExtraModalShow()}>扩展</a>,
-                  <a>编辑</a>,
-                  <a>详细</a>
+                  <a onClick={() => this.handleExtraModalShow(item.id)}>
+                    扩展
+                  </a>,
+                  <a onClick={() => this.handleAbilityUpdate(item.id)}>编辑</a>,
+                  <a onClick={() => this.handleAbilityDelete(item.id)}>删除</a>
                 ]}
               >
                 <List.Item.Meta
@@ -511,19 +590,19 @@ class HeroEdit extends PureComponent {
                   title={item.name}
                   description={item.description}
                 />
-                {item.extra.length > 0 ? (
-                  item.extra.slice(0, 6).map(x => (
-                    <Row key={x.id}>
-                      <Col>
+                <div>
+                  {item.extra.length > 0 ? (
+                    item.extra.slice(0, 6).map(x => (
+                      <div key={x.id}>
                         <Tag color="magenta">{x.name}</Tag>：<span>
                           {x.value}
                         </span>
-                      </Col>
-                    </Row>
-                  ))
-                ) : (
-                  <div />
-                )}
+                      </div>
+                    ))
+                  ) : (
+                    <div />
+                  )}
+                </div>
               </List.Item>
             )}
           />
@@ -539,10 +618,10 @@ class HeroEdit extends PureComponent {
         </FooterToolbar>
         <Modal
           title="英雄技能"
-          visible={visible}
-          onOk={this.handleModalOk}
+          visible={ability_visible}
+          onOk={this.handleAbilityModalOk}
           confirmLoading={confirmLoading}
-          onCancel={this.handleModalCancel}
+          onCancel={this.handleAbilityModalCancel}
         >
           <Form hideRequiredMark>
             <FormItem label="技能图标">
@@ -567,17 +646,22 @@ class HeroEdit extends PureComponent {
                 )}
               </Upload>
             </FormItem>
+            <FormItem>
+              <Input type="hidden" value={this.state.abilityId} />
+            </FormItem>
             <FormItem label="技能名称">
               <Input
                 placeholder="请输入技能名称"
-                onChange={() => this.onAbilityNameChange}
+                onChange={this.onAbilityNameChange}
+                value={this.state.abilityName}
               />
             </FormItem>
             <FormItem label="技能描述">
               <TextArea
                 style={{ minHeight: 32 }}
                 placeholder="请输入技能描述"
-                onChange={() => this.onAbilityDescChange}
+                onChange={this.onAbilityDescChange}
+                value={this.state.abilityDesc}
                 rows={6}
               />
             </FormItem>
@@ -593,7 +677,7 @@ class HeroEdit extends PureComponent {
           <Form hideRequiredMark>
             <FormItem>
               <EditableAbilityExtraTable
-                data={abilityExtra}
+                data={ability}
                 handleAbilityExtraChange={this.handleAbilityExtraChange}
                 handleAbilityExtraDelete={this.handleAbilityExtraDelete}
                 handleAbilityExtraAdd={this.handleAbilityExtraAdd}
@@ -617,4 +701,15 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(HeroEdit)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    update: params => {
+      dispatch({
+        type: 'heroes/update',
+        payload: params
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeroEdit)
