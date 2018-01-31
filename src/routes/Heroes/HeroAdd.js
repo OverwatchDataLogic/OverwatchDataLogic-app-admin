@@ -3,7 +3,6 @@ import { connect } from 'dva'
 import {
   Form,
   Input,
-  InputNumber,
   Button,
   Card,
   Radio,
@@ -16,16 +15,9 @@ import {
 import AV from 'leancloud-storage'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
-import styles from './HeroEdit'
 
 const FormItem = Form.Item
 const { TextArea } = Input
-
-function getBase64(img, callback) {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
 
 @Form.create()
 class HeroAdd extends PureComponent {
@@ -47,7 +39,7 @@ class HeroAdd extends PureComponent {
       this.setState({ width })
     }
   }
-  avatarUpload = ({ onSuccess, onError, file }) => {
+  handleUpload = ({ onSuccess, onError, file }) => {
     var newfile = new AV.File(file.name, file)
     newfile.save().then(
       function(res) {
@@ -58,33 +50,28 @@ class HeroAdd extends PureComponent {
       }
     )
   }
-  handleChange = info => {
+  handleAvatarUploadChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
       return
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          avatarUrl: imageUrl,
-          isAvatarChanged: true,
-          loading: false
-        })
-      )
+      this.setState({
+        avatarUrl: info.file.response.attributes.url,
+        isAvatarChanged: true,
+        loading: false
+      })
     }
   }
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'heroes/create',
-          payload: {
-            ...values,
-            avatar: this.state.isAvatarChanged
-              ? this.state.avatarUrl
-              : this.props.avatar
-          }
+        this.props.create({
+          ...values,
+          avatar: this.state.isAvatarChanged
+            ? this.state.avatarUrl
+            : this.props.avatar
         })
       }
     })
@@ -105,19 +92,13 @@ class HeroAdd extends PureComponent {
       difficulty,
       role,
       avatar
-    } = this.props.default
+    } = this.props.hero
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
     const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">上传</div>
-      </div>
-    )
     return (
       <PageHeaderLayout title="新增英雄">
-        <Card title="游戏数据" className={styles.card} bordered={false}>
+        <Card title="游戏数据" bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
@@ -220,7 +201,7 @@ class HeroAdd extends PureComponent {
             </Row>
           </Form>
         </Card>
-        <Card title="背景数据" className={styles.card} bordered={false}>
+        <Card title="背景数据" bordered={false}>
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
@@ -293,12 +274,6 @@ class HeroAdd extends PureComponent {
                 <FormItem label="英雄介绍">
                   {getFieldDecorator('description', {
                     initialValue: description,
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入英雄介绍'
-                      }
-                    ]
                   })(
                     <TextArea
                       style={{ minHeight: 32 }}
@@ -326,13 +301,18 @@ class HeroAdd extends PureComponent {
                       listType="picture-card"
                       className="avatar-uploader"
                       showUploadList={false}
-                      onChange={this.handleChange}
-                      customRequest={this.avatarUpload}
+                      onChange={this.handleAvatarUploadChange}
+                      customRequest={this.handleUpload}
                     >
                       {avatarUrl ? (
                         <img src={avatarUrl} alt="" />
                       ) : (
-                        uploadButton
+                        <div>
+                          <Icon
+                            type={this.state.loading ? 'loading' : 'plus'}
+                          />
+                          <div className="ant-upload-text">上传</div>
+                        </div>
                       )}
                     </Upload>
                   )}
@@ -364,9 +344,20 @@ class HeroAdd extends PureComponent {
 const mapStateToProps = (state, ownProps) => {
   const { heroes, loading } = state
   return {
-    default: heroes.default,
+    hero: heroes.default,
     loading: loading.models.heroes
   }
 }
 
-export default connect(mapStateToProps)(HeroAdd)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    create: params => {
+      dispatch({
+        type: 'heroes/create',
+        payload: params
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeroAdd)

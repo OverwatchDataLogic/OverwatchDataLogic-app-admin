@@ -19,10 +19,72 @@ let tableListDataSource = [
     base_of_operations: '埃及，开罗',
     difficulty: 3,
     role: 'support',
+    extra: [],
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/ana/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Ana_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Ana_portrait.png',
+    abilities: [
+      {
+        id: uuidv4(),
+        name: '生物步枪',
+        description:
+          '安娜可以用手中的步枪射出飞镖为队友恢复生命值或对敌人造成持续性伤害。她也可以用步枪的瞄准镜进行放大瞄准以便更精准地击中目标。',
+        icon:
+          'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/f/fc/Ability-ana1.png',
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
+      },
+      {
+        id: uuidv4(),
+        name: '麻醉镖',
+        description:
+          '安娜可以用她的副武器射出飞镖，使敌人失去意识（目标受到任何伤害后将会醒来）。',
+        icon:
+          'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/5/58/Ability-ana2.png',
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
+      },
+      {
+        id: uuidv4(),
+        name: '生物手雷',
+        description:
+          '安娜扔出一颗生物手雷；当手雷爆炸后，对小范围内的敌人造成伤害并治疗队友。受影响的队友在短时间内受到的所有治疗效果将会提高，而受影响的敌人则会在短时间内无法受到治疗。',
+        icon:
+          'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/0/0c/Ability-ana3.png',
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '否'
+          }
+        ]
+      },
+      {
+        id: uuidv4(),
+        name: '纳米激素',
+        description:
+          '安娜用激素强化一位队友，在短时间内提高目标队友造成的伤害并且降低其受到的伤害。',
+        icon:
+          'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/9/97/Ability-ana4.png',
+        extra: [
+          {
+            id: uuidv4(),
+            name: '大招',
+            value: '是'
+          }
+        ]
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -42,8 +104,7 @@ let tableListDataSource = [
     role: 'deffense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/bastion/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Bastion_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Bastion_portrait.png'
   },
   {
     id: uuidv4(),
@@ -63,8 +124,7 @@ let tableListDataSource = [
     role: 'tank',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/dva/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/DVa_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/DVa_portrait.png'
   },
   {
     id: uuidv4(),
@@ -84,8 +144,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/genji/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Genji_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Genji_portrait.png'
   },
   {
     id: uuidv4(),
@@ -105,8 +164,7 @@ let tableListDataSource = [
     role: 'deffense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/hanzo/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Hanzo_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Hanzo_portrait.png'
   },
   {
     id: uuidv4(),
@@ -126,8 +184,7 @@ let tableListDataSource = [
     role: 'deffense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/junkrat/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Junkrat_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Junkrat_portrait.png'
   },
   {
     id: uuidv4(),
@@ -147,8 +204,7 @@ let tableListDataSource = [
     role: 'support',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/lucio/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Lucio_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Lucio_portrait.png'
   },
   {
     id: uuidv4(),
@@ -168,8 +224,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mccree/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/McCree_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/McCree_portrait.png'
   },
   {
     id: uuidv4(),
@@ -189,8 +244,7 @@ let tableListDataSource = [
     role: 'deffense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mei/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mei_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mei_portrait.png'
   },
   {
     id: uuidv4(),
@@ -210,8 +264,7 @@ let tableListDataSource = [
     role: 'support',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/mercy/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mercy_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mercy_portrait.png'
   },
   {
     id: uuidv4(),
@@ -231,8 +284,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/pharah/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Pharah_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Pharah_portrait.png'
   },
   {
     id: uuidv4(),
@@ -252,8 +304,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/reaper/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reaper_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reaper_portrait.png'
   },
   {
     id: uuidv4(),
@@ -294,8 +345,7 @@ let tableListDataSource = [
     role: 'tank',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/roadhog/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Roadhog_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Roadhog_portrait.png'
   },
   {
     id: uuidv4(),
@@ -336,8 +386,7 @@ let tableListDataSource = [
     role: 'support',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/symmetra/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Symmetra_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Symmetra_portrait.png'
   },
   {
     id: uuidv4(),
@@ -357,8 +406,7 @@ let tableListDataSource = [
     role: 'deffense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/torbjorn/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Torbjorn_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Torbjorn_portrait.png'
   },
   {
     id: uuidv4(),
@@ -378,8 +426,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/tracer/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Tracer_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Tracer_portrait.png'
   },
   {
     id: uuidv4(),
@@ -420,8 +467,7 @@ let tableListDataSource = [
     role: 'tank',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/winston/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Winston_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Winston_portrait.png'
   },
   {
     id: uuidv4(),
@@ -441,8 +487,7 @@ let tableListDataSource = [
     role: 'tank',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/zarya/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
   {
     id: uuidv4(),
@@ -462,8 +507,7 @@ let tableListDataSource = [
     role: 'support',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/zenyatta/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
   {
     id: uuidv4(),
@@ -483,8 +527,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/sombra/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Sombra_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Sombra_portrait.png'
   },
   {
     id: uuidv4(),
@@ -504,8 +547,7 @@ let tableListDataSource = [
     role: 'tank',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/orisa/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Orisa_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Orisa_portrait.png'
   },
   {
     id: uuidv4(),
@@ -525,8 +567,7 @@ let tableListDataSource = [
     role: 'offense',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/doomfist/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Doomfist_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Doomfist_portrait.png'
   },
   {
     id: uuidv4(),
@@ -546,8 +587,7 @@ let tableListDataSource = [
     role: 'support',
     full_portrait:
       'http://overwatch.nos.netease.com/1/assets/images/hero/moira/full-portrait.png',
-    avatar:
-      'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Moira_portrait.png'
+    avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Moira_portrait.png'
   }
 ]
 
