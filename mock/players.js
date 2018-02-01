@@ -14,7 +14,9 @@ let tableListDataSource = [
     homeLocation: 'Suwon',
     role: 'offense',
     heroes: [],
-    accounts: []
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
@@ -27,7 +29,9 @@ let tableListDataSource = [
     homeLocation: 'DaeJeon',
     role: 'tank',
     heroes: [],
-    accounts: []
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
@@ -40,7 +44,9 @@ let tableListDataSource = [
     homeLocation: 'Boryung',
     role: 'flex',
     heroes: [],
-    accounts: []
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
@@ -53,7 +59,9 @@ let tableListDataSource = [
     homeLocation: 'Seoul',
     role: 'offense',
     heroes: [],
-    accounts: []
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   }
 ]
 
@@ -136,7 +144,9 @@ export function postPlayers(req, res, b) {
     homeLocation,
     role,
     heroes,
-    accounts
+    accounts,
+    accountsType,
+    accountsValue,
   } = body
 
   const result = {
@@ -149,7 +159,9 @@ export function postPlayers(req, res, b) {
     homeLocation,
     role,
     heroes,
-    accounts
+    accounts,
+    accountsType,
+    accountsValue,
   }
 
   tableListDataSource.unshift(result)

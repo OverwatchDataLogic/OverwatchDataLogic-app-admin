@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
+import { ACCOUNTS } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import styles from './Players.less'
 
 const FormItem = Form.Item
 const Option = Select.Option
+let uuid = 0
 
 @Form.create()
 class PlayerAdd extends PureComponent {
@@ -42,6 +44,34 @@ class PlayerAdd extends PureComponent {
         loading: false
       })
     }
+  }
+
+  remove = k => {
+    const { form } = this.props
+    // can use data-binding to get
+    const keys = form.getFieldValue('accounts')
+    // We need at least one passenger
+    if (keys.length === 1) {
+      return
+    }
+
+    // can use data-binding to set
+    form.setFieldsValue({
+      accounts: keys.filter(key => key !== k)
+    })
+  }
+
+  add = () => {
+    const { form } = this.props
+    // can use data-binding to get
+    const keys = form.getFieldValue('accounts')
+    const nextKeys = keys.concat(uuid)
+    uuid++
+    // can use data-binding to set
+    // important! notify form to detect changes
+    form.setFieldsValue({
+      accounts: nextKeys
+    })
   }
 
   handleSubmit = e => {
@@ -80,15 +110,24 @@ class PlayerAdd extends PureComponent {
       nationality,
       homeLocation,
       role,
-      heroes
+      heroes,
+      accounts
     } = this.props.player
     const { submitting } = this.props
-    const { getFieldDecorator } = this.props.form
+    const { getFieldDecorator, getFieldValue } = this.props.form
     const avatarUrl = this.state.avatarUrl
     const heroOptions = []
     this.props.heroes.forEach(item => {
       heroOptions.push(
         <Option key={item.id} value={item.id}>
+          {item.name}
+        </Option>
+      )
+    })
+    const accountOptions = []
+    ACCOUNTS.forEach(item => {
+      accountOptions.push(
+        <Option key={item.type} value={item.name}>
           {item.name}
         </Option>
       )
@@ -110,6 +149,36 @@ class PlayerAdd extends PureComponent {
         sm: { span: 10, offset: 7 }
       }
     }
+    const formItemLayoutWithOutLabel = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 }
+      }
+    }
+    getFieldDecorator('accounts', { initialValue: accounts })
+    const keys = getFieldValue('accounts')
+    const formItems = keys.map((k, index) => {
+      return (
+        <FormItem {...formItemLayout} label="媒体账号" key={k}>
+          {getFieldDecorator(`accountsValue[${k}]`, {})(
+            <Input
+              style={{ width: '90%' }}
+              addonBefore={getFieldDecorator(`accountsType[${k}]`, {
+                initialValue: 'twitter'
+              })(<Select>{accountOptions}</Select>)}
+            />
+          )}
+          {keys.length > 1 ? (
+            <Icon
+              className="dynamic-delete-button"
+              type="minus-circle-o"
+              disabled={keys.length === 1}
+              onClick={() => this.remove(k)}
+            />
+          ) : null}
+        </FormItem>
+      )
+    })
     return (
       <PageHeaderLayout title="新增选手">
         <Card bordered={false}>
@@ -117,7 +186,7 @@ class PlayerAdd extends PureComponent {
             onSubmit={this.handleSubmit}
             hideRequiredMark
             style={{ marginTop: 8 }}
-            className={styles.playerImg}
+            className={styles.player}
           >
             <FormItem {...formItemLayout} label="选手名称">
               {getFieldDecorator('name', {
@@ -200,6 +269,12 @@ class PlayerAdd extends PureComponent {
                   {heroOptions}
                 </Select>
               )}
+            </FormItem>
+            {formItems}
+            <FormItem {...formItemLayoutWithOutLabel}>
+              <Button type="dashed" onClick={this.add}>
+                <Icon type="plus" /> 新增媒体账号
+              </Button>
             </FormItem>
             <FormItem {...formItemLayout} label="头像">
               <Upload

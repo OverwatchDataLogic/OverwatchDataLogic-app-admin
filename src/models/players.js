@@ -22,7 +22,9 @@ export default {
       homeLocation: '',
       role: '',
       heroes: [],
-      accounts: []
+      accounts: [],
+      accountsType: [],
+      accountsValue: []
     },
     data: {
       list: [],
