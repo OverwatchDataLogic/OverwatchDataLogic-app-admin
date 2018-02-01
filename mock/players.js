@@ -8,44 +8,60 @@ let tableListDataSource = [
     name: 'Bunny',
     familyName: 'Chae',
     givenName: 'Jun-Hyeok',
-    headshot:
+    avatar:
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/8VVBZ6TJQZL41512770127850.png',
     nationality: 'KR',
     homeLocation: 'Suwon',
-    role: 'offense'
+    role: 'offense',
+    heroes: [],
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
     name: 'Miro',
     familyName: 'Gong',
     givenName: 'Jin-Hyuk',
-    headshot:
+    avatar:
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/LTXC1UP8RPNW1512770128083.png',
     nationality: 'KR',
     homeLocation: 'DaeJeon',
-    role: 'tank'
+    role: 'tank',
+    heroes: [],
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
     name: 'ZUNBA',
     familyName: 'Kim',
     givenName: 'Joon-Hyeok',
-    headshot:
+    avatar:
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/1W9Y36BABS5S1512770128543.png',
     nationality: 'KR',
     homeLocation: 'Boryung',
-    role: 'flex'
+    role: 'flex',
+    heroes: [],
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   },
   {
     id: uuidv4(),
     name: 'Munchkin',
     familyName: 'Byun',
     givenName: 'Sang-Beom',
-    headshot:
+    avatar:
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/EXGQNIWZDGSD1512770128109.png',
     nationality: 'KR',
     homeLocation: 'Seoul',
-    role: 'offense'
+    role: 'offense',
+    heroes: [],
+    accounts: [],
+    accountsType: [],
+    accountsValue: [],
   }
 ]
 
@@ -123,10 +139,14 @@ export function postPlayers(req, res, b) {
     name,
     familyName,
     givenName,
-    headshot,
+    avatar,
     nationality,
     homeLocation,
-    role
+    role,
+    heroes,
+    accounts,
+    accountsType,
+    accountsValue,
   } = body
 
   const result = {
@@ -134,10 +154,14 @@ export function postPlayers(req, res, b) {
     name,
     familyName,
     givenName,
-    headshot,
+    avatar,
     nationality,
     homeLocation,
-    role
+    role,
+    heroes,
+    accounts,
+    accountsType,
+    accountsValue,
   }
 
   tableListDataSource.unshift(result)

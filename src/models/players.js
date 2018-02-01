@@ -21,7 +21,10 @@ export default {
       nationality: '',
       homeLocation: '',
       role: '',
-      heroes: []
+      heroes: [],
+      accounts: [],
+      accountsType: [],
+      accountsValue: []
     },
     data: {
       list: [],
