@@ -21,7 +21,8 @@ export default {
       nationality: '',
       homeLocation: '',
       role: '',
-      heroes: []
+      heroes: [],
+      accounts: []
     },
     data: {
       list: [],

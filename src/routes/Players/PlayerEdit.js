@@ -1,57 +1,46 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'dva'
 import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
+import AV from 'leancloud-storage'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
+import styles from './Players.less'
 
 const FormItem = Form.Item
 const Option = Select.Option
 
-function getBase64(img, callback) {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
-
 @Form.create()
-class PlayerEdit extends PureComponent {
+class PlayerEdit extends Component {
   state = {
-    loading: false
+    loading: false,
+    avatarUrl: this.props.player.avatar,
+    heroes: []
   }
 
   componentDidMount() {
-    this.props.getById()
     this.props.getHeroes()
   }
 
-  handleLogoChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
-      return
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          headshotUrl: imageUrl,
-          loading: false
-        })
-      )
-    }
+  handleUpload = ({ onSuccess, onError, file }) => {
+    var newfile = new AV.File(file.name, file)
+    newfile.save().then(
+      function(res) {
+        onSuccess(res)
+      },
+      function(error) {
+        console.log(error)
+      }
+    )
   }
-
-  handlePicChange = info => {
+  handleAvatarUploadChange = info => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true })
       return
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          picUrl: imageUrl,
-          loading: false
-        })
-      )
+      this.setState({
+        avatarUrl: info.file.response.attributes.url,
+        loading: false
+      })
     }
   }
 
@@ -59,13 +48,28 @@ class PlayerEdit extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.update(values)
+        this.props.update({
+          ...values,
+          avatar: this.state.avatarUrl,
+          heroes: this.state.heroes
+        })
       }
     })
   }
 
-  handleHeroChange(value) {
-    console.log(`selected ${value}`)
+  handleHeroChange = value => {
+    const heroes = []
+    value.forEach(item => {
+      const hero = this.props.heroes.filter(x => x.id === item)[0]
+      heroes.push({
+        id: hero.id,
+        name: hero.name,
+        avatar: hero.avatar
+      })
+    })
+    this.setState({
+      heroes
+    })
   }
 
   render() {
@@ -81,13 +85,7 @@ class PlayerEdit extends PureComponent {
     } = this.props.player
     const { submitting } = this.props
     const { getFieldDecorator } = this.props.form
-    const headshotUrl = this.state.headshotUrl
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    )
+    const avatarUrl = this.state.avatarUrl
     const heroOptions = []
     this.props.heroes.forEach(item => {
       heroOptions.push(
@@ -114,18 +112,19 @@ class PlayerEdit extends PureComponent {
       }
     }
     return (
-      <PageHeaderLayout title="编辑选手">
+      <PageHeaderLayout title="新增选手">
         <Card bordered={false}>
+          <FormItem>
+            {getFieldDecorator('id', {
+              initialValue: id
+            })(<Input type="hidden" />)}
+          </FormItem>
           <Form
             onSubmit={this.handleSubmit}
             hideRequiredMark
             style={{ marginTop: 8 }}
+            className={styles.playerImg}
           >
-            <FormItem>
-              {getFieldDecorator('id', {
-                initialValue: id
-              })(<Input type="hidden" />)}
-            </FormItem>
             <FormItem {...formItemLayout} label="选手名称">
               {getFieldDecorator('name', {
                 initialValue: name,
@@ -182,24 +181,27 @@ class PlayerEdit extends PureComponent {
               })(<Input placeholder="请输入选手家乡" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="角色">
-              {getFieldDecorator('role', {
-                initialValue: role
-              })(
-                <Radio.Group>
-                  <Radio value="offense">突击</Radio>
-                  <Radio value="tank">重装</Radio>
-                  <Radio value="support">辅助</Radio>
-                  <Radio value="flex">自由人</Radio>
-                </Radio.Group>
-              )}
+              <div>
+                {getFieldDecorator('role', {
+                  initialValue: role
+                })(
+                  <Radio.Group>
+                    <Radio value="offense">突击</Radio>
+                    <Radio value="tank">重装</Radio>
+                    <Radio value="support">辅助</Radio>
+                    <Radio value="flex">自由人</Radio>
+                  </Radio.Group>
+                )}
+              </div>
             </FormItem>
             <FormItem {...formItemLayout} label="擅长英雄">
               {getFieldDecorator('heroes', {
-                initialValue: heroes
+                initialValue: heroes ? heroes.map(x => {
+                  return x.id
+                }) : []
               })(
                 <Select
                   mode="multiple"
-                  style={{ width: '100%' }}
                   placeholder="请选择擅长英雄"
                   onChange={this.handleHeroChange}
                 >
@@ -209,15 +211,22 @@ class PlayerEdit extends PureComponent {
             </FormItem>
             <FormItem {...formItemLayout} label="头像">
               <Upload
-                name="headshot"
+                name="avatar"
                 accept="image/jpg,image/jpeg,image/png"
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                onChange={this.handleChange}
+                onChange={this.handleAvatarUploadChange}
+                customRequest={this.handleUpload}
               >
-                {headshotUrl ? <img src={headshotUrl} alt="" /> : uploadButton}
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="" />
+                ) : (
+                  <div>
+                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                    <div className="ant-upload-text">上传</div>
+                  </div>
+                )}
               </Upload>
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
@@ -246,12 +255,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    getById: () => {
-      dispatch({
-        type: 'players/getById',
-        payload: ownProps.match.params.id
-      })
-    },
     update: values => {
       dispatch({
         type: 'players/update',
