@@ -1,25 +1,28 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
+import { Form, Input, Button, Card, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
 import { ACCOUNTS } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from './Players.less'
+import styles from './Teams.less'
 
 const FormItem = Form.Item
 const Option = Select.Option
+const { TextArea } = Input
 let uuid = 0
 
 @Form.create()
-class PlayerAdd extends PureComponent {
+class TeamAdd extends PureComponent {
   state = {
-    loading: false,
-    avatarUrl: '',
-    heroes: []
+    logo_loading: false,
+    logoUrl: '',
+    icon_loading: false,
+    iconUrl: '',
+    players: []
   }
 
   componentDidMount() {
-    this.props.getHeroes()
+    this.props.getPlayers()
   }
 
   handleUpload = ({ onSuccess, onError, file }) => {
@@ -33,15 +36,29 @@ class PlayerAdd extends PureComponent {
       }
     )
   }
-  handleAvatarUploadChange = info => {
+
+  handleLogoUploadChange = info => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true })
+      this.setState({ logo_loading: true })
       return
     }
     if (info.file.status === 'done') {
       this.setState({
-        avatarUrl: info.file.response.attributes.url,
-        loading: false
+        logoUrl: info.file.response.attributes.url,
+        logo_loading: false
+      })
+    }
+  }
+
+  handleIconUploadChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ icon_loading: true })
+      return
+    }
+    if (info.file.status === 'done') {
+      this.setState({
+        iconUrl: info.file.response.attributes.url,
+        icon_loading: false
       })
     }
   }
@@ -78,19 +95,20 @@ class PlayerAdd extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const heroes = []
-        values.heroes.forEach(item => {
-          const hero = this.props.heroes.filter(x => x.id === item)[0]
-          heroes.push({
-            id: hero.id,
-            name: hero.name,
-            avatar: hero.avatar
+        const players = []
+        values.players.forEach(item => {
+          const player = this.props.players.filter(x => x.id === item)[0]
+          players.push({
+            id: player.id,
+            name: player.name,
+            avatar: player.avatar
           })
         })
         this.props.create({
           ...values,
-          avatar: this.state.avatarUrl,
-          heroes: heroes
+          logo: this.state.logoUrl,
+          icon: this.state.iconUrl,
+          players: players
         })
       }
     })
@@ -99,20 +117,24 @@ class PlayerAdd extends PureComponent {
   render() {
     const {
       name,
-      familyName,
-      givenName,
-      nationality,
+      abbreviatedTitle,
       homeLocation,
-      role,
-      heroes,
-      accounts
-    } = this.props.player
+      accounts,
+      primaryColor,
+      secondaryColor,
+      addressCountry,
+      description,
+      match,
+      honour,
+      players
+    } = this.props.team
     const { submitting } = this.props
     const { getFieldDecorator, getFieldValue } = this.props.form
-    const avatarUrl = this.state.avatarUrl
-    const heroOptions = []
-    this.props.heroes.forEach(item => {
-      heroOptions.push(
+    const logoUrl = this.state.logoUrl
+    const iconUrl = this.state.iconUrl
+    const playerOptions = []
+    this.props.players.forEach(item => {
+      playerOptions.push(
         <Option key={item.id} value={item.id}>
           {item.name}
         </Option>
@@ -174,92 +196,110 @@ class PlayerAdd extends PureComponent {
       )
     })
     return (
-      <PageHeaderLayout title="新增选手">
-        <Card bordered={false}>
+      <PageHeaderLayout title="新增队伍">
+        <Card bordered={false} className={styles.team}>
           <Form
             onSubmit={this.handleSubmit}
             hideRequiredMark
             style={{ marginTop: 8 }}
             className={styles.player}
           >
-            <FormItem {...formItemLayout} label="选手名称">
+            <FormItem {...formItemLayout} label="队伍名称">
               {getFieldDecorator('name', {
                 initialValue: name,
                 rules: [
                   {
                     required: true,
-                    message: '请输入选手名称'
+                    message: '请输入队伍名称'
                   }
                 ]
-              })(<Input placeholder="请输入选手名称" />)}
+              })(<Input placeholder="请输入队伍名称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选手姓氏">
-              {getFieldDecorator('familyName', {
-                initialValue: familyName,
+            <FormItem {...formItemLayout} label="队伍简称">
+              {getFieldDecorator('abbreviatedTitle', {
+                initialValue: abbreviatedTitle,
                 rules: [
                   {
                     required: true,
-                    message: '请输入选手姓氏'
+                    message: '请输入队伍简称'
                   }
                 ]
-              })(<Input placeholder="请输入选手姓氏" />)}
+              })(<Input placeholder="请输入队伍简称" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选手名字">
-              {getFieldDecorator('givenName', {
-                initialValue: givenName,
+            <FormItem {...formItemLayout} label="队伍主色调">
+              {getFieldDecorator('primaryColor', {
+                initialValue: primaryColor
+              })(<Input placeholder="请输入队伍主色调" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="队伍辅色调">
+              {getFieldDecorator('secondaryColor', {
+                initialValue: secondaryColor
+              })(<Input placeholder="请输入队伍辅色调" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="队伍国籍">
+              {getFieldDecorator('addressCountry', {
+                initialValue: addressCountry,
                 rules: [
                   {
                     required: true,
-                    message: '请输入选手名字'
+                    message: '请输入队伍国籍'
                   }
                 ]
-              })(<Input placeholder="请输入选手名字" />)}
+              })(<Input placeholder="请输入队伍国籍" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="选手国籍">
-              {getFieldDecorator('nationality', {
-                initialValue: nationality,
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入选手国籍'
-                  }
-                ]
-              })(<Input placeholder="请输入选手国籍" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="选手家乡">
+            <FormItem {...formItemLayout} label="队伍城市">
               {getFieldDecorator('homeLocation', {
                 initialValue: homeLocation,
                 rules: [
                   {
                     required: true,
-                    message: '请输入选手家乡'
+                    message: '请输入队伍城市'
                   }
                 ]
-              })(<Input placeholder="请输入选手家乡" />)}
+              })(<Input placeholder="请输入队伍城市" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="角色">
-              <div>
-                {getFieldDecorator('role', {
-                  initialValue: role
-                })(
-                  <Radio.Group>
-                    <Radio value="offense">突击</Radio>
-                    <Radio value="tank">重装</Radio>
-                    <Radio value="support">辅助</Radio>
-                    <Radio value="flex">自由人</Radio>
-                  </Radio.Group>
-                )}
-              </div>
+            <FormItem {...formItemLayout} label="队伍介绍">
+              {getFieldDecorator('description', {
+                initialValue: description
+              })(
+                <TextArea
+                  style={{ minHeight: 32 }}
+                  placeholder="请输入队伍介绍"
+                  rows={6}
+                />
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label="擅长英雄">
-              {getFieldDecorator('heroes', {
-                initialValue: heroes
+            <FormItem {...formItemLayout} label="比赛经历">
+              {getFieldDecorator('match', {
+                initialValue: match
+              })(
+                <TextArea
+                  style={{ minHeight: 32 }}
+                  placeholder="请输入比赛经历"
+                  rows={6}
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="比赛荣誉">
+              {getFieldDecorator('honour', {
+                initialValue: honour
+              })(
+                <TextArea
+                  style={{ minHeight: 32 }}
+                  placeholder="请输入比赛荣誉"
+                  rows={6}
+                />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="队伍成员">
+              {getFieldDecorator('players', {
+                initialValue: players
               })(
                 <Select
                   mode="multiple"
-                  placeholder="请选择擅长英雄"
+                  placeholder="请选择队伍成员"
                 >
-                  {heroOptions}
+                  {playerOptions}
                 </Select>
               )}
             </FormItem>
@@ -269,21 +309,40 @@ class PlayerAdd extends PureComponent {
                 <Icon type="plus" /> 新增媒体账号
               </Button>
             </FormItem>
-            <FormItem {...formItemLayout} label="头像">
+            <FormItem {...formItemLayout} label="Logo">
               <Upload
-                name="avatar"
+                name="logo"
                 accept="image/jpg,image/jpeg,image/png"
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                onChange={this.handleAvatarUploadChange}
+                onChange={this.handleLogoUploadChange}
                 customRequest={this.handleUpload}
               >
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt="" />
+                {logoUrl ? (
+                  <img src={logoUrl} alt="" />
                 ) : (
                   <div>
-                    <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                    <Icon type={this.state.logo_loading ? 'loading' : 'plus'} />
+                    <div className="ant-upload-text">上传</div>
+                  </div>
+                )}
+              </Upload>
+            </FormItem>
+            <FormItem {...formItemLayout} label="Icon">
+              <Upload
+                name="icon"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                onChange={this.handleIconUploadChange}
+                customRequest={this.handleUpload}
+              >
+                {iconUrl ? (
+                  <img src={iconUrl} alt="" />
+                ) : (
+                  <div>
+                    <Icon type={this.state.icon_loading ? 'loading' : 'plus'} />
                     <div className="ant-upload-text">上传</div>
                   </div>
                 )}
@@ -302,11 +361,11 @@ class PlayerAdd extends PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { players, heroes, loading } = state
+  const { teams, players, loading } = state
   return {
-    player: players.default,
-    heroes: heroes.data.list,
-    loading: loading.models.players
+    team: teams.default,
+    players: players.data.list,
+    loading: loading.models.teams
   }
 }
 
@@ -314,17 +373,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     create: values => {
       dispatch({
-        type: 'players/create',
+        type: 'teams/create',
         payload: values
       })
     },
-    getHeroes: () => {
+    getPlayers: () => {
       dispatch({
-        type: 'heroes/get',
+        type: 'players/get',
         payload: {}
       })
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerAdd)
+export default connect(mapStateToProps, mapDispatchToProps)(TeamAdd)

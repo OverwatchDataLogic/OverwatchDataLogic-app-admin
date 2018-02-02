@@ -30,18 +30,12 @@ export default {
       addressCountry: '',
       //队伍描述
       description: '',
-      //是否解散
-      isDissolved: false,
-      //解散时间
-      dissolvedTime: null,
       //比赛经历
       match: '',
-      //成立时间
-      createTime: '',
       //获得荣誉
       honour: '',
       //选手列表
-      playerList: [],
+      players: [],
     },
     data: {
       currentItem: {},
