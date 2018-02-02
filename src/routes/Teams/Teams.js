@@ -4,8 +4,7 @@ import { routerRedux } from 'dva/router'
 import { Card, Form, Icon, Button, Dropdown, Menu } from 'antd'
 import TeamsTable from '../../components/TeamsTable'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-
-//import styles from './Sports.less'
+import styles from './Teams.less'
 
 const getValue = obj =>
   Object.keys(obj)
@@ -77,14 +76,14 @@ class Teams extends PureComponent {
     )
 
     return (
-      <PageHeaderLayout title="赛事列表">
+      <PageHeaderLayout title="队伍列表">
         <Card bordered={false}>
-          <div>
-            <div>
+          <div  className={styles.tableList}>
+            <div className={styles.tableListOperator}>
               <Button
                 icon="plus"
                 type="primary"
-                onClick={() => navigateTo('/sports/sport/add')}
+                onClick={() => navigateTo('/teams/team/add')}
               >
                 新建
               </Button>

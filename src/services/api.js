@@ -201,7 +201,7 @@ export async function updateTeams(params) {
 }
 
 export async function removeTeams(id) {
-  return request(`/api/team/${id}`, {
+  return request(`/api/teams/${id}`, {
     method: 'DELETE'
   })
 }

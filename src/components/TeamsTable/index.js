@@ -45,26 +45,18 @@ class TeamsTable extends PureComponent {
         dataIndex: 'name'
       },
       {
-        title: '队伍名称',
-        dataIndex: 'description'
+        title: '队伍缩写',
+        dataIndex: 'abbreviatedTitle'
       },
       {
         title: '城市',
         dataIndex: 'homeLocation'
       },
       {
-        title: '主色调',
-        dataIndex: 'primaryColor',
-      },
-      {
-        title: '成立时间',
-        dataIndex: 'createTime',
-      },
-      {
         title: '操作',
         render: (text, record) => (
           <Fragment>
-            <a onClick={() => navigateTo(`/temas/team/edit/${record.id}`)}>
+            <a onClick={() => navigateTo(`/teams/team/edit/${record.id}`)}>
               编辑
             </a>
             <Divider type="vertical" />

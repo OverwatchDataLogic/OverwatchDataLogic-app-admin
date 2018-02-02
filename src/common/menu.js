@@ -162,10 +162,6 @@ const menuData = [
         name: '赛事列表',
         path: 'sport/list'
       },
-      {
-        name: '新增赛事',
-        path: 'sport/add'
-      }
     ]
   },
   {
@@ -177,10 +173,6 @@ const menuData = [
         name: '队伍列表',
         path: 'team/list'
       },
-      {
-        name: '新增队伍',
-        path: 'team/add'
-      }
     ]
   },
   {
@@ -192,10 +184,6 @@ const menuData = [
         name: '选手列表',
         path: 'player/list'
       },
-      {
-        name: '新增选手',
-        path: 'player/add'
-      }
     ]
   },
   {
@@ -207,10 +195,6 @@ const menuData = [
         name: '英雄列表',
         path: 'hero/list'
       },
-      {
-        name: '新增英雄',
-        path: 'hero/add'
-      }
     ]
   },
   {
