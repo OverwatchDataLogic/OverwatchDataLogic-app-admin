@@ -78,27 +78,21 @@ class PlayerAdd extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const heroes = []
+        values.heroes.forEach(item => {
+          const hero = this.props.heroes.filter(x => x.id === item)[0]
+          heroes.push({
+            id: hero.id,
+            name: hero.name,
+            avatar: hero.avatar
+          })
+        })
         this.props.create({
           ...values,
           avatar: this.state.avatarUrl,
-          heroes: this.state.heroes
+          heroes: heroes
         })
       }
-    })
-  }
-
-  handleHeroChange = value => {
-    const heroes = []
-    value.forEach(item => {
-      const hero = this.props.heroes.filter(x => x.id === item)[0]
-      heroes.push({
-        id: hero.id,
-        name: hero.name,
-        avatar: hero.avatar
-      })
-    })
-    this.setState({
-      heroes
     })
   }
 
@@ -264,7 +258,6 @@ class PlayerAdd extends PureComponent {
                 <Select
                   mode="multiple"
                   placeholder="请选择擅长英雄"
-                  onChange={this.handleHeroChange}
                 >
                   {heroOptions}
                 </Select>
