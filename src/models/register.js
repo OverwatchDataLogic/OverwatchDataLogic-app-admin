@@ -1,28 +1,43 @@
-import { fakeRegister } from '../services/api';
+import { register } from '../services/leancloud/user'
 
 export default {
   namespace: 'register',
 
   state: {
     status: undefined,
+    error: undefined
   },
 
   effects: {
-    *submit(_, { call, put }) {
-      const response = yield call(fakeRegister);
-      yield put({
-        type: 'registerHandle',
-        payload: response,
-      });
-    },
+    *submit({ payload }, { call, put }) {
+      try {
+        const response = yield call(register, payload)
+        yield put({
+          type: 'registerSuccess',
+          payload: response
+        })
+      } catch (error) {
+        yield put({
+          type: 'registerFailed',
+          payload: error
+        })
+      }
+    }
   },
 
   reducers: {
-    registerHandle(state, { payload }) {
+    registerSuccess(state, { payload }) {
       return {
         ...state,
-        status: payload.status,
-      };
+        status: 'ok'
+      }
     },
-  },
-};
+    registerFailed(state, { payload }) {
+      return {
+        ...state,
+        status: 'error',
+        error: payload.rawMessage
+      }
+    }
+  }
+}

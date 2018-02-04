@@ -17,7 +17,7 @@ import {
   Tag
 } from 'antd'
 import AV from 'leancloud-storage'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import FooterToolbar from '../../components/FooterToolbar'
 import EditableHeroExtraTable from '../../components/EditableHeroExtraTable'
@@ -35,9 +35,9 @@ class HeroEdit extends Component {
     super(props)
     this.state = {
       avatar_loading: false,
+      avatarUrl: this.props.hero.avatar,
       fullshot_loading: false,
-      isAvatarChanged: false,
-      isFullshotChanged: false,
+      fullshotUrl: this.props.hero.fullshot,
       width: '100%',
       ability_visible: false,
       ability_extra_visible: false,
@@ -88,7 +88,6 @@ class HeroEdit extends Component {
     if (info.file.status === 'done') {
       this.setState({
         avatarUrl: info.file.response.attributes.url,
-        isAvatarChanged: true,
         avatar_loading: false
       })
     }
@@ -101,7 +100,6 @@ class HeroEdit extends Component {
     if (info.file.status === 'done') {
       this.setState({
         fullshotUrl: info.file.response.attributes.url,
-        isFullshotChanged: true,
         fullshot_loading: false
       })
     }
@@ -125,12 +123,8 @@ class HeroEdit extends Component {
       if (!err) {
         this.props.update({
           ...values,
-          avatar: this.state.isAvatarChanged
-            ? this.state.avatarUrl
-            : this.props.avatar,
-          fullshot: this.state.isFullshotChanged
-            ? this.state.fullshotUrl
-            : this.props.fullshot,
+          avatar: this.state.avatarUrl,
+          fullshot: this.state.fullshotUrl,
           abilities: this.state.abilities,
           extra: this.state.extra,
           remark: this.state.remark
@@ -187,7 +181,7 @@ class HeroEdit extends Component {
       })
     } else {
       const ability = {
-        id: uuidv4(),
+        id: uuidv1(),
         name: this.state.abilityName,
         description: this.state.abilityDesc,
         icon: this.state.abilityUrl,
@@ -262,7 +256,7 @@ class HeroEdit extends Component {
   }
   handleAbilityExtraAdd = () => {
     const newData = {
-      id: uuidv4(),
+      id: uuidv1(),
       name: '标题',
       value: '内容'
     }
@@ -320,7 +314,7 @@ class HeroEdit extends Component {
   }
   handleAbilityRemarkAdd = () => {
     const newData = {
-      id: uuidv4(),
+      id: uuidv1(),
       value: '内容'
     }
     this.setState({
@@ -355,7 +349,7 @@ class HeroEdit extends Component {
   }
   handleHeroExtraAdd = () => {
     const newData = {
-      id: uuidv4(),
+      id: uuidv1(),
       name: '标题',
       value: '内容'
     }
@@ -388,7 +382,7 @@ class HeroEdit extends Component {
   }
   handleHeroRemarkAdd = () => {
     const newData = {
-      id: uuidv4(),
+      id: uuidv1(),
       value: '内容'
     }
     this.setState({
@@ -397,7 +391,7 @@ class HeroEdit extends Component {
   }
   render() {
     const {
-      id,
+      objectId,
       name,
       description,
       comment,
@@ -427,10 +421,8 @@ class HeroEdit extends Component {
       remark,
       abilities
     } = this.state
-    const avatarUrl = this.state.isAvatarChanged ? this.state.avatarUrl : avatar
-    const fullshotUrl = this.state.isFullshotChanged
-      ? this.state.fullshotUrl
-      : fullshot
+    const avatarUrl = this.state.avatarUrl
+    const fullshotUrl = this.state.fullshotUrl
     const abilityUrl = this.state.isAbilityChanged ? this.state.abilityUrl : ''
     return (
       <PageHeaderLayout title="编辑英雄">
@@ -439,8 +431,8 @@ class HeroEdit extends Component {
             <Row gutter={16}>
               <Col lg={0} md={0} sm={0}>
                 <FormItem>
-                  {getFieldDecorator('id', {
-                    initialValue: id
+                  {getFieldDecorator('objectId', {
+                    initialValue: objectId
                   })(<Input type="hidden" />)}
                 </FormItem>
               </Col>
@@ -910,7 +902,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     hero:
       heroes.data.list.length > 0
-        ? heroes.data.list.filter(x => x.id === ownProps.match.params.id)[0]
+        ? heroes.data.list.filter(
+            x => x.objectId === ownProps.match.params.id
+          )[0]
         : heroes.default,
     loading: loading.models.heroes
   }

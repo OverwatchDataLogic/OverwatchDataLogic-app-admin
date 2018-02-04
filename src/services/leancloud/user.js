@@ -1,7 +1,7 @@
 import AV from 'leancloud-storage'
 
 // 用户名和密码注册
-export function signUp(payload) {
+export function register(payload) {
   const { username, password, email } = payload
   const user = new AV.User()
   user.setUsername(username)
@@ -22,7 +22,7 @@ export function signUpBySmsCode(payload) {
 export function signUpOrlogInWithAuthData(payload) {}
 
 // 用户名和密码登录
-export function logIn(payload) {
+export function login(payload) {
   const { username, password } = payload
   return AV.User.logIn(username, password).then(function(result) {
     return result.toJSON()
@@ -30,7 +30,7 @@ export function logIn(payload) {
 }
 
 // 手机号和密码登录
-export function logInWithMobilePhone(payload) {
+export function loginWithMobilePhone(payload) {
   const { phone, password } = payload
   return AV.User.logInWithMobilePhone(phone, password)
 }
@@ -60,7 +60,7 @@ export function logInWithSessionToken(payload) {
 }
 
 // 登出
-export function logOut() {
+export function logout() {
   return AV.User.logOut()
   // 现在的 currentUser 是 null 了
   // var currentUser = AV.User.current()

@@ -1,10 +1,10 @@
 import { getUrlParams } from './utils'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import _ from 'lodash'
 
 let tableListDataSource = [
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '安娜',
     description:
       '安娜全方位的武器配备让她可以应对战场上的所有情况。她的生物步枪和生物手雷可以用来治疗队友并对敌人造成伤害，同时还能对敌人造成负面影响；她的副武器可以麻醉重要目标，而纳米激素则可以大大强化她的一名队友。',
@@ -27,7 +27,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Ana_portrait.png',
     abilities: [
       {
-        id: uuidv4(),
+        id: uuidv1(),
         name: '生物步枪',
         description:
           '安娜可以用手中的步枪射出飞镖为队友恢复生命值或对敌人造成持续性伤害。她也可以用步枪的瞄准镜进行放大瞄准以便更精准地击中目标。',
@@ -35,21 +35,21 @@ let tableListDataSource = [
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/f/fc/Ability-ana1.png',
         extra: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             name: '大招',
             value: '否'
           }
         ],
         remark: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             value:
               '生物步枪能够对敌方托比昂的炮台造成伤害，但不能治疗友方托比昂的炮台。'
           }
         ]
       },
       {
-        id: uuidv4(),
+        id: uuidv1(),
         name: '麻醉镖',
         description:
           '安娜可以用她的副武器射出飞镖，使敌人失去意识（目标受到任何伤害后将会醒来）。',
@@ -57,20 +57,20 @@ let tableListDataSource = [
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/5/58/Ability-ana2.png',
         extra: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             name: '大招',
             value: '否'
           }
         ],
         remark: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             value: '麻醉镖对托比昂的炮台没有作用。'
           }
         ]
       },
       {
-        id: uuidv4(),
+        id: uuidv1(),
         name: '生物手雷',
         description:
           '安娜扔出一颗生物手雷；当手雷爆炸后，对小范围内的敌人造成伤害并治疗队友。受影响的队友在短时间内受到的所有治疗效果将会提高，而受影响的敌人则会在短时间内无法受到治疗。',
@@ -78,21 +78,21 @@ let tableListDataSource = [
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/0/0c/Ability-ana3.png',
         extra: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             name: '大招',
             value: '否'
           }
         ],
         remark: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             value:
               '队友受到的治疗量额外提高100%，同时敌人受到的治疗量减少100%。'
           }
         ]
       },
       {
-        id: uuidv4(),
+        id: uuidv1(),
         name: '纳米激素',
         description:
           '安娜用激素强化一位队友，在短时间内提高目标队友造成的伤害并且降低其受到的伤害。',
@@ -100,7 +100,7 @@ let tableListDataSource = [
           'https://d1u5p3l4wpay3k.cloudfront.net/overwatch_gamepedia/9/97/Ability-ana4.png',
         extra: [
           {
-            id: uuidv4(),
+            id: uuidv1(),
             name: '大招',
             value: '是'
           }
@@ -110,7 +110,7 @@ let tableListDataSource = [
     ]
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '堡垒',
     description:
       '“堡垒”具有自我修复的能力，还可以在哨卫模式、侦查模式以及极具毁灭性的坦克模式间进行切换。',
@@ -133,7 +133,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Bastion_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: 'D.Va',
     description:
       'D.Va拥有一部强大的机甲，它具有两台全自动的近距离聚变机炮、可以使机甲飞跃敌人或障碍物的推进器、 还有可以抵御来自正面的远程攻击的deffense矩阵。',
@@ -156,7 +156,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/DVa_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '源氏',
     description:
       '源氏可以用致命而准确的手里剑重创敌人，他的高科技武士刀可以用来反弹敌人的远程攻击，或是对敌人施展一次快速攻击。',
@@ -179,7 +179,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Genji_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '半藏',
     description:
       '半藏的弓箭具备有不同的功能，既可以侦测敌情，也可以分散成数股箭矢攻击多个敌人。他还可以攀爬墙壁，从高处攻击敌人，或是召唤巨大的巨龙之魂冲击敌人。',
@@ -202,7 +202,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Hanzo_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '狂鼠',
     description:
       '“狂鼠”具有强大的范围攻击能力，他的榴弹发射器可以射出弹跳的榴弹攻击敌人，震荡地雷可以对敌人造成伤害并击飞他们，捕兽夹则可以困住不小心落入陷阱的敌人。',
@@ -225,7 +225,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Junkrat_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '卢西奥',
     description:
       '卢西奥的音速扩音器可以射出音速飞弹攻击敌人，还可以用声波将其击退。他播放的音乐可以为队友恢复生命值，或者为他们提供移动速度加成，而且他可以在这两种音乐中随心切换。',
@@ -248,7 +248,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Lucio_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '麦克雷',
     description:
       '麦克雷拥有一把维和者左轮手枪，他可以用神射手精准解决他的目标，也可以用战术翻滚如苍鹰般在战场中出入自如。',
@@ -271,7 +271,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/McCree_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '美',
     description:
       '美的天气控制设备可以使敌人减速或是进行区域控制。她的冰霜冲击枪可以射出冰锥或是冷气对敌人造成伤害。她可以将自己急冻在冰块中治疗自己或者抵挡伤害，还可以用冰墙来阻碍敌方的行动。',
@@ -294,7 +294,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mei_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '天使',
     description:
       '“天使”的女武神作战服可以让她像守护天使一样保护战场上的队友。她的治疗杖可以射出两种光束，治疗或是强化队友，她还可以使用复活技能使队友死而复生。',
@@ -317,7 +317,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Mercy_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '法老之鹰',
     description:
       '可以通过喷气作战服翱翔天际，也能用火箭发射器投下高爆火箭，“法老之鹰”代表着一股让你无法忽视的强大力量。',
@@ -340,7 +340,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Pharah_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '死神',
     description:
       '”死神”能用地狱火霰弹枪造成巨大伤害，能够用幽灵形态躲避伤害，还能用暗影步在各个地点来回穿梭，这些能力让他足以成为最致命的杀手。',
@@ -363,7 +363,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reaper_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '莱因哈特',
     description:
       '莱因哈特穿着一套厚重的动力装甲，既可以挥舞着火箭重锤，用强大的冲锋杀入敌阵，也能用巨大的能量屏障保护盟友。',
@@ -387,7 +387,7 @@ let tableListDataSource = [
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Reinhardt_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '路霸',
     description:
       '“路霸”可以用他标志性的链钩将敌人勾到他的身边，然后用爆裂枪重创他们。他能够承受巨大的伤害，还可以通过呼吸器恢复生命值。',
@@ -410,7 +410,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Roadhog_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '士兵76',
     description:
       '他装备有最先进的武器，一把试验性的可以发射螺旋高爆火箭的脉冲步枪，而且他还是经过专业训练的战斗人员，拥有强大的机动以及辅助能力。',
@@ -434,7 +434,7 @@ let tableListDataSource = [
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Soldier76_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '秩序之光',
     description:
       '“秩序之光”能够使用光子发射器来分解敌人，为队友提供护盾，建造传送面板或是部署粒子哨戒炮。',
@@ -457,7 +457,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Symmetra_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '托比昂',
     description:
       '托比昂的主要武器是一把锤子以及一把铆钉枪。他随身携带的熔炉让他可以放置可升级的炮台，或是铸造护甲包供盟友使用。',
@@ -480,7 +480,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Torbjorn_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '猎空',
     description:
       '“猎空”的武器有两把脉冲手枪，强大的脉冲炸弹以及永不停歇的欢声笑语。猎空能够通过闪现快速移动并且利用闪回调整自己的状态，然后以这些强大的能力除尽世上的邪恶。',
@@ -503,7 +503,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Tracer_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '黑百合',
     description:
       '“黑百合”全身都是致命的武器，包括能够放出致命毒素的诡雷、能够为队友提供红外视野的护目镜以及一把可以在狙击和自动模式间切换的强大步枪。',
@@ -527,7 +527,7 @@ let tableListDataSource = [
       'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Widowmaker_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '温斯顿',
     description:
       '温斯顿拥有他创造的强大发明，包括了喷射背包、特斯拉炮以及屏障发射器。不仅如此，他还有与生俱来强大的猩猩力量。',
@@ -550,7 +550,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Winston_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '查莉娅',
     description:
       '查莉娅可以为自己或队友施加护盾，吸收伤害并且提升她粒子炮的能量，因此查莉雅具备有前线作战的强大实力。',
@@ -573,7 +573,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '禅雅塔',
     description:
       '禅雅塔可以用和“谐”治愈盟友，也可以用“乱”削弱敌人，还可以在短时间内进入超凡入圣的状态，获得短暂的无敌效果。',
@@ -596,7 +596,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Zenyatta_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '黑影',
     description:
       '隐身与削弱敌人的能力让“黑影”成为了一个强大的渗透者。她的黑客入侵技能可以干扰敌人，使其更容易被击杀，而她的电磁脉冲可以在对付多个敌人时获得先手优势。“黑影”的位移传动和隐秘潜行也让她难以被敌人压制。',
@@ -619,7 +619,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Sombra_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '奥丽莎',
     description:
       '奥丽莎是团队的核心，可以用防护屏障掩护前线队友。她可以从远距离进行攻击、强化自身的deffense、发射重力弹使敌人减速并打乱阵型，同时还能部署超充能器强化范围多个队友的伤害输出。',
@@ -642,7 +642,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Orisa_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '末日铁拳',
     description:
       '“末日铁拳”身上的机械元件使他成为一名高机动力、高破坏力的前线战士。除了用手炮从远距离造成伤害，”末日铁拳”还能猛击地面，将敌人击飞或令其失去平衡，或者用火箭重拳冲进战场。当面对一群阵型紧密的敌人时，”末日铁拳”可以跳到敌人视野之外，紧接着以毁天灭地之势坠落强袭。',
@@ -665,7 +665,7 @@ let tableListDataSource = [
     avatar: 'http://p2f9yvxck.bkt.clouddn.com/hero/avatar/Doomfist_portrait.png'
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '莫伊拉',
     description:
       '莫伊拉可以运用生化能量提供治疗或输出伤害——但一切都是为了她自己的利益。',
@@ -779,7 +779,7 @@ export function postHeroes(req, res, b) {
   } = body
 
   const result = {
-    id: uuidv4(),
+    id: uuidv1(),
     name,
     description,
     comment,

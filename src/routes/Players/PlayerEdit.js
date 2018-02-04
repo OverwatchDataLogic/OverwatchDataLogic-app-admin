@@ -80,9 +80,9 @@ class PlayerEdit extends Component {
       if (!err) {
         const heroes = []
         values.heroes.forEach(item => {
-          const hero = this.props.heroes.filter(x => x.id === item)[0]
+          const hero = this.props.heroes.filter(x => x.objectId === item)[0]
           heroes.push({
-            id: hero.id,
+            id: hero.objectId,
             name: hero.name,
             avatar: hero.avatar
           })
@@ -98,7 +98,7 @@ class PlayerEdit extends Component {
 
   render() {
     const {
-      id,
+      objectId,
       name,
       familyName,
       givenName,
@@ -116,7 +116,7 @@ class PlayerEdit extends Component {
     const heroOptions = []
     this.props.heroes.forEach(item => {
       heroOptions.push(
-        <Option key={item.id} value={item.id}>
+        <Option key={item.objectId} value={item.objectId}>
           {item.name}
         </Option>
       )
@@ -188,8 +188,8 @@ class PlayerEdit extends Component {
             className={styles.player}
           >
             <FormItem>
-              {getFieldDecorator('id', {
-                initialValue: id
+              {getFieldDecorator('objectId', {
+                initialValue: objectId
               })(<Input type="hidden" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="选手名称">
@@ -321,7 +321,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     player:
       players.data.list.length > 0
-        ? players.data.list.filter(x => x.id === ownProps.match.params.id)[0]
+        ? players.data.list.filter(
+            x => x.objectId === ownProps.match.params.id
+          )[0]
         : players.default,
     heroes: heroes.data.list,
     loading: loading.models.players

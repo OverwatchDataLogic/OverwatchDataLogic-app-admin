@@ -3,11 +3,11 @@ import queryString from 'query-string'
 import _ from 'lodash'
 import {
   getPlayers,
-  getPlayerById,
+  getPlayer,
   createPlayers,
   updatePlayers,
   removePlayers
-} from '../services/api'
+} from '../services/leancloud/player'
 
 export default {
   namespace: 'players',
@@ -20,7 +20,7 @@ export default {
       headshot: '',
       nationality: '',
       homeLocation: '',
-      role: '',
+      role: 'offense',
       heroes: [],
       accounts: [],
       accountsType: [],
@@ -40,7 +40,7 @@ export default {
       })
     },
     *getById({ payload }, { call, put }) {
-      const response = yield call(getPlayerById, payload)
+      const response = yield call(getPlayer, payload)
       yield put({
         type: 'updateSuccess',
         payload: response
@@ -62,10 +62,17 @@ export default {
       })
       yield put(routerRedux.push('/players/player/list'))
     },
-    *remove({ payload, callback }, { call, put }) {
+    *remove({ payload }, { call, put }) {
       const response = yield call(removePlayers, payload)
       yield put({
         type: 'removeSuccess',
+        payload: response
+      })
+    },
+    *removeAll({ payload }, { call, put }) {
+      const response = yield call(removePlayers, payload)
+      yield put({
+        type: 'removeAllSuccess',
         payload: response
       })
     }
@@ -89,7 +96,7 @@ export default {
     },
     updateSuccess(state, action) {
       const list = state.data.list.map(item => {
-        if (item.id === action.payload.id) {
+        if (item.objectId === action.payload.objectId) {
           return Object.assign(item, action.payload)
         } else {
           return item
@@ -104,7 +111,24 @@ export default {
       }
     },
     removeSuccess(state, action) {
-      const list = _.xorBy(state.data.list, JSON.parse(action.payload), 'id')
+      const list = state.data.list.filter(
+        x => x.objectId !== action.payload.objectId
+      )
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          list: list
+        }
+      }
+    },
+    removeAllSuccess(state, action) {
+      const l = []
+      action.payload.objectId.forEach(item => {
+        const list = state.data.list.filter(x => x.objectId !== item)
+        l.concat(list)
+      })
+      const list = _.xor(l)
       return {
         ...state,
         data: {

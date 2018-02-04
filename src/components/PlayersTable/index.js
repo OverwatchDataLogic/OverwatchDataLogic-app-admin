@@ -89,11 +89,15 @@ class PlayersTable extends PureComponent {
         title: '操作',
         render: (text, record) => (
           <Fragment>
-            <a onClick={() => navigateTo(`/players/player/edit/${record.id}`)}>
+            <a
+              onClick={() =>
+                navigateTo(`/players/player/edit/${record.objectId}`)
+              }
+            >
               编辑
             </a>
             <Divider type="vertical" />
-            <a onClick={() => remove(record.id)}>删除</a>
+            <a onClick={() => remove(record.objectId)}>删除</a>
           </Fragment>
         )
       }
@@ -117,7 +121,7 @@ class PlayersTable extends PureComponent {
       <div className={styles.standardTable}>
         <Table
           loading={loading}
-          rowKey={record => record.id}
+          rowKey={record => record.objectId}
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}

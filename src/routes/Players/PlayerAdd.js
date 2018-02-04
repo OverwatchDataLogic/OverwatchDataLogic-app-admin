@@ -80,9 +80,9 @@ class PlayerAdd extends PureComponent {
       if (!err) {
         const heroes = []
         values.heroes.forEach(item => {
-          const hero = this.props.heroes.filter(x => x.id === item)[0]
+          const hero = this.props.heroes.filter(x => x.objectId === item)[0]
           heroes.push({
-            id: hero.id,
+            id: hero.objectId,
             name: hero.name,
             avatar: hero.avatar
           })
@@ -113,7 +113,7 @@ class PlayerAdd extends PureComponent {
     const heroOptions = []
     this.props.heroes.forEach(item => {
       heroOptions.push(
-        <Option key={item.id} value={item.id}>
+        <Option key={item.objectId} value={item.objectId}>
           {item.name}
         </Option>
       )
@@ -255,10 +255,7 @@ class PlayerAdd extends PureComponent {
               {getFieldDecorator('heroes', {
                 initialValue: heroes
               })(
-                <Select
-                  mode="multiple"
-                  placeholder="请选择擅长英雄"
-                >
+                <Select mode="multiple" placeholder="请选择擅长英雄">
                   {heroOptions}
                 </Select>
               )}
@@ -320,8 +317,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getHeroes: () => {
       dispatch({
-        type: 'heroes/get',
-        payload: {}
+        type: 'heroes/get'
       })
     }
   }

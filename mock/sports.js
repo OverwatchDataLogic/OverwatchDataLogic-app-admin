@@ -1,10 +1,10 @@
 import { getUrlParams } from './utils'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import _ from 'lodash'
 
 let tableListDataSource = [
   {
-    id: uuidv4(),
+    id: uuidv1(),
     title: '守望先锋职业战队联赛',
     abbreviatedTitle: 'OTS',
     englishTitle: 'OverWatch Team Story',
@@ -19,7 +19,7 @@ let tableListDataSource = [
     prize: 30
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     title: '守望先锋联赛',
     abbreviatedTitle: 'OWL',
     englishTitle: 'OverWatch League',
@@ -119,7 +119,7 @@ export function postSports(req, res, b) {
   } = body
 
   const result = {
-    id: uuidv4(),
+    id: uuidv1(),
     title,
     abbreviatedTitle,
     englishTitle,

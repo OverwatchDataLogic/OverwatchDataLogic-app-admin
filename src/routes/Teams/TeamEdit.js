@@ -97,9 +97,9 @@ class TeamEdit extends PureComponent {
       if (!err) {
         const players = []
         values.players.forEach(item => {
-          const player = this.props.players.filter(x => x.id === item)[0]
+          const player = this.props.players.filter(x => x.objectId === item)[0]
           players.push({
-            id: player.id,
+            id: player.objectId,
             name: player.name,
             avatar: player.avatar
           })
@@ -116,7 +116,7 @@ class TeamEdit extends PureComponent {
 
   render() {
     const {
-      id,
+      objectId,
       name,
       abbreviatedTitle,
       homeLocation,
@@ -138,7 +138,7 @@ class TeamEdit extends PureComponent {
     const playerOptions = []
     this.props.players.forEach(item => {
       playerOptions.push(
-        <Option key={item.id} value={item.id}>
+        <Option key={item.objectId} value={item.objectId}>
           {item.name}
         </Option>
       )
@@ -210,8 +210,8 @@ class TeamEdit extends PureComponent {
             className={styles.player}
           >
             <FormItem>
-              {getFieldDecorator('id', {
-                initialValue: id
+              {getFieldDecorator('objectId', {
+                initialValue: objectId
               })(<Input type="hidden" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="队伍名称">
@@ -309,10 +309,7 @@ class TeamEdit extends PureComponent {
                     })
                   : []
               })(
-                <Select
-                  mode="multiple"
-                  placeholder="请选择队伍成员"
-                >
+                <Select mode="multiple" placeholder="请选择队伍成员">
                   {playerOptions}
                 </Select>
               )}
@@ -379,7 +376,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     team:
       teams.data.list.length > 0
-        ? teams.data.list.filter(x => x.id === ownProps.match.params.id)[0]
+        ? teams.data.list.filter(
+            x => x.objectId === ownProps.match.params.id
+          )[0]
         : teams.default,
     players: players.data.list,
     loading: loading.models.teams

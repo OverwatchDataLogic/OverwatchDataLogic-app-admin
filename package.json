@@ -82,5 +82,9 @@
     "**/*.{js,jsx}": "lint-staged:js",
     "**/*.less": "stylelint --syntax less"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }

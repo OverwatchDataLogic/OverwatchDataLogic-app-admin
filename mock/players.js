@@ -1,10 +1,10 @@
 import { getUrlParams } from './utils'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import _ from 'lodash'
 
 let tableListDataSource = [
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: 'Bunny',
     familyName: 'Chae',
     givenName: 'Jun-Hyeok',
@@ -19,7 +19,7 @@ let tableListDataSource = [
     accountsValue: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: 'Miro',
     familyName: 'Gong',
     givenName: 'Jin-Hyuk',
@@ -34,7 +34,7 @@ let tableListDataSource = [
     accountsValue: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: 'ZUNBA',
     familyName: 'Kim',
     givenName: 'Joon-Hyeok',
@@ -49,7 +49,7 @@ let tableListDataSource = [
     accountsValue: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: 'Munchkin',
     familyName: 'Byun',
     givenName: 'Sang-Beom',
@@ -150,7 +150,7 @@ export function postPlayers(req, res, b) {
   } = body
 
   const result = {
-    id: uuidv4(),
+    id: uuidv1(),
     name,
     familyName,
     givenName,

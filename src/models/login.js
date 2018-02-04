@@ -1,58 +1,76 @@
-import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+import { routerRedux } from 'dva/router'
+import { login, logout } from '../services/leancloud/user'
+import { setAuthority } from '../utils/authority'
+import { reloadAuthorized } from '../utils/Authorized'
 
 export default {
   namespace: 'login',
 
   state: {
     status: undefined,
+    user: null
   },
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
-        yield put(routerRedux.push('/'));
-      }
-    },
-    *logout(_, { put, select }) {
       try {
-        // get location pathname
-        const urlParams = new URL(window.location.href);
-        const pathname = yield select(state => state.routing.location.pathname);
-        // add the parameters in the url
-        urlParams.searchParams.set('redirect', pathname);
-        window.history.replaceState(null, 'login', urlParams.href);
-      } finally {
+        const response = yield call(login, payload)
         yield put({
-          type: 'changeLoginStatus',
-          payload: {
-            status: false,
-            currentAuthority: 'guest',
-          },
-        });
-        reloadAuthorized();
-        yield put(routerRedux.push('/user/login'));
+          type: 'loginSuccess',
+          payload: response
+        })
+        reloadAuthorized()
+        yield put(routerRedux.push('/'))
+      } catch (error) {
+        yield put({
+          type: 'loginFailed',
+          payload: error
+        })
       }
     },
+    *logout(_, { call, put, select }) {
+      yield call(logout)
+      const urlParams = new URL(window.location.href)
+      const pathname = yield select(state => state.routing.location.pathname)
+      urlParams.searchParams.set('redirect', pathname)
+      window.history.replaceState(null, 'login', urlParams.href)
+      yield put({
+        type: 'logoutSuccess'
+      })
+      reloadAuthorized()
+      yield put(routerRedux.push('/user/login'))
+    }
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+    loginSuccess(state, { payload }) {
+      setAuthority('admin')
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
-      };
+        user: payload,
+        status: 'ok',
+        type: 'account',
+        currentAuthority: 'admin'
+      }
     },
-  },
-};
+    loginFailed(state, { payload }) {
+      setAuthority('guest')
+      return {
+        ...state,
+        status: 'error',
+        error: payload.rawMessage,
+        type: 'account',
+        currentAuthority: 'guest'
+      }
+    },
+    logoutSuccess(state) {
+      setAuthority('guest')
+      return {
+        ...state,
+        user: null,
+        status: 'error',
+        currentAuthority: 'guest'
+      }
+    }
+  }
+}

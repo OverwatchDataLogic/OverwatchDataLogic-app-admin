@@ -3,11 +3,11 @@ import queryString from 'query-string'
 import _ from 'lodash'
 import {
   getTeams,
-  getTeamById,
+  getTeam,
   createTeams,
   updateTeams,
   removeTeams
-} from '../services/api'
+} from '../services/leancloud/teams'
 
 export default {
   namespace: 'teams',
@@ -35,7 +35,7 @@ export default {
       //获得荣誉
       honour: '',
       //选手列表
-      players: [],
+      players: []
     },
     data: {
       currentItem: {},
@@ -53,7 +53,7 @@ export default {
       })
     },
     *getById({ payload }, { call, put }) {
-      const response = yield call(getTeamById, payload)
+      const response = yield call(getTeam, payload)
       yield put({
         type: 'updateSuccess',
         payload: response
@@ -75,10 +75,17 @@ export default {
       })
       yield put(routerRedux.push('/teams/team/list'))
     },
-    *remove({ payload, callback }, { call, put }) {
+    *remove({ payload }, { call, put }) {
       const response = yield call(removeTeams, payload)
       yield put({
         type: 'removeSuccess',
+        payload: response
+      })
+    },
+    *removeAll({ payload }, { call, put }) {
+      const response = yield call(removeTeams, payload)
+      yield put({
+        type: 'removeAllSuccess',
         payload: response
       })
     }
@@ -102,7 +109,7 @@ export default {
     },
     updateSuccess(state, action) {
       const list = state.data.list.map(item => {
-        if (item.id === action.payload.id) {
+        if (item.objectId === action.payload.objectId) {
           return Object.assign(item, action.payload)
         } else {
           return item
@@ -117,7 +124,24 @@ export default {
       }
     },
     removeSuccess(state, action) {
-      const list = _.xorBy(state.data.list, JSON.parse(action.payload), 'id')
+      const list = state.data.list.filter(
+        x => x.objectId !== action.payload.objectId
+      )
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          list: list
+        }
+      }
+    },
+    removeAllSuccess(state, action) {
+      const l = []
+      action.payload.objectId.forEach(item => {
+        const list = state.data.list.filter(x => x.objectId !== item)
+        l.concat(list)
+      })
+      const list = _.xor(l)
       return {
         ...state,
         data: {

@@ -1,13 +1,13 @@
 import { routerRedux } from 'dva/router'
 import queryString from 'query-string'
 import _ from 'lodash'
+import { getHeroById } from '../services/api'
 import {
   getHeroes,
-  getHeroById,
   createHeroes,
   updateHeroes,
   removeHeroes
-} from '../services/api'
+} from '../services/leancloud/hero'
 
 export default {
   namespace: 'heroes',
@@ -34,15 +34,14 @@ export default {
       extra: []
     },
     data: {
-      list: [],
-      pagination: {}
+      list: []
     }
   },
   effects: {
-    *get({ payload }, { call, put }) {
-      const response = yield call(getHeroes, payload)
+    *get(_, { call, put }) {
+      const response = yield call(getHeroes)
       yield put({
-        type: 'save',
+        type: 'getSuccess',
         payload: response
       })
     },
@@ -79,7 +78,7 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
+    getSuccess(state, action) {
       return {
         ...state,
         data: action.payload
@@ -96,7 +95,7 @@ export default {
     },
     updateSuccess(state, action) {
       const list = state.data.list.map(item => {
-        if (item.id === action.payload.id) {
+        if (item.objectId === action.payload.objectId) {
           return Object.assign(item, action.payload)
         } else {
           return item
@@ -111,7 +110,9 @@ export default {
       }
     },
     removeSuccess(state, action) {
-      const list = _.xorBy(state.data.list, JSON.parse(action.payload), 'id')
+      const list = state.data.list.filter(
+        x => x.objectId !== action.payload.objectId
+      )
       return {
         ...state,
         data: {
@@ -124,9 +125,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, search }) => {
-        const query = queryString.parse(search)
         if (pathname === '/heroes/hero/list') {
-          dispatch({ type: 'get', payload: query })
+          dispatch({ type: 'get' })
         }
       })
     }

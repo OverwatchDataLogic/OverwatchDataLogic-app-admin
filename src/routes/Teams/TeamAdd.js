@@ -97,9 +97,9 @@ class TeamAdd extends PureComponent {
       if (!err) {
         const players = []
         values.players.forEach(item => {
-          const player = this.props.players.filter(x => x.id === item)[0]
+          const player = this.props.players.filter(x => x.objectId === item)[0]
           players.push({
-            id: player.id,
+            id: player.objectId,
             name: player.name,
             avatar: player.avatar
           })
@@ -135,7 +135,7 @@ class TeamAdd extends PureComponent {
     const playerOptions = []
     this.props.players.forEach(item => {
       playerOptions.push(
-        <Option key={item.id} value={item.id}>
+        <Option key={item.objectId} value={item.objectId}>
           {item.name}
         </Option>
       )
@@ -295,10 +295,7 @@ class TeamAdd extends PureComponent {
               {getFieldDecorator('players', {
                 initialValue: players
               })(
-                <Select
-                  mode="multiple"
-                  placeholder="请选择队伍成员"
-                >
+                <Select mode="multiple" placeholder="请选择队伍成员">
                   {playerOptions}
                 </Select>
               )}

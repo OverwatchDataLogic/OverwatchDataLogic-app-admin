@@ -42,14 +42,14 @@ class Players extends PureComponent {
   }
 
   handleMenuClick = e => {
-    const { remove } = this.props
+    const { removeAll } = this.props
     const { selectedRows } = this.state
 
     if (!selectedRows) return
 
     switch (e.key) {
       case 'remove':
-        remove(selectedRows.map(row => row.id).join(','), () => {
+        removeAll(selectedRows.map(row => row.objectId), () => {
           this.setState({
             selectedRows: []
           })
@@ -134,10 +134,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: params
       })
     },
-    remove: (id, callback) => {
+    remove: objectId => {
       dispatch({
         type: 'players/remove',
-        payload: id,
+        payload: { objectId: objectId }
+      })
+    },
+    removeAll: (objectId, callback) => {
+      dispatch({
+        type: 'players/removeAll',
+        payload: { objectId: objectId },
         callback: callback
       })
     }

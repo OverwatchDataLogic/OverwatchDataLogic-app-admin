@@ -90,7 +90,9 @@ class HeroAdd extends PureComponent {
             : this.props.avatar,
           fullshot: this.state.isFullshotChanged
             ? this.state.fullshotUrl
-            : this.props.fullshot
+            : this.props.fullshot,
+          abilities: [],
+          extra: []
         })
       }
     })

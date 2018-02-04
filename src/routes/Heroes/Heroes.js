@@ -14,27 +14,27 @@ class Heroes extends PureComponent {
       <PageHeaderLayout title="英雄列表">
         <div className={styles.cardList}>
           <List
-            rowKey="id"
+            rowKey="objectId"
             loading={loading}
             grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
             dataSource={['', ...data.list]}
             renderItem={item =>
               item ? (
-                <List.Item key={item.id}>
+                <List.Item key={item.objectId}>
                   <Card
                     hoverable
                     className={styles.card}
                     actions={[
                       <a
                         onClick={() =>
-                          navigateTo(`/heroes/hero/edit/${item.id}`)
+                          navigateTo(`/heroes/hero/edit/${item.objectId}`)
                         }
                       >
                         编辑
                       </a>,
                       <a
                         onClick={() => {
-                          remove(item.id)
+                          remove(item.objectId)
                         }}
                       >
                         删除
@@ -90,16 +90,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     navigateTo: location => {
       dispatch(routerRedux.push(location))
     },
-    get: params => {
-      dispatch({
-        type: 'heroes/get',
-        payload: params
-      })
-    },
-    remove: (id, callback) => {
+    remove: (objectId, callback) => {
       dispatch({
         type: 'heroes/remove',
-        payload: id,
+        payload: { objectId },
         callback: callback
       })
     }

@@ -1,10 +1,10 @@
 import { getUrlParams } from './utils'
-import uuidv4 from 'uuid/v4'
+import uuidv1 from 'uuid/v1'
 import _ from 'lodash'
 
 let tableListDataSource = [
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '达拉斯燃料队',
     abbreviatedTitle: 'DAL',
     homeLocation: '德克萨斯州，达拉斯',
@@ -20,7 +20,7 @@ let tableListDataSource = [
     players: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '费城融合队',
     abbreviatedTitle: 'PHI',
     homeLocation: '宾夕法尼亚州，费城',
@@ -36,7 +36,7 @@ let tableListDataSource = [
     players: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '休斯顿神枪手队',
     abbreviatedTitle: 'HOU',
     homeLocation: '德克萨斯州，休斯顿',
@@ -52,7 +52,7 @@ let tableListDataSource = [
     players: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '波士顿崛起队',
     abbreviatedTitle: 'BOS',
     homeLocation: '马萨诸塞州，波士顿',
@@ -70,7 +70,7 @@ let tableListDataSource = [
     players: [],
   },
   {
-    id: uuidv4(),
+    id: uuidv1(),
     name: '纽约九霄天擎队',
     abbreviatedTitle: 'BOS',
     homeLocation: '纽约州，纽约',
@@ -180,7 +180,7 @@ export function postTeams(req, res, b) {
   } = body
 
   const result = {
-    id: uuidv4(),
+    id: uuidv1(),
     name,
     abbreviatedTitle,
     homeLocation,

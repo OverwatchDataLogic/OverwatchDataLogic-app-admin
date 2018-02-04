@@ -48,7 +48,7 @@ class Teams extends PureComponent {
 
     switch (e.key) {
       case 'remove':
-        remove(selectedRows.map(row => row.id).join(','), () => {
+        remove(selectedRows.map(row => row.objectId), () => {
           this.setState({
             selectedRows: []
           })
@@ -78,7 +78,7 @@ class Teams extends PureComponent {
     return (
       <PageHeaderLayout title="队伍列表">
         <Card bordered={false}>
-          <div  className={styles.tableList}>
+          <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button
                 icon="plus"
@@ -133,11 +133,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: params
       })
     },
-    remove: (id, callback) => {
+    remove: objectId => {
       dispatch({
         type: 'teams/remove',
-        payload: id,
-        callback: callback
+        payload: { objectId: objectId }
+      })
+    },
+    removeAll: objectId => {
+      dispatch({
+        type: 'teams/removeAll',
+        payload: { objectId: objectId }
       })
     }
   }
