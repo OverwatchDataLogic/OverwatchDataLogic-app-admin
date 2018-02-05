@@ -17,11 +17,11 @@ class TeamEdit extends PureComponent {
     logo_loading: false,
     logoUrl: this.props.team.logo,
     icon_loading: false,
-    iconUrl: this.props.team.icon,
+    iconUrl: this.props.team.icon
   }
 
   componentDidMount() {
-    this.props.getPlayers()
+    this.props.getAllPlayers()
   }
 
   handleUpload = ({ onSuccess, onError, file }) => {
@@ -97,7 +97,7 @@ class TeamEdit extends PureComponent {
         this.props.update({
           ...values,
           logo: this.state.logoUrl,
-          icon: this.state.iconUrl,
+          icon: this.state.iconUrl
         })
       }
     })
@@ -365,7 +365,7 @@ const mapStateToProps = (state, ownProps) => {
             x => x.objectId === ownProps.match.params.id
           )[0]
         : teams.default,
-    players: players.data.list,
+    players: players.all,
     loading: loading.models.teams
   }
 }
@@ -378,10 +378,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: values
       })
     },
-    getPlayers: () => {
+    getAllPlayers: () => {
       dispatch({
-        type: 'players/get',
-        payload: {}
+        type: 'players/getAll'
       })
     }
   }

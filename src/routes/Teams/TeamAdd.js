@@ -17,11 +17,11 @@ class TeamAdd extends PureComponent {
     logo_loading: false,
     logoUrl: '',
     icon_loading: false,
-    iconUrl: '',
+    iconUrl: ''
   }
 
   componentDidMount() {
-    this.props.getPlayers()
+    this.props.getAllPlayers()
   }
 
   handleUpload = ({ onSuccess, onError, file }) => {
@@ -97,7 +97,7 @@ class TeamAdd extends PureComponent {
         this.props.create({
           ...values,
           logo: this.state.logoUrl,
-          icon: this.state.iconUrl,
+          icon: this.state.iconUrl
         })
       }
     })
@@ -350,7 +350,7 @@ const mapStateToProps = (state, ownProps) => {
   const { teams, players, loading } = state
   return {
     team: teams.default,
-    players: players.data.list,
+    players: players.all,
     loading: loading.models.teams
   }
 }
@@ -363,10 +363,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: values
       })
     },
-    getPlayers: () => {
+    getAllPlayers: () => {
       dispatch({
-        type: 'players/get',
-        payload: {}
+        type: 'players/getAll'
       })
     }
   }
