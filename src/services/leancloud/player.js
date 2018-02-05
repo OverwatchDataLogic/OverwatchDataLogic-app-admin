@@ -17,6 +17,13 @@ export function createPlayers(payload) {
   players.setACL(acl)
 
   return players.save().then(function(result) {
+    payload.heroes.forEach(item => {
+      const playerHeroMap = new AV.Object('PlayerHeroMap')
+      const hero = AV.Object.createWithoutData('Heroes', item)
+      playerHeroMap.set('hero', hero)
+      playerHeroMap.set('player', result)
+      playerHeroMap.save()
+    })
     return result.toJSON()
   })
 }
@@ -56,6 +63,8 @@ export function getPlayers(payload) {
   })
 }
 
+export function getPlayersWithHeros(payload) {}
+
 export function getPlayer(playload) {
   var query = new AV.Query('Player')
   query.get(playload.objectId).then(function(result) {
@@ -64,21 +73,56 @@ export function getPlayer(playload) {
 }
 
 export function updatePlayers(payload) {
-  const players = AV.Object.createWithoutData('Players', payload.objectId)
+  const player = AV.Object.createWithoutData('Players', payload.objectId)
   for (let key of Object.keys(payload)) {
     if (key !== 'objectId') {
-      players.set(key, payload[key])
+      player.set(key, payload[key])
     }
   }
 
-  return players.save().then(function(result) {
-    return result.toJSON()
+  return player.save().then(function(result) {
+    const query = new AV.Query('PlayerHeroMap')
+    query.equalTo('player', player)
+    query.find().then(function(result) {
+      AV.Object.destroyAll(result).then(() => {
+        payload.heroes.forEach(item => {
+          const playerHeroMap = new AV.Object('PlayerHeroMap')
+          const hero = AV.Object.createWithoutData('Heroes', item)
+          playerHeroMap.set('hero', hero)
+          playerHeroMap.set('player', player)
+          playerHeroMap.save()
+        })
+        return result.toJSON()
+      })
+    })
   })
 }
 
 export function removePlayers(payload) {
-  var players = AV.Object.createWithoutData('Players', payload.objectId)
+  const player = AV.Object.createWithoutData('Players', payload.objectId)
+  return player.destroy().then(function(success) {
+    const query = new AV.Query('PlayerHeroMap')
+    query.equalTo('player', player)
+    query.find().then(function(result) {
+      AV.Object.destroyAll(result)
+    })
+    return success.toJSON()
+  })
+}
+
+export function removeAllPlayers(payload) {
+  const players = AV.Object.createWithoutData('Players', payload.objectId)
   return players.destroy().then(function(success) {
+    payload.objectId.forEach(item => {
+      const player = AV.Object.createWithoutData('Players', item)
+      player.destroy().then(function(success) {
+        const query = new AV.Query('PlayerHeroMap')
+        query.equalTo('player', player)
+        query.find().then(function(result) {
+          AV.Object.destroyAll(result)
+        })
+      })
+    })
     return success.toJSON()
   })
 }

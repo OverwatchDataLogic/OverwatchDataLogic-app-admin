@@ -6,7 +6,8 @@ import {
   getPlayer,
   createPlayers,
   updatePlayers,
-  removePlayers
+  removePlayers,
+  removeAllPlayers
 } from '../services/leancloud/player'
 
 export default {
@@ -70,7 +71,7 @@ export default {
       })
     },
     *removeAll({ payload }, { call, put }) {
-      const response = yield call(removePlayers, payload)
+      const response = yield call(removeAllPlayers, payload)
       yield put({
         type: 'removeAllSuccess',
         payload: response

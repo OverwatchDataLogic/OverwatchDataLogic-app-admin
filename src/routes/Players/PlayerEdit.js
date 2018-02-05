@@ -15,7 +15,6 @@ class PlayerEdit extends Component {
   state = {
     loading: false,
     avatarUrl: this.props.player.avatar,
-    heroes: []
   }
 
   componentDidMount() {
@@ -78,19 +77,9 @@ class PlayerEdit extends Component {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const heroes = []
-        values.heroes.forEach(item => {
-          const hero = this.props.heroes.filter(x => x.objectId === item)[0]
-          heroes.push({
-            id: hero.objectId,
-            name: hero.name,
-            avatar: hero.avatar
-          })
-        })
         this.props.update({
           ...values,
           avatar: this.state.avatarUrl,
-          heroes: heroes
         })
       }
     })
@@ -264,15 +253,10 @@ class PlayerEdit extends Component {
             <FormItem {...formItemLayout} label="擅长英雄">
               {getFieldDecorator('heroes', {
                 initialValue: heroes
-                  ? heroes.map(x => {
-                      return x.id
-                    })
-                  : []
               })(
                 <Select
                   mode="multiple"
                   placeholder="请选择擅长英雄"
-                  onChange={this.handleHeroChange}
                 >
                   {heroOptions}
                 </Select>

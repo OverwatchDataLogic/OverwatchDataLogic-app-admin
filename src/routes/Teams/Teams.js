@@ -41,14 +41,14 @@ class Teams extends PureComponent {
   }
 
   handleMenuClick = e => {
-    const { remove } = this.props
+    const { removeAll } = this.props
     const { selectedRows } = this.state
 
     if (!selectedRows) return
 
     switch (e.key) {
       case 'remove':
-        remove(selectedRows.map(row => row.objectId), () => {
+        removeAll(selectedRows.map(row => row.objectId), () => {
           this.setState({
             selectedRows: []
           })
@@ -139,10 +139,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: { objectId: objectId }
       })
     },
-    removeAll: objectId => {
+    removeAll: (objectId, callback) => {
       dispatch({
         type: 'teams/removeAll',
-        payload: { objectId: objectId }
+        payload: { objectId: objectId },
+        callback: callback
       })
     }
   }

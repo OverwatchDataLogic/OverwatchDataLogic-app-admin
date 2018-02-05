@@ -6,7 +6,8 @@ import {
   getTeam,
   createTeams,
   updateTeams,
-  removeTeams
+  removeTeams,
+  removeAllTeams
 } from '../services/leancloud/teams'
 
 export default {
@@ -83,7 +84,7 @@ export default {
       })
     },
     *removeAll({ payload }, { call, put }) {
-      const response = yield call(removeTeams, payload)
+      const response = yield call(removeAllTeams, payload)
       yield put({
         type: 'removeAllSuccess',
         payload: response

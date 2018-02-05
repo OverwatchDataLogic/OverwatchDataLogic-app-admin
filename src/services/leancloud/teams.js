@@ -18,9 +18,11 @@ export function createTeams(payload) {
 
   return teams.save().then(function(result) {
     payload.players.forEach(item => {
-      const player = AV.Object.createWithoutData('Players', item.id)
-      player.set('team', result)
-      player.save()
+      const teamPlayerMap = new AV.Object('TeamPlayerMap')
+      const player = AV.Object.createWithoutData('Players', item)
+      teamPlayerMap.set('player', player)
+      teamPlayerMap.set('team', result)
+      teamPlayerMap.save()
     })
     return result.toJSON()
   })
@@ -59,26 +61,56 @@ export function getTeam(playload) {
 }
 
 export function updateTeams(payload) {
-  const teams = AV.Object.createWithoutData('Teams', payload.objectId)
+  const team = AV.Object.createWithoutData('Teams', payload.objectId)
   for (let key of Object.keys(payload)) {
     if (key !== 'objectId') {
-      teams.set(key, payload[key])
+      team.set(key, payload[key])
     }
   }
 
-  return teams.save().then(function(result) {
-    payload.players.forEach(item => {
-      const player = AV.Object.createWithoutData('Players', item.id)
-      player.set('team', result)
-      player.save()
+  return team.save().then(function(result) {
+    const query = new AV.Query('TeamPlayerMap')
+    query.equalTo('team', team)
+    query.find().then(function(result) {
+      AV.Object.destroyAll(result).then(() => {
+        payload.players.forEach(item => {
+          const teamPlayerMap = new AV.Object('TeamPlayerMap')
+          const player = AV.Object.createWithoutData('Players', item)
+          teamPlayerMap.set('player', player)
+          teamPlayerMap.set('team', team)
+          teamPlayerMap.save()
+        })
+        return result.toJSON()
+      })
     })
-    return result.toJSON()
   })
 }
 
 export function removeTeams(payload) {
-  var teams = AV.Object.createWithoutData('Teams', payload.objectId)
+  var team = AV.Object.createWithoutData('Teams', payload.objectId)
+  return team.destroy().then(function(success) {
+    const query = new AV.Query('TeamPlayerMap')
+    query.equalTo('team', team)
+    query.find().then(function(result) {
+      AV.Object.destroyAll(result)
+    })
+    return success.toJSON()
+  })
+}
+
+export function removeAllTeams(payload) {
+  const teams = AV.Object.createWithoutData('Teams', payload.objectId)
   return teams.destroy().then(function(success) {
+    payload.objectId.forEach(item => {
+      const team = AV.Object.createWithoutData('Teams', item)
+      team.destroy().then(function(success) {
+        const query = new AV.Query('TeamPlayerMap')
+        query.equalTo('team', team)
+        query.find().then(function(result) {
+          AV.Object.destroyAll(result)
+        })
+      })
+    })
     return success.toJSON()
   })
 }

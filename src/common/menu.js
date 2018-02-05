@@ -5,6 +5,7 @@ const menuData = [
     name: 'dashboard',
     icon: 'dashboard',
     path: 'dashboard',
+    authority: 'admin',
     children: [
       {
         name: '分析页',
@@ -25,6 +26,7 @@ const menuData = [
     name: '表单页',
     icon: 'form',
     path: 'form',
+    authority: 'admin',    
     children: [
       {
         name: '基础表单',
@@ -45,6 +47,7 @@ const menuData = [
     name: '列表页',
     icon: 'table',
     path: 'list',
+    authority: 'admin',
     children: [
       {
         name: '查询表格',
@@ -82,6 +85,7 @@ const menuData = [
     name: '详情页',
     icon: 'profile',
     path: 'profile',
+    authority: 'admin',
     children: [
       {
         name: '基础详情页',
@@ -113,6 +117,7 @@ const menuData = [
     name: '异常页',
     icon: 'warning',
     path: 'exception',
+    authority: 'admin',
     children: [
       {
         name: '403',
@@ -153,21 +158,23 @@ const menuData = [
       }
     ]
   },
-  {
-    name: '赛事',
-    icon: 'user',
-    path: 'sports',
-    children: [
-      {
-        name: '赛事列表',
-        path: 'sport/list'
-      },
-    ]
-  },
+  // {
+  //   name: '赛事',
+  //   icon: 'user',
+  //   path: 'sports',
+  //   authority: 'admin',
+  //   children: [
+  //     {
+  //       name: '赛事列表',
+  //       path: 'sport/list'
+  //     },
+  //   ]
+  // },
   {
     name: '队伍',
     icon: 'user',
     path: 'teams',
+    authority: 'admin',
     children: [
       {
         name: '队伍列表',
@@ -179,6 +186,7 @@ const menuData = [
     name: '选手',
     icon: 'user',
     path: 'players',
+    authority: 'admin',
     children: [
       {
         name: '选手列表',
@@ -190,6 +198,7 @@ const menuData = [
     name: '英雄',
     icon: 'user',
     path: 'heroes',
+    authority: 'admin',
     children: [
       {
         name: '英雄列表',

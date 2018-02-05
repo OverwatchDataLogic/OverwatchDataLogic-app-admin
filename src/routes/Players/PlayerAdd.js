@@ -4,18 +4,19 @@ import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
 import { ACCOUNTS } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
+import { HERORULE } from '../../constants'
 import styles from './Players.less'
 
 const FormItem = Form.Item
 const Option = Select.Option
+const OptGroup = Select.OptGroup
 let uuid = 0
 
 @Form.create()
 class PlayerAdd extends PureComponent {
   state = {
     loading: false,
-    avatarUrl: '',
-    heroes: []
+    avatarUrl: ''
   }
 
   componentDidMount() {
@@ -78,19 +79,9 @@ class PlayerAdd extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const heroes = []
-        values.heroes.forEach(item => {
-          const hero = this.props.heroes.filter(x => x.objectId === item)[0]
-          heroes.push({
-            id: hero.objectId,
-            name: hero.name,
-            avatar: hero.avatar
-          })
-        })
         this.props.create({
           ...values,
-          avatar: this.state.avatarUrl,
-          heroes: heroes
+          avatar: this.state.avatarUrl
         })
       }
     })

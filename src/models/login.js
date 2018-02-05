@@ -8,7 +8,6 @@ export default {
 
   state: {
     status: undefined,
-    user: null
   },
 
   effects: {
@@ -16,7 +15,10 @@ export default {
       try {
         const response = yield call(login, payload)
         yield put({
-          type: 'loginSuccess',
+          type: 'loginSuccess'
+        })
+        yield put({
+          type: 'user/saveCurrentUser',
           payload: response
         })
         reloadAuthorized()
@@ -47,7 +49,6 @@ export default {
       setAuthority('admin')
       return {
         ...state,
-        user: payload,
         status: 'ok',
         type: 'account',
         currentAuthority: 'admin'

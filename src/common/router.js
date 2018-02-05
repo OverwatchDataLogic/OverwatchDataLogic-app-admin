@@ -74,17 +74,20 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () =>
         import('../layouts/BasicLayout')
-      )
+      ),
+      authority: 'admin',
     },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () =>
         import('../routes/Dashboard/Analysis')
-      )
+      ),
+      authority: 'admin',
     },
     '/dashboard/monitor': {
       component: dynamicWrapper(app, ['monitor'], () =>
         import('../routes/Dashboard/Monitor')
-      )
+      ),
+      authority: 'admin',
     },
     '/dashboard/workplace': {
       component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
@@ -218,62 +221,74 @@ export const getRouterData = app => {
     '/sports/sport/list': {
       component: dynamicWrapper(app, ['sports'], () =>
         import('../routes/Sports/Sports')
-      )
+      ),
+      authority: 'admin',
     },
     '/sports/sport/add': {
       component: dynamicWrapper(app, ['sports'], () =>
         import('../routes/Sports/SportAdd')
-      )
+      ),
+      authority: 'admin',
     },
     '/sports/sport/edit/:id': {
       component: dynamicWrapper(app, ['sports'], () =>
         import('../routes/Sports/SportEdit')
-      )
+      ),
+      authority: 'admin',
     },
     '/players/player/list': {
       component: dynamicWrapper(app, ['players'], () =>
         import('../routes/Players/Players')
-      )
+      ),
+      authority: 'admin',
     },
     '/players/player/add': {
       component: dynamicWrapper(app, ['players', 'heroes'], () =>
         import('../routes/Players/PlayerAdd')
-      )
+      ),
+      authority: 'admin',
     },
     '/players/player/edit/:id': {
       component: dynamicWrapper(app, ['players', 'heroes'], () =>
         import('../routes/Players/PlayerEdit')
-      )
+      ),
+      authority: 'admin',
     },
     '/heroes/hero/list': {
       component: dynamicWrapper(app, ['heroes'], () =>
         import('../routes/Heroes/Heroes')
-      )
+      ),
+      authority: 'admin',
     },
     '/heroes/hero/add': {
       component: dynamicWrapper(app, ['heroes'], () =>
         import('../routes/Heroes/HeroAdd')
-      )
+      ),
+      authority: 'admin',
     },
     '/heroes/hero/edit/:id': {
       component: dynamicWrapper(app, ['heroes'], () =>
         import('../routes/Heroes/HeroEdit')
-      )
+      ),
+      authority: 'admin',
     },
     '/teams/team/list': {
       component: dynamicWrapper(app, ['teams'], () =>
         import('../routes/Teams/Teams')
-      )
+      ),
+      authority: 'admin',
     },
     '/teams/team/add': {
       component: dynamicWrapper(app, ['teams', 'players'], () =>
         import('../routes/Teams/TeamAdd')
-      )
+      ),
+      authority: 'admin',
     },
     '/teams/team/edit/:id': {
       component: dynamicWrapper(app, ['teams', 'players'], () =>
         import('../routes/Teams/TeamEdit')
-      )
+      ),
+      authority: 'admin',
     }
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),

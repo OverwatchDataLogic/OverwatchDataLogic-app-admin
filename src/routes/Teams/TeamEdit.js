@@ -18,7 +18,6 @@ class TeamEdit extends PureComponent {
     logoUrl: this.props.team.logo,
     icon_loading: false,
     iconUrl: this.props.team.icon,
-    players: []
   }
 
   componentDidMount() {
@@ -95,20 +94,10 @@ class TeamEdit extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const players = []
-        values.players.forEach(item => {
-          const player = this.props.players.filter(x => x.objectId === item)[0]
-          players.push({
-            id: player.objectId,
-            name: player.name,
-            avatar: player.avatar
-          })
-        })
         this.props.update({
           ...values,
           logo: this.state.logoUrl,
           icon: this.state.iconUrl,
-          players: players
         })
       }
     })
@@ -304,10 +293,6 @@ class TeamEdit extends PureComponent {
             <FormItem {...formItemLayout} label="队伍成员">
               {getFieldDecorator('players', {
                 initialValue: players
-                  ? players.map(x => {
-                      return x.id
-                    })
-                  : []
               })(
                 <Select mode="multiple" placeholder="请选择队伍成员">
                   {playerOptions}

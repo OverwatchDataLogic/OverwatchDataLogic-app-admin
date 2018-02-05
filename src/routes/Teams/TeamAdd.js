@@ -18,7 +18,6 @@ class TeamAdd extends PureComponent {
     logoUrl: '',
     icon_loading: false,
     iconUrl: '',
-    players: []
   }
 
   componentDidMount() {
@@ -95,20 +94,10 @@ class TeamAdd extends PureComponent {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const players = []
-        values.players.forEach(item => {
-          const player = this.props.players.filter(x => x.objectId === item)[0]
-          players.push({
-            id: player.objectId,
-            name: player.name,
-            avatar: player.avatar
-          })
-        })
         this.props.create({
           ...values,
           logo: this.state.logoUrl,
           icon: this.state.iconUrl,
-          players: players
         })
       }
     })

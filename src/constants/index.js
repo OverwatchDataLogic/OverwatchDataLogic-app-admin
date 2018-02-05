@@ -30,3 +30,10 @@ export const ACCOUNTS = [
     logo: ''
   }
 ]
+
+export const HERORULE = {
+  offense: '突击',
+  deffense: '防御',
+  tank: '重装',
+  support: '支援'
+}

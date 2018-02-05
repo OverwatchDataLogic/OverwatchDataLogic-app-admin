@@ -1,12 +1,15 @@
 import AV from 'leancloud-storage'
+import { getAvatar } from '../../utils/avatar'
 
 // 用户名和密码注册
 export function register(payload) {
   const { username, password, email } = payload
+  const avatar = getAvatar()
   const user = new AV.User()
   user.setUsername(username)
   user.setPassword(password)
   user.setEmail(email)
+  user.set('avatar', avatar)
   return user.signUp().then(function(result) {
     return result.toJSON()
   })
@@ -44,6 +47,14 @@ export function requestLoginSmsCode(payload) {
 // 当前用户
 export function getCurrentUser() {
   return AV.User.current()
+}
+
+export function getCurrentUserToJSON() {
+  return AV.User.current().toJSON()
+}
+
+export function getUsers() {
+  
 }
 
 // 验证 SessionToken 是否在有效期内
