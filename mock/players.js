@@ -12,11 +12,12 @@ let tableListDataSource = [
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/8VVBZ6TJQZL41512770127850.png',
     nationality: 'KR',
     homeLocation: 'Suwon',
+    level: 'owl',
     role: 'offense',
     heroes: [],
     accounts: [],
     accountsType: [],
-    accountsValue: [],
+    accountsValue: []
   },
   {
     id: uuidv1(),
@@ -27,11 +28,12 @@ let tableListDataSource = [
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/LTXC1UP8RPNW1512770128083.png',
     nationality: 'KR',
     homeLocation: 'DaeJeon',
+    level: 'owl',
     role: 'tank',
     heroes: [],
     accounts: [],
     accountsType: [],
-    accountsValue: [],
+    accountsValue: []
   },
   {
     id: uuidv1(),
@@ -42,11 +44,12 @@ let tableListDataSource = [
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/1W9Y36BABS5S1512770128543.png',
     nationality: 'KR',
     homeLocation: 'Boryung',
+    level: 'owl',
     role: 'flex',
     heroes: [],
     accounts: [],
     accountsType: [],
-    accountsValue: [],
+    accountsValue: []
   },
   {
     id: uuidv1(),
@@ -57,11 +60,12 @@ let tableListDataSource = [
       'https://bnetcmsus-a.akamaihd.net/cms/page_media/EXGQNIWZDGSD1512770128109.png',
     nationality: 'KR',
     homeLocation: 'Seoul',
+    level: 'owl',
     role: 'offense',
     heroes: [],
     accounts: [],
     accountsType: [],
-    accountsValue: [],
+    accountsValue: []
   }
 ]
 
@@ -91,6 +95,17 @@ export function getPlayers(req, res, u) {
     role.forEach(s => {
       filterDataSource = filterDataSource.concat(
         [...dataSource].filter(data => data.role === s)
+      )
+    })
+    dataSource = filterDataSource
+  }
+
+  if (params.level) {
+    const level = params.level.split(',')
+    let filterDataSource = []
+    level.forEach(s => {
+      filterDataSource = filterDataSource.concat(
+        [...dataSource].filter(data => data.level === s)
       )
     })
     dataSource = filterDataSource
@@ -142,11 +157,12 @@ export function postPlayers(req, res, b) {
     avatar,
     nationality,
     homeLocation,
+    level,
     role,
     heroes,
     accounts,
     accountsType,
-    accountsValue,
+    accountsValue
   } = body
 
   const result = {
@@ -157,11 +173,12 @@ export function postPlayers(req, res, b) {
     avatar,
     nationality,
     homeLocation,
+    level,
     role,
     heroes,
     accounts,
     accountsType,
-    accountsValue,
+    accountsValue
   }
 
   tableListDataSource.unshift(result)

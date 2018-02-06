@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'dva'
 import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
-import { ACCOUNTS } from '../../constants'
+import { ACCOUNTS, LEVEL, PLAYERROLE } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import styles from './Players.less'
 
@@ -14,7 +14,7 @@ let uuid = 0
 class PlayerEdit extends Component {
   state = {
     loading: false,
-    avatarUrl: this.props.player.avatar,
+    avatarUrl: this.props.player.avatar
   }
 
   componentDidMount() {
@@ -79,7 +79,7 @@ class PlayerEdit extends Component {
       if (!err) {
         this.props.update({
           ...values,
-          avatar: this.state.avatarUrl,
+          avatar: this.state.avatarUrl
         })
       }
     })
@@ -94,6 +94,7 @@ class PlayerEdit extends Component {
       nationality,
       homeLocation,
       role,
+      level,
       heroes,
       accounts,
       accountsType,
@@ -117,6 +118,14 @@ class PlayerEdit extends Component {
           {item.name}
         </Option>
       )
+    })
+    const levelRadio = []
+    LEVEL.forEach(item => {
+      levelRadio.push(<Radio value={item.value}>{item.label}</Radio>)
+    })
+    const roleRadio = []
+    PLAYERROLE.forEach(item => {
+      roleRadio.push(<Radio value={item.value}>{item.label}</Radio>)
     })
     const formItemLayout = {
       labelCol: {
@@ -236,28 +245,25 @@ class PlayerEdit extends Component {
                 ]
               })(<Input placeholder="请输入选手家乡" />)}
             </FormItem>
+            <FormItem {...formItemLayout} label="等级">
+              <div>
+                {getFieldDecorator('level', {
+                  initialValue: level
+                })(<Radio.Group>{levelRadio}</Radio.Group>)}
+              </div>
+            </FormItem>
             <FormItem {...formItemLayout} label="角色">
               <div>
                 {getFieldDecorator('role', {
                   initialValue: role
-                })(
-                  <Radio.Group>
-                    <Radio value="offense">突击</Radio>
-                    <Radio value="tank">重装</Radio>
-                    <Radio value="support">辅助</Radio>
-                    <Radio value="flex">自由人</Radio>
-                  </Radio.Group>
-                )}
+                })(<Radio.Group>{roleRadio}</Radio.Group>)}
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label="擅长英雄">
               {getFieldDecorator('heroes', {
                 initialValue: heroes
               })(
-                <Select
-                  mode="multiple"
-                  placeholder="请选择擅长英雄"
-                >
+                <Select mode="multiple" placeholder="请选择擅长英雄">
                   {heroOptions}
                 </Select>
               )}

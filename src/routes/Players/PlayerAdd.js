@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
-import { ACCOUNTS } from '../../constants'
+import { ACCOUNTS, LEVEL, PLAYERROLE } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import { HERORULE } from '../../constants'
 import styles from './Players.less'
 
 const FormItem = Form.Item
@@ -95,6 +94,7 @@ class PlayerAdd extends PureComponent {
       nationality,
       homeLocation,
       role,
+      level,
       heroes,
       accounts
     } = this.props.player
@@ -116,6 +116,14 @@ class PlayerAdd extends PureComponent {
           {item.name}
         </Option>
       )
+    })
+    const levelRadio = []
+    LEVEL.forEach(item => {
+      levelRadio.push(<Radio value={item.value}>{item.label}</Radio>)
+    })
+    const roleRadio = []
+    PLAYERROLE.forEach(item => {
+      roleRadio.push(<Radio value={item.value}>{item.label}</Radio>)
     })
     const formItemLayout = {
       labelCol: {
@@ -228,18 +236,18 @@ class PlayerAdd extends PureComponent {
                 ]
               })(<Input placeholder="请输入选手家乡" />)}
             </FormItem>
+            <FormItem {...formItemLayout} label="等级">
+              <div>
+                {getFieldDecorator('level', {
+                  initialValue: level
+                })(<Radio.Group>{levelRadio}</Radio.Group>)}
+              </div>
+            </FormItem>
             <FormItem {...formItemLayout} label="角色">
               <div>
                 {getFieldDecorator('role', {
                   initialValue: role
-                })(
-                  <Radio.Group>
-                    <Radio value="offense">突击</Radio>
-                    <Radio value="tank">重装</Radio>
-                    <Radio value="support">辅助</Radio>
-                    <Radio value="flex">自由人</Radio>
-                  </Radio.Group>
-                )}
+                })(<Radio.Group>{roleRadio}</Radio.Group>)}
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label="擅长英雄">

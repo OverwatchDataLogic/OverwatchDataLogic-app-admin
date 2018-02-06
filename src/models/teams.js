@@ -35,6 +35,7 @@ export default {
       match: '',
       //获得荣誉
       honour: '',
+      level: 'owl',
       //选手列表
       players: []
     },

@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Table, Divider } from 'antd'
+import { Table, Badge, Divider } from 'antd'
 //import styles from './index.less'
 
 class TeamsTable extends PureComponent {
@@ -38,7 +38,16 @@ class TeamsTable extends PureComponent {
       navigateTo,
       remove
     } = this.props
-
+    const level = {
+      owl: '守望先锋联赛',
+      oc: '守望先锋挑战赛',
+      owod: '守望先锋公开赛'
+    }
+    const levelsMap = {
+      owl: 'default',
+      oc: 'processing',
+      owod: 'success'
+    }
     const columns = [
       {
         title: '队伍名称',
@@ -51,6 +60,27 @@ class TeamsTable extends PureComponent {
       {
         title: '城市',
         dataIndex: 'homeLocation'
+      },
+      {
+        title: '等级',
+        dataIndex: 'level',
+        filters: [
+          {
+            text: level.owl,
+            value: 'owl'
+          },
+          {
+            text: level.oc,
+            value: 'oc'
+          },
+          {
+            text: level.owod,
+            value: 'owod'
+          }
+        ],
+        render(val) {
+          return <Badge status={levelsMap[val]} text={level[val]} />
+        }
       },
       {
         title: '操作',

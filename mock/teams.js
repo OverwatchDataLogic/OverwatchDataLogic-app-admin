@@ -12,12 +12,17 @@ let tableListDataSource = [
     secondaryColor: '0072ce',
     addressCountry: 'US',
     description: '达拉斯燃料队',
-    logo: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/NO44N7DDJAPF1508792362936.png',
-    icon: 'https://bnetcmsus-a.akamaihd.net/cms/template_resource/YX6JZ6FR89LU1507822882865.svg',
+    logo:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/NO44N7DDJAPF1508792362936.png',
+    icon:
+      'https://bnetcmsus-a.akamaihd.net/cms/template_resource/YX6JZ6FR89LU1507822882865.svg',
     match: '比赛经历',
     honour: '所获荣誉',
+    level: 'owl',
     accounts: [],
-    players: [],
+    accountsType: [],
+    accountsValue: [],
+    players: []
   },
   {
     id: uuidv1(),
@@ -28,12 +33,16 @@ let tableListDataSource = [
     secondaryColor: '000000',
     addressCountry: 'US',
     description: '费城融合队',
-    logo: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/3JZTLCPH37QD1508792362853.png',
-    icon: 'https://bnetcmsus-a.akamaihd.net/cms/template_resource/LAKZ6R7QEG6S1507822883033.svg',
+    logo:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/3JZTLCPH37QD1508792362853.png',
+    icon:
+      'https://bnetcmsus-a.akamaihd.net/cms/template_resource/LAKZ6R7QEG6S1507822883033.svg',
     match: '比赛经历',
     honour: '所获荣誉',
     accounts: [],
-    players: [],
+    accountsType: [],
+    accountsValue: [],
+    players: []
   },
   {
     id: uuidv1(),
@@ -44,12 +53,17 @@ let tableListDataSource = [
     secondaryColor: '97d700',
     addressCountry: 'US',
     description: '休斯顿神枪手队',
-    logo: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/HLRHYU5MT9MD1508792362935.png',
-    icon: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/UPM8U5QV3DDU1507858876250.svg',
+    logo:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/HLRHYU5MT9MD1508792362935.png',
+    icon:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/UPM8U5QV3DDU1507858876250.svg',
     match: '比赛经历',
     honour: '所获荣誉',
+    level: 'owl',
     accounts: [],
-    players: [],
+    accountsType: [],
+    accountsValue: [],
+    players: []
   },
   {
     id: uuidv1(),
@@ -60,14 +74,17 @@ let tableListDataSource = [
     secondaryColor: 'f2df00',
     addressCountry: 'US',
     description: '波士顿崛起队',
-    logo: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/43UINMGMA83X1513383982827.png',
-    icon: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/W4FGQ24HKCB51513383982827.svg',
+    logo:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/43UINMGMA83X1513383982827.png',
+    icon:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/W4FGQ24HKCB51513383982827.svg',
     match: '比赛经历',
     honour: '所获荣誉',
+    level: 'owl',
     accounts: [],
     accountsType: [],
     accountsValue: [],
-    players: [],
+    players: []
   },
   {
     id: uuidv1(),
@@ -78,15 +95,18 @@ let tableListDataSource = [
     secondaryColor: '0f57ea',
     addressCountry: 'US',
     description: '纽约九霄天擎队',
-    logo: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/9r/9RYLM8FICLJ01508818792450.png',
-    icon: 'https://bnetcmsus-a.akamaihd.net/cms/page_media/jz/JZHJUJ8QM1AP1508818097057.svg',
+    logo:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/9r/9RYLM8FICLJ01508818792450.png',
+    icon:
+      'https://bnetcmsus-a.akamaihd.net/cms/page_media/jz/JZHJUJ8QM1AP1508818097057.svg',
     match: '比赛经历',
     honour: '所获荣誉',
+    level: 'owl',
     accounts: [],
     accountsType: [],
     accountsValue: [],
-    players: [],
-  },
+    players: []
+  }
 ]
 
 export function getTeams(req, res, u) {
@@ -117,6 +137,17 @@ export function getTeams(req, res, u) {
     role.forEach(s => {
       filterDataSource = filterDataSource.concat(
         [...dataSource].filter(data => data.role === s)
+      )
+    })
+    dataSource = filterDataSource
+  }
+
+  if (params.level) {
+    const level = params.level.split(',')
+    let filterDataSource = []
+    level.forEach(s => {
+      filterDataSource = filterDataSource.concat(
+        [...dataSource].filter(data => data.level === s)
       )
     })
     dataSource = filterDataSource
@@ -173,6 +204,7 @@ export function postTeams(req, res, b) {
     icon,
     match,
     honour,
+    level,
     accounts,
     accountsType,
     accountsValue,
@@ -192,6 +224,7 @@ export function postTeams(req, res, b) {
     icon,
     match,
     honour,
+    level,
     accounts,
     accountsType,
     accountsValue,

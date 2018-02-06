@@ -51,6 +51,16 @@ export function getPlayers(payload) {
       })
       list = filterDataSource
     }
+    if (payload.level) {
+      const level = payload.level.split(',')
+      let filterDataSource = []
+      level.forEach(s => {
+        filterDataSource = filterDataSource.concat(
+          [...list].filter(data => data.level === s)
+        )
+      })
+      list = filterDataSource
+    }
     const data = {
       list,
       pagination: {

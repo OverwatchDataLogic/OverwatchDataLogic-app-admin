@@ -40,7 +40,7 @@ class PlayersTable extends PureComponent {
     } = this.props
 
     const role = {
-      offense: '突击',
+      dps: '输出',
       tank: '重装',
       support: '辅助',
       flex: '自由人'
@@ -51,6 +51,16 @@ class PlayersTable extends PureComponent {
       support: 'success',
       flex: 'error'
     }
+    const level = {
+      owl: '守望先锋联赛',
+      oc: '守望先锋挑战赛',
+      owod: '守望先锋公开赛'
+    }
+    const levelsMap = {
+      owl: 'default',
+      oc: 'processing',
+      owod: 'success'
+    }
     const columns = [
       {
         title: '名称',
@@ -59,6 +69,27 @@ class PlayersTable extends PureComponent {
       {
         title: '国籍',
         dataIndex: 'nationality'
+      },
+      {
+        title: '等级',
+        dataIndex: 'level',
+        filters: [
+          {
+            text: level.owl,
+            value: 'owl'
+          },
+          {
+            text: level.oc,
+            value: 'oc'
+          },
+          {
+            text: level.owod,
+            value: 'owod'
+          }
+        ],
+        render(val) {
+          return <Badge status={levelsMap[val]} text={level[val]} />
+        }
       },
       {
         title: '角色',

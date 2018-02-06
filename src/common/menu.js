@@ -158,18 +158,18 @@ const menuData = [
       }
     ]
   },
-  // {
-  //   name: '赛事',
-  //   icon: 'user',
-  //   path: 'sports',
-  //   authority: 'admin',
-  //   children: [
-  //     {
-  //       name: '赛事列表',
-  //       path: 'sport/list'
-  //     },
-  //   ]
-  // },
+  {
+    name: '赛事',
+    icon: 'user',
+    path: 'sports',
+    authority: 'admin',
+    children: [
+      {
+        name: '赛事列表',
+        path: 'sport/list'
+      },
+    ]
+  },
   {
     name: '队伍',
     icon: 'user',

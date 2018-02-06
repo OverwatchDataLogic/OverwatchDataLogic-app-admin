@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import { Form, Input, Button, Card, Icon, Upload, Select } from 'antd'
+import { Form, Input, Button, Card, Radio, Icon, Upload, Select } from 'antd'
 import AV from 'leancloud-storage'
-import { ACCOUNTS } from '../../constants'
+import { ACCOUNTS, LEVEL } from '../../constants'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
 import styles from './Teams.less'
 
@@ -17,11 +17,13 @@ class TeamAdd extends PureComponent {
     logo_loading: false,
     logoUrl: '',
     icon_loading: false,
-    iconUrl: '',
+    iconUrl: ''
   }
 
   componentDidMount() {
-    this.props.getPlayers()
+    if (this.props.players.length === 0) {
+      this.props.getAllPlayers()
+    }
   }
 
   handleUpload = ({ onSuccess, onError, file }) => {
@@ -97,7 +99,7 @@ class TeamAdd extends PureComponent {
         this.props.create({
           ...values,
           logo: this.state.logoUrl,
-          icon: this.state.iconUrl,
+          icon: this.state.iconUrl
         })
       }
     })
@@ -114,6 +116,7 @@ class TeamAdd extends PureComponent {
       addressCountry,
       description,
       match,
+      level,
       honour,
       players
     } = this.props.team
@@ -136,6 +139,10 @@ class TeamAdd extends PureComponent {
           {item.name}
         </Option>
       )
+    })
+    const levelRadio = []
+    LEVEL.forEach(item => {
+      levelRadio.push(<Radio value={item.value}>{item.label}</Radio>)
     })
     const formItemLayout = {
       labelCol: {
@@ -280,6 +287,13 @@ class TeamAdd extends PureComponent {
                 />
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="等级">
+              <div>
+                {getFieldDecorator('level', {
+                  initialValue: level
+                })(<Radio.Group>{levelRadio}</Radio.Group>)}
+              </div>
+            </FormItem>
             <FormItem {...formItemLayout} label="队伍成员">
               {getFieldDecorator('players', {
                 initialValue: players
@@ -363,10 +377,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         payload: values
       })
     },
-    getPlayers: () => {
+    getAllPlayers: params => {
       dispatch({
-        type: 'players/get',
-        payload: {}
+        type: 'players/getAll',
+        payload: params
       })
     }
   }
