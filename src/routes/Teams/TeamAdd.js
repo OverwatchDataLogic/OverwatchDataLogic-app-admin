@@ -364,7 +364,7 @@ const mapStateToProps = (state, ownProps) => {
   const { teams, players, loading } = state
   return {
     team: teams.default,
-    players: players.data.list,
+    players: players.all,
     loading: loading.models.teams
   }
 }

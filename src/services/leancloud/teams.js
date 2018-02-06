@@ -63,6 +63,18 @@ export function getTeams(payload) {
   })
 }
 
+export function getAllTeams() {
+  let list = []
+  const query = new AV.Query('Teams')
+  return query.find().then(function(result) {
+    result.forEach(item => {
+      const res = item.toJSON()
+      list.push(res)
+    })
+    return list
+  })
+}
+
 export function getTeam(playload) {
   var query = new AV.Query('Team')
   query.get(playload.objectId).then(function(result) {

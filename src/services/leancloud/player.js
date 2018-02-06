@@ -73,6 +73,18 @@ export function getPlayers(payload) {
   })
 }
 
+export function getAllPlayers() {
+  let list = []
+  const query = new AV.Query('Players')
+  return query.find().then(function(result) {
+    result.forEach(item => {
+      const res = item.toJSON()
+      list.push(res)
+    })
+    return list
+  })
+}
+
 export function getPlayersWithHeros(payload) {}
 
 export function getPlayer(playload) {

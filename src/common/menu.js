@@ -26,7 +26,7 @@ const menuData = [
     name: '表单页',
     icon: 'form',
     path: 'form',
-    authority: 'admin',    
+    authority: 'admin',
     children: [
       {
         name: '基础表单',
@@ -179,7 +179,7 @@ const menuData = [
       {
         name: '队伍列表',
         path: 'team/list'
-      },
+      }
     ]
   },
   {
@@ -191,7 +191,7 @@ const menuData = [
       {
         name: '选手列表',
         path: 'player/list'
-      },
+      }
     ]
   },
   {
@@ -203,7 +203,7 @@ const menuData = [
       {
         name: '英雄列表',
         path: 'hero/list'
-      },
+      }
     ]
   },
   {

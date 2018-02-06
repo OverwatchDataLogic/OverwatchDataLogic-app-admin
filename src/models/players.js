@@ -3,6 +3,7 @@ import queryString from 'query-string'
 import _ from 'lodash'
 import {
   getPlayers,
+  getAllPlayers,
   getPlayer,
   createPlayers,
   updatePlayers,
@@ -31,13 +32,21 @@ export default {
     data: {
       list: [],
       pagination: {}
-    }
+    },
+    all: []
   },
   effects: {
     *get({ payload }, { call, put }) {
       const response = yield call(getPlayers, payload)
       yield put({
         type: 'save',
+        payload: response
+      })
+    },
+    *getAll(_, { call, put }) {
+      const response = yield call(getAllPlayers)
+      yield put({
+        type: 'saveAll',
         payload: response
       })
     },
@@ -85,6 +94,12 @@ export default {
       return {
         ...state,
         data: action.payload
+      }
+    },
+    saveAll(state, action) {
+      return {
+        ...state,
+        all: action.payload
       }
     },
     createSuccess(state, action) {

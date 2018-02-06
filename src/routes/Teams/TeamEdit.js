@@ -379,7 +379,7 @@ const mapStateToProps = (state, ownProps) => {
             x => x.objectId === ownProps.match.params.id
           )[0]
         : teams.default,
-    players: players.data.list,
+    players: players.all,
     loading: loading.models.teams
   }
 }
