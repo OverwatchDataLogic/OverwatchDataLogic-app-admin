@@ -112,7 +112,6 @@ class HeroEdit extends Component {
     if (info.file.status === 'done') {
       this.setState({
         abilityUrl: info.file.response.attributes.url,
-        isAbilityChanged: true,
         ability_loading: false
       })
     }
@@ -142,7 +141,6 @@ class HeroEdit extends Component {
     const ability = this.state.abilities.filter(x => x.id === id)[0]
     this.setState({
       ability_visible: true,
-      isAbilityChanged: true,
       abilityId: id,
       abilityUrl: ability.icon,
       abilityName: ability.name,
@@ -423,7 +421,7 @@ class HeroEdit extends Component {
     } = this.state
     const avatarUrl = this.state.avatarUrl
     const fullshotUrl = this.state.fullshotUrl
-    const abilityUrl = this.state.isAbilityChanged ? this.state.abilityUrl : ''
+    const abilityUrl = this.state.abilityUrl
     return (
       <PageHeaderLayout title="编辑英雄">
         <Card title="基础数据" className={styles.card} bordered={false}>
