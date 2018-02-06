@@ -46,7 +46,7 @@ class PlayersTable extends PureComponent {
       flex: '自由人'
     }
     const rolesMap = {
-      offense: 'default',
+      dps: 'default',
       tank: 'processing',
       support: 'success',
       flex: 'error'
@@ -96,8 +96,8 @@ class PlayersTable extends PureComponent {
         dataIndex: 'role',
         filters: [
           {
-            text: role.offense,
-            value: 'offense'
+            text: role.dps,
+            value: 'dps'
           },
           {
             text: role.tank,

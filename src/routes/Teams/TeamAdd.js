@@ -21,9 +21,7 @@ class TeamAdd extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.players.length === 0) {
-      this.props.getAllPlayers()
-    }
+    this.props.getAllPlayers({ level: 'owl' })
   }
 
   handleUpload = ({ onSuccess, onError, file }) => {
@@ -90,6 +88,10 @@ class TeamAdd extends PureComponent {
     form.setFieldsValue({
       accounts: nextKeys
     })
+  }
+
+  onLevelChange = e => {
+    this.props.getAllPlayers({ level: e.target.value })
   }
 
   handleSubmit = e => {
@@ -291,7 +293,11 @@ class TeamAdd extends PureComponent {
               <div>
                 {getFieldDecorator('level', {
                   initialValue: level
-                })(<Radio.Group>{levelRadio}</Radio.Group>)}
+                })(
+                  <Radio.Group onChange={this.onLevelChange}>
+                    {levelRadio}
+                  </Radio.Group>
+                )}
               </div>
             </FormItem>
             <FormItem {...formItemLayout} label="队伍成员">

@@ -43,8 +43,8 @@ export default {
         payload: response
       })
     },
-    *getAll(_, { call, put }) {
-      const response = yield call(getAllPlayers)
+    *getAll({ payload }, { call, put }) {
+      const response = yield call(getAllPlayers, payload)
       yield put({
         type: 'saveAll',
         payload: response

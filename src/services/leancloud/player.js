@@ -73,7 +73,7 @@ export function getPlayers(payload) {
   })
 }
 
-export function getAllPlayers() {
+export function getAllPlayers(payload) {
   let list = []
   const query = new AV.Query('Players')
   return query.find().then(function(result) {
@@ -81,6 +81,16 @@ export function getAllPlayers() {
       const res = item.toJSON()
       list.push(res)
     })
+    if (payload.level) {
+      const level = payload.level.split(',')
+      let filterDataSource = []
+      level.forEach(s => {
+        filterDataSource = filterDataSource.concat(
+          [...list].filter(data => data.level === s)
+        )
+      })
+      list = filterDataSource
+    }
     return list
   })
 }
